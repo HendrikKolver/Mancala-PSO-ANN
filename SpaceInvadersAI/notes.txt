@@ -1,0 +1,65 @@
+Space invaders AI design:
+
+	Optimize for best possible single player efficiency
+	Game tree maps all possible moves for player, excluding moves that result in no action for a specific position
+	Each position is evaluated using a Neural Network
+	
+	Iteration 1:	PSO used to train the Neural network:
+						Each player only sees their side of the board during play (since a player has very little effect on the opponent player's board).
+						No opponent is considered in this iteration
+						Each round is played as a single player game
+						Random change for an enemy alien factory to spawn. This is so that the AI is used to it
+						The outcome of each game will be determined by a scoring system
+						
+						Scoring system:	
+							Survived 200 rounds:
+								rank by kill count
+							Died before 200 rounds:
+								rank by round count and kills
+						
+						So basically something like 
+							Round count + kill count + (survivedTo200() ? 50 : 0)
+	
+	Iteration 2:	PSO used to train the Neural network:
+						Add the 10 best players from the previous iteration to this playing pool along with the other random opponents
+						Each player only sees their side of the board during play (since a player has very little effect on the opponent player's board).
+						Each Tournament game however is still played against an opponent.
+						Each player will play against each other player in the tournament pool each for each round of the tournament.
+						The outcome of each game will be determined by a win/loss.
+						Last round tournament winner is the selected player
+						
+	Ideas: 			Add own strategies to already trained players and play against trained players without strategies, also play against random opponent. 
+						Check if improved
+					Train through Iteration 1 and 2 but this time train with strategies already added
+					Compare pure iteration 1 player with iteration 1 and 2 trained player
+					Final tournament with all the best players to find the best among those
+
+Code Reuse:
+		NeuralNetwork.java
+		Neuron.java
+		PSO.java
+		Particle.java
+		Trainer.java
+
+
+
+
+Implementation plan:
+	Game move and next state calculator
+		Should cater for 1 and 2 players
+		Should take player/s next move as input
+		Should update the aliens position
+		Should update all bullet positions
+		Should generate new bullets
+		Should generate new aliens, also account for higher speed generation (This will come into play if/when an alien factory is built)
+		Should have a valid move checker. This should check if the move the player attempts to make is valid in context
+					
+					
+					
+		
+	
+			
+						
+			
+			
+			 
