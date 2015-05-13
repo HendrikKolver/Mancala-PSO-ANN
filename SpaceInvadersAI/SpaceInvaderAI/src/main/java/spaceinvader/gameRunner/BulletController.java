@@ -65,7 +65,7 @@ public class BulletController {
             }
             
              for (int i = 0; i < playerBulletList.size();) {
-                if(playerBulletList.get(i).getyPosition() == 1){
+                if(playerBulletList.get(i).getyPosition() == 11){
                     playerBulletList.remove(i);
                 }else{
                     i++;
@@ -85,6 +85,10 @@ public class BulletController {
             }
             System.out.println("\n"); 
         }
+    }
+    
+    public int getPlayerBulletCount(){
+        return playerBulletList.size();
     }
 
 }

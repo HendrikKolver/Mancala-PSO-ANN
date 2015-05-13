@@ -2,6 +2,7 @@ package spaceinvader;
 
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
+import spaceinvader.gameRunner.PlayerController;
 
 /**
  *
@@ -19,7 +20,7 @@ public class SpaceInvader {
         long startTime = System.currentTimeMillis();
 
         while(roundCounter<200){
-            Thread.sleep(400);
+            //Thread.sleep(400);
             roundCounter++;
             waveRoundCounter++;
             
@@ -28,10 +29,13 @@ public class SpaceInvader {
                 waveRoundCounter=0;
             }
             
-           // alienController.printAllAliens();
-            BulletController.getInstance().printAllBullets();
+            //alienController.printAllAliens();
+            //BulletController.getInstance().printAllBullets();
+            //PlayerController.getInstance().printPlayerPosition();
+            
             BulletController.getInstance().update();
-            alienController.update(roundCounter);  
+            alienController.update(roundCounter);
+            PlayerController.getInstance().update();
         }
         
         long endTime = System.currentTimeMillis();

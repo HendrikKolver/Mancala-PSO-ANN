@@ -58,7 +58,7 @@ public class Alien extends GameObject{
     
     public void fireBullet(){
         //yPos +1 so that the bullet is spawned below the alien
-        AlienBullet alienBullet = new AlienBullet(xPosition,yPosition+1);
+        AlienBullet alienBullet = new AlienBullet(xPosition,yPosition+1); // check if Alien infront and if so move bullet y ahead with 2
         BulletController.getInstance().addAlienBullet(alienBullet);
     }
 

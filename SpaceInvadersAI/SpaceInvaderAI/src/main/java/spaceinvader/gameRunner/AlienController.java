@@ -1,6 +1,7 @@
 package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import spaceinvader.entities.Alien;
 import spaceinvader.entities.GameObject;
 import spaceinvader.utilities.RandomGenerator;
@@ -25,6 +26,7 @@ public class AlienController {
   
     public void update(int roundNumber){
         removeEmptyRows();
+        //TODO remove dead aliens
         updateAlienPosition();
         checkToFireBullet(roundNumber);
         checkToAddRow();
@@ -44,22 +46,27 @@ public class AlienController {
             if(firstRow != null){
                 int probability = RandomGenerator.randInt(1, 1000);
                 if(probability <= 333){
-                    int alienToShoot = RandomGenerator.randInt(0, firstRow.size()-1);
-                    Alien firstRowAlienToShoot = firstRow.get(alienToShoot);
-                    firstRowAlienToShoot.fireBullet();
-                    //System.out.println("First row shooting alien xPos: "+ firstRowAlienToShoot.getxPosition());
+                    //TODO Alien infront of player should shoot
+                }else{
+                    int rowChoice = 0;
+                    if(secondRow != null){
+                        rowChoice = RandomGenerator.randInt(0, 1);
+                    }
+                    
+                    if(rowChoice == 0){
+                        int alienToShoot = RandomGenerator.randInt(0, firstRow.size()-1);
+                        Alien firstRowAlienToShoot = firstRow.get(alienToShoot);
+                        firstRowAlienToShoot.fireBullet();
+                    }else{
+                        int alienToShoot = RandomGenerator.randInt(0, secondRow.size()-1);
+                        Alien secondRowAlienToShoot = secondRow.get(alienToShoot);
+                        secondRowAlienToShoot.fireBullet();
+                    }
+                    
                 }
             }
             
-            if(secondRow != null){
-                int probability = RandomGenerator.randInt(1, 1000);
-                if(probability <= 666){
-                    int alienToShoot = RandomGenerator.randInt(0, secondRow.size()-1);
-                    Alien secondRowAlienToShoot = secondRow.get(alienToShoot);
-                    secondRowAlienToShoot.fireBullet();
-                    //System.out.println("Second row shooting alien xPos: "+ firstRowAlienToShoot.getxPosition());
-                }
-            }
+            
 
         }
     }
@@ -72,26 +79,26 @@ public class AlienController {
     }
     
     public void updateAlienPosition(){
+        boolean moveDown = false;
          for (ArrayList<Alien> rowAliens : alienRow) { 
-            boolean moveDown = false;
-            for (Alien alien : rowAliens) {    
-                if(alien.getMoveDirection().equals("LEFT")){
-                    if(alien.getxPosition() == 1){
-                       moveDown = true;
-                       break;
-                    }
-                }else{
-                    if(alien.getxPosition() == 17){
-                       moveDown = true;
-                       break;
-                    }
+            if(rowAliens.get(0).getMoveDirection().equals("LEFT")){
+                if(rowAliens.get(0).getxPosition() == 1){
+                   moveDown = true;
+                   break;
+                }
+            }else{
+                if(rowAliens.get(rowAliens.size()-1).getxPosition() == 17){
+                   moveDown = true;
+                   break;
                 }
             }
-            
+        }
+         
+         for (ArrayList<Alien> rowAliens : alienRow) { 
             for (Alien alien : rowAliens) {
-                 if(moveDown){
-                        alien.updatePosition("DOWN");
-                        alien.invertMoveDirection();
+                if(moveDown){
+                    alien.updatePosition("DOWN");
+                    alien.invertMoveDirection();
                 }else{
                     alien.updatePosition(alien.getMoveDirection());
                 }
@@ -105,6 +112,7 @@ public class AlienController {
             latestRowAliens.add(new Alien(xStartLocation,11));
             xStartLocation -= 2;
         }
+        Collections.reverse(latestRowAliens);
     }
     
     private void addNewRow(){
