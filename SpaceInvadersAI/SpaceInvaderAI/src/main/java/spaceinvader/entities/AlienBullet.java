@@ -5,11 +5,6 @@ package spaceinvader.entities;
  * @author Hendrik Kolver
  */
 public class AlienBullet extends GameObject{
-
-    @Override
-    void updatePosition() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     
 

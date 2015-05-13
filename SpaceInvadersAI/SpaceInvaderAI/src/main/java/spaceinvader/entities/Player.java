@@ -13,8 +13,4 @@ public class Player extends GameObject{
     private int kills;
     private boolean isAlive;
 
-    @Override
-    void updatePosition() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
