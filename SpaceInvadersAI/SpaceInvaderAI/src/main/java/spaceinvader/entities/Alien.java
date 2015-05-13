@@ -1,5 +1,7 @@
 package spaceinvader.entities;
 
+import spaceinvader.gameRunner.BulletController;
+
 /**
  *
  * @author Hendrik Kolver
@@ -43,13 +45,6 @@ public class Alien extends GameObject{
                 }
                 break;
             }
-            case "UP" : {
-                int newY = yPosition+1;
-                if(isPositionInBounds(xPosition,newY)){
-                    yPosition = newY;
-                }
-                break;
-            }
             case "DOWN" : {
                  int newY = yPosition-1;
                 if(isPositionInBounds(xPosition,newY)){
@@ -59,7 +54,12 @@ public class Alien extends GameObject{
                 }
             }
         }
-       
+    }
+    
+    public void fireBullet(){
+        //yPos +1 so that the bullet is spawned below the alien
+        AlienBullet alienBullet = new AlienBullet(xPosition,yPosition+1);
+        BulletController.getInstance().addAlienBullet(alienBullet);
     }
 
 }

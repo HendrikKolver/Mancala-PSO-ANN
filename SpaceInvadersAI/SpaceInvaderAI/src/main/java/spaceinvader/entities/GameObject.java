@@ -13,32 +13,32 @@ public class GameObject {
     public void updatePosition(String direction){
         switch(direction){
             case "LEFT" : {
-                System.out.println("Called Left");
-                int newX = xPosition--;
+                //System.out.println("Called Left");
+                int newX = xPosition-1;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
                 }
                 break;
             }
             case "RIGHT" : {
-                System.out.println("Called Right");
-                int newX = xPosition++;
+               // System.out.println("Called Right");
+                int newX = xPosition+1;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
                 }
                 break;
             }
             case "UP" : {
-                System.out.println("Called Up");
-                int newY = yPosition++;
+               // System.out.println("Called Up");
+                int newY = yPosition+1;
                 if(isPositionInBounds(xPosition,newY)){
                     yPosition = newY;
                 }
                 break;
             }
             case "DOWN" : {
-                System.out.println("Called Down");
-                 int newY = yPosition--;
+               // System.out.println("Called Down");
+                 int newY = yPosition-1;
                 if(isPositionInBounds(xPosition,newY)){
                     yPosition = newY;
                 }
