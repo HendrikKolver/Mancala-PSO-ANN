@@ -7,9 +7,9 @@ package spaceinvader.entities;
 public class Alien extends GameObject{
     private String moveDirection = "LEFT";
     
-    public Alien(){
-        this.xPosition = 17;
-        this.yPosition = 11;
+    public Alien(int xPosition, int yPosition){
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
         this.xSize = 1;
         this.ySize = 1;
     }
@@ -26,16 +26,13 @@ public class Alien extends GameObject{
         }   
     }
     
-    @Override
+
     public void updatePosition(String direction){
         switch(direction){
             case "LEFT" : {
                 int newX = xPosition-2;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
-                }else{
-                    moveDirection = "RIGHT";
-                    updatePosition("DOWN");
                 }
                 break;
             }
@@ -43,9 +40,6 @@ public class Alien extends GameObject{
                 int newX = xPosition+2;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
-                }else{
-                    moveDirection = "LEFT";
-                    updatePosition("DOWN");
                 }
                 break;
             }
@@ -60,10 +54,12 @@ public class Alien extends GameObject{
                  int newY = yPosition-1;
                 if(isPositionInBounds(xPosition,newY)){
                     yPosition = newY;
+                }else{
+                    System.out.println("Game Over");
                 }
-                break;
             }
         }
+       
     }
 
 }
