@@ -55,7 +55,7 @@ public class Alien extends GameObject{
                 if(isPositionInBounds(xPosition,newY)){
                     yPosition = newY;
                 }else{
-                    System.out.println("Game Over");
+                    //System.out.println("Game Over");
                 }
             }
         }

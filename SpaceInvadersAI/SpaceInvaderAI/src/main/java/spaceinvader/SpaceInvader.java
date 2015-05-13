@@ -15,8 +15,10 @@ public class SpaceInvader {
         AlienController alienController = new AlienController();
         int roundCounter = 0;
         int waveRoundCounter = 0;
-        while(true){
-            Thread.sleep(400);
+        long startTime = System.currentTimeMillis();
+
+        while(roundCounter<200){
+            //Thread.sleep(400);
             roundCounter++;
             waveRoundCounter++;
             
@@ -25,11 +27,15 @@ public class SpaceInvader {
                 waveRoundCounter=0;
             }
             
-            alienController.printAllAliens();
-            alienController.update();
-            
-            
+            //alienController.printAllAliens();
+            alienController.update();  
         }
+        
+        long endTime = System.currentTimeMillis();
+
+        long duration = (endTime - startTime);
+        System.out.println("Total time: "+duration);
+        
     }
     
 }
