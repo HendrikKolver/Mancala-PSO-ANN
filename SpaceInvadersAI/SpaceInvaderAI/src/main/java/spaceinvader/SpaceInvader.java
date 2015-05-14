@@ -13,13 +13,14 @@ public class SpaceInvader {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {        
         AlienController alienController = new AlienController();
         int roundCounter = 0;
         int waveRoundCounter = 0;
         long startTime = System.currentTimeMillis();
 
         while(roundCounter<200){
+            
             //Thread.sleep(400);
             roundCounter++;
             waveRoundCounter++;
@@ -32,7 +33,7 @@ public class SpaceInvader {
             //alienController.printAllAliens();
             //BulletController.getInstance().printAllBullets();
             //PlayerController.getInstance().printPlayerPosition();
-            PlayerController.getInstance().printBuildingPositions();
+            //PlayerController.getInstance().printBuildingPositions();
             
             BulletController.getInstance().update();
             alienController.update(roundCounter);
