@@ -15,4 +15,9 @@ public class BulletFactory extends Building {
         return "Bullet Factory xPos: "+this.getxPosition();
     }
 
+    @Override
+    public String getRepresentation() {
+        return "B";
+    }
+
 }

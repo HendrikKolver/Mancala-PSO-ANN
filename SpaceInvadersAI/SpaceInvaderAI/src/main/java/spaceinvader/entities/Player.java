@@ -17,7 +17,7 @@ public class Player extends GameObject{
     
     public Player(){
         //start location
-        this.xPosition = 7;
+        this.xPosition = 8;
         this.yPosition = 2;
         this.xSize =3;
         this.ySize =1;

@@ -90,5 +90,13 @@ public class BulletController {
     public int getPlayerBulletCount(){
         return playerBulletList.size();
     }
+    
+    public ArrayList<AlienBullet> getAlienbullets(){
+        return alienBulletList;
+    }
+    
+    public ArrayList<PlayerBullet> getPlayerbullets(){
+        return playerBulletList;
+    }
 
 }

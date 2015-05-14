@@ -41,6 +41,14 @@ public class PlayerController {
         System.out.println("Player Pos: "+ player.getxPosition());
     }
     
+    public int getPlayerPosition(){
+        return player.getxPosition();
+    }
+    
+    public ArrayList<Building> getBuildings(){
+        return player.getAllBuildings();
+    }
+    
     public void printBuildingPositions(){
         for(Building building : player.getAllBuildings()){
             System.out.println(building.stringContent());

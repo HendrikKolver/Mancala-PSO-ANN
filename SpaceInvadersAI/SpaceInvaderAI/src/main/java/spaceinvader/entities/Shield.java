@@ -15,4 +15,9 @@ public class Shield extends Building {
         return "Shield xPos: "+this.getxPosition();
     }
 
+    @Override
+    public String getRepresentation() {
+        return "-";
+    }
+
 }

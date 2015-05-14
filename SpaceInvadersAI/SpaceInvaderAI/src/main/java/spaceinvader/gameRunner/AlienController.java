@@ -110,7 +110,7 @@ public class AlienController {
         int xStartLocation = 17;
         for (int i = 0; i < waveSize; i++) {
             latestRowAliens.add(new Alien(xStartLocation,11));
-            xStartLocation -= 2;
+            xStartLocation -= 3;
         }
         Collections.reverse(latestRowAliens);
     }
@@ -144,6 +144,10 @@ public class AlienController {
             System.out.println(alienString);  
         }
         System.out.println("\n");
+    }
+    
+    public ArrayList<ArrayList<Alien>> getAllAliens(){
+        return alienRow;
     }
 
 }

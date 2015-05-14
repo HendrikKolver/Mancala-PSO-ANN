@@ -15,4 +15,5 @@ public abstract class Building extends GameObject{
     }
     
     public abstract String stringContent();
+    public abstract String getRepresentation();
 }

@@ -15,4 +15,9 @@ public class AlienFactory extends Building {
         return "Alien Factory xPos: "+this.getxPosition();
     }
 
+    @Override
+    public String getRepresentation() {
+        return "X";
+    }
+
 }

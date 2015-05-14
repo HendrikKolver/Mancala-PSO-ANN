@@ -32,14 +32,14 @@ public class Alien extends GameObject{
     public void updatePosition(String direction){
         switch(direction){
             case "LEFT" : {
-                int newX = xPosition-2;
+                int newX = xPosition-1;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
                 }
                 break;
             }
             case "RIGHT" : {
-                int newX = xPosition+2;
+                int newX = xPosition+1;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
                 }
@@ -58,7 +58,7 @@ public class Alien extends GameObject{
     
     public void fireBullet(){
         //yPos +1 so that the bullet is spawned below the alien
-        AlienBullet alienBullet = new AlienBullet(xPosition,yPosition+1); // check if Alien infront and if so move bullet y ahead with 2
+        AlienBullet alienBullet = new AlienBullet(xPosition,yPosition-1); // check if Alien infront and if so move bullet y ahead with 2
         BulletController.getInstance().addAlienBullet(alienBullet);
     }
 
