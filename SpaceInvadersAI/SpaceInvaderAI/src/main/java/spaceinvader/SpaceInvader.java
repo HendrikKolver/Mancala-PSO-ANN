@@ -32,6 +32,7 @@ public class SpaceInvader {
             //alienController.printAllAliens();
             //BulletController.getInstance().printAllBullets();
             //PlayerController.getInstance().printPlayerPosition();
+            PlayerController.getInstance().printBuildingPositions();
             
             BulletController.getInstance().update();
             alienController.update(roundCounter);

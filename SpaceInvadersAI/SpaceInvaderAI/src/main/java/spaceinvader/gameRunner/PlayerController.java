@@ -1,6 +1,7 @@
 package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
+import spaceinvader.entities.Building;
 import spaceinvader.entities.Player;
 import spaceinvader.utilities.RandomGenerator;
 
@@ -38,6 +39,12 @@ public class PlayerController {
     
     public void printPlayerPosition(){
         System.out.println("Player Pos: "+ player.getxPosition());
+    }
+    
+    public void printBuildingPositions(){
+        for(Building building : player.getAllBuildings()){
+            System.out.println(building.stringContent());
+        }
     }
     
     
