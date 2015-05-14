@@ -3,6 +3,7 @@ package spaceinvader.gameRunner;
 import java.util.ArrayList;
 import spaceinvader.entities.Building;
 import spaceinvader.entities.Player;
+import spaceinvader.entities.Shield;
 import spaceinvader.utilities.RandomGenerator;
 
 /**
@@ -17,7 +18,10 @@ public class PlayerController {
     private PlayerController(){
         instance = this;
         player = new Player();
-
+        ArrayList<Shield> shieldBlock1 = player.createShieldBlock(2);
+        ArrayList<Shield> shieldBlock2 = player.createShieldBlock(14);
+        shieldBlock1.addAll(shieldBlock2);
+        player.setShields(shieldBlock1);
     }
     
     public static PlayerController getInstance(){
@@ -53,6 +57,18 @@ public class PlayerController {
         for(Building building : player.getAllBuildings()){
             System.out.println(building.stringContent());
         }
+    }
+    
+    public ArrayList<Shield> getAllShields(){
+        return player.getAllShields();
+    }
+    
+    public void setBuildings(ArrayList<Building> buildings){
+        
+    }
+    
+    public void setShields(ArrayList<Shield> shields){
+        player.setShields(shields);
     }
     
     

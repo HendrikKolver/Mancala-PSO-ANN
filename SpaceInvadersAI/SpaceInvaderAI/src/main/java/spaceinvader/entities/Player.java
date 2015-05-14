@@ -37,8 +37,10 @@ public class Player extends GameObject{
             possibleMoves.add("MoveRight");
         }
         
+        System.out.println("BulletCont: "+BulletController.getInstance().getPlayerBulletCount());
+        System.out.println("bulletLimit: "+bulletLimit);
         if(BulletController.getInstance().getPlayerBulletCount()<bulletLimit){
-            //check if shield infront of player
+            //TODO check if shield infront of player
             possibleMoves.add("Shoot");
         }
         
@@ -47,7 +49,12 @@ public class Player extends GameObject{
             possibleMoves.add("BuildMissileController");
         }
         
-        possibleMoves.add("BuildShield");
+        System.out.println(this.lives);
+        if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
+            System.out.println("adding shields");
+            possibleMoves.add("BuildShield");
+        }
+        
         
         return possibleMoves;
     }
@@ -60,7 +67,20 @@ public class Player extends GameObject{
         
         for(Building building : buildings){
             if(building.getxPosition() >= this.getxPosition()-2 && building.getxPosition() <= this.getxPosition()+2){
-                
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean isShieldInfrontOfPlayer(){
+        System.out.println("shields.Size(): "+shields.size());
+         for(Shield shield : shields){
+
+            if(shield.getxPosition() == this.getxPosition() 
+                || shield.getxPosition() == this.getxPosition()+1 
+                || shield.getxPosition() == this.getxPosition()+2){
+                System.out.println("HIt");
                 return true;
             }
         }
@@ -105,7 +125,7 @@ public class Player extends GameObject{
     }
     
     private void fireBullet(){
-        PlayerBullet playerBullet = new PlayerBullet(xPosition,yPosition+1);
+        PlayerBullet playerBullet = new PlayerBullet(this.getxPosition()+1,this.getyPosition()+1);
         BulletController.getInstance().addPlayerBullet(playerBullet);
     }
     
@@ -113,6 +133,8 @@ public class Player extends GameObject{
         //xPos, yPos, xSize, ySize
         BulletFactory bulletFactory = new BulletFactory(this.getxPosition(),1,3,1);
         this.buildings.add(bulletFactory);
+        //+1 for the initial limit of 1
+        this.bulletLimit++;
         this.lives--;
     }
     
@@ -124,12 +146,51 @@ public class Player extends GameObject{
     }
     
     private void buildShield(){
-        //TODO
+        shields.addAll(createShieldBlock(this.getxPosition()));
+        this.lives--;
     }
     
     public ArrayList<Building> getAllBuildings(){
         return this.buildings;
     }
+    
+    public void setShields(ArrayList<Shield> shields){
+        this.shields = shields;
+    }
+    
+    public ArrayList<Shield> getAllShields(){
+        return shields;
+    }
+    
+    public ArrayList<Shield> createShieldBlock(int startPos){
+        ArrayList<Shield> shields = new ArrayList();
+        int xPosCounter = startPos;
+        int yPosCounter = 3;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                Shield shield = new Shield(xPosCounter,yPosCounter,1,1);
+                shields.add(shield);
+                xPosCounter++;
+            }
+            xPosCounter = startPos;
+            yPosCounter++;
+        }
+        return shields;
+    }
+    
+    public void setBuildings(ArrayList<Building> buildings){
+        this.buildings = buildings;
+        int extraBullets = 0;
+        for(Building building : buildings){
+            if(building.getRepresentation().equals("B")){
+              extraBullets++;  
+            }
+        }
+        
+        //+1 for the initial limit of 1
+        this.bulletLimit = extraBullets + 1;
+    }
+    
 
 
 }

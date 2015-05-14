@@ -5,6 +5,7 @@ import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienBullet;
 import spaceinvader.entities.Building;
 import spaceinvader.entities.PlayerBullet;
+import spaceinvader.entities.Shield;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.gameRunner.PlayerController;
@@ -19,7 +20,7 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException {        
-        AlienController alienController = new AlienController();
+        AlienController alienController = AlienController.getInstance();
         int roundCounter = 0;
         int waveRoundCounter = 0;
         long startTime = System.currentTimeMillis();
@@ -32,7 +33,7 @@ public class SpaceInvader {
             
             if(waveRoundCounter ==40){
                 alienController.increaseWaveSize();
-                waveRoundCounter=0;
+                //waveRoundCounter=0;
             }
             
             //alienController.printAllAliens();
@@ -43,6 +44,10 @@ public class SpaceInvader {
             BulletController.getInstance().update();
             alienController.update(roundCounter);
             PlayerController.getInstance().update();
+            
+            //Check again for collisions to see if someone moved into a bullet
+            BulletController.getInstance().alienBulletColissionDetection();
+            BulletController.getInstance().playerBulletColissionDetection();
             
         }
         
@@ -92,6 +97,11 @@ public class SpaceInvader {
         board[building.getxPosition()+1][building.getyPosition()] = building.getRepresentation();
         board[building.getxPosition()+2][building.getyPosition()] = building.getRepresentation();
     }
+    
+    ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
+    for(Shield shield : shields){
+        board[shield.getxPosition()][shield.getyPosition()] = shield.getRepresentation();
+    } 
     
     for(AlienBullet alienBullet : alienBulletList){
         board[alienBullet.getxPosition()][alienBullet.getyPosition()] = "|";

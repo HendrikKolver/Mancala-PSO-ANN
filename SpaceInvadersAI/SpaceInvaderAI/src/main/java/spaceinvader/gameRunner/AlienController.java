@@ -11,17 +11,26 @@ import spaceinvader.utilities.RandomGenerator;
  * @author Hendrik Kolver
  */
 public class AlienController {
+    private static AlienController instance;
     ArrayList <ArrayList<Alien>> alienRow;
     ArrayList <Alien> latestRowAliens;
     boolean spawnRow = true;
     private int waveSize;
     
-    public AlienController(){
+    private AlienController(){
         waveSize =3;
         alienRow = new ArrayList();
         latestRowAliens = new ArrayList();
         alienRow.add(latestRowAliens);
         addAlien();
+    }
+    
+    public static AlienController getInstance(){
+        if(instance == null){
+            instance = new AlienController();
+        }
+        
+        return instance;
     }
   
     public void update(int roundNumber){
@@ -65,9 +74,6 @@ public class AlienController {
                     
                 }
             }
-            
-            
-
         }
     }
     
@@ -148,6 +154,10 @@ public class AlienController {
     
     public ArrayList<ArrayList<Alien>> getAllAliens(){
         return alienRow;
+    }
+    
+    public void setAliens(ArrayList<ArrayList<Alien>> allAliens){
+        this.alienRow = allAliens;
     }
 
 }
