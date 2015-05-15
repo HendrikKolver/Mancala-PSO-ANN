@@ -13,6 +13,7 @@ import spaceinvader.utilities.RandomGenerator;
 public class PlayerController {
   private static PlayerController instance = null;
         private Player player;
+        private int respawnCounter;
     
     
     private PlayerController(){
@@ -22,6 +23,7 @@ public class PlayerController {
         ArrayList<Shield> shieldBlock2 = player.createShieldBlock(14);
         shieldBlock1.addAll(shieldBlock2);
         player.setShields(shieldBlock1);
+        respawnCounter = 0;
     }
     
     public static PlayerController getInstance(){
@@ -33,6 +35,13 @@ public class PlayerController {
     }
     
     public void update(){
+        if(!player.isAlive() && respawnCounter == 0){
+            player.respawn();
+        }else if(!player.isAlive()){
+            respawnCounter--;
+            return;
+        }
+        
         ArrayList<String> possibleMoves = player.getPossibleMoves();
         
         int moveIndex = RandomGenerator.randInt(0, possibleMoves.size()-1);
@@ -69,6 +78,19 @@ public class PlayerController {
     
     public void setShields(ArrayList<Shield> shields){
         player.setShields(shields);
+    }
+    
+    public boolean isPlayerAlive(){
+        return player.isAlive();
+    }
+    
+    public void killPlayer(){
+        respawnCounter =3;
+        player.die();
+    }
+    
+    public boolean isGameOver(){
+        return (player.getLives()<0);
     }
     
     

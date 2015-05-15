@@ -110,14 +110,14 @@ public class BulletController {
                 } 
             }
             
-            if(i < alienBulletList.size()){
+            if(i < alienBulletList.size() && PlayerController.getInstance().isPlayerAlive()){
                  if(alienBulletList.get(i).getyPosition() == 2 
                         && (playerPos == alienBulletList.get(i).getxPosition() 
                         || playerPos+1 == alienBulletList.get(i).getxPosition()
                         || playerPos+2 == alienBulletList.get(i).getxPosition()))
                     {
                         alienBulletList.remove(alienBulletList.get(i));
-                        //kill player
+                        PlayerController.getInstance().killPlayer();
                         increaseCounter = false;
                     }
             }
@@ -133,7 +133,7 @@ public class BulletController {
     public void playerBulletColissionDetection(){
         
         ArrayList<ArrayList<Alien>> allAliens = AlienController.getInstance().getAllAliens();
-
+        ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
         
         for (int i = 0; i < playerBulletList.size();) {
             boolean increaseCounter = true;
@@ -153,6 +153,20 @@ public class BulletController {
                     break;
                 }
                     
+            }
+            
+            //This is incase a player fires a bullet and then builds a shield on top of that bullet.
+            //This is allowed since there may be enemy bullets in that area that the player wants to mitigate as well
+            if(i < playerBulletList.size()){
+                for(Shield shield : shields){
+                    if(shield.getyPosition() == playerBulletList.get(i).getyPosition() 
+                            && (shield.getxPosition() == playerBulletList.get(i).getxPosition()))
+                    {
+                      shields.remove(shield);
+                      playerBulletList.remove(playerBulletList.get(i));
+                      break;
+                    }
+                } 
             }
 
             if(increaseCounter){

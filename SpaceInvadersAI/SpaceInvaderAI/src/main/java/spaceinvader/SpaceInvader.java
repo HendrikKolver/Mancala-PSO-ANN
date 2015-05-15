@@ -26,7 +26,6 @@ public class SpaceInvader {
         long startTime = System.currentTimeMillis();
 
         while(roundCounter<200){
-            
             Thread.sleep(500);
             roundCounter++;
             waveRoundCounter++;
@@ -36,11 +35,13 @@ public class SpaceInvader {
                 //waveRoundCounter=0;
             }
             
-            //alienController.printAllAliens();
-            //BulletController.getInstance().printAllBullets();
-            //PlayerController.getInstance().printPlayerPosition();
-            //PlayerController.getInstance().printBuildingPositions();
             printBoard(alienController, roundCounter);
+            
+            if(PlayerController.getInstance().isGameOver()){
+                System.out.println("Game Over");
+                break;
+            }
+            
             BulletController.getInstance().update();
             alienController.update(roundCounter);
             PlayerController.getInstance().update();
@@ -48,13 +49,14 @@ public class SpaceInvader {
             //Check again for collisions to see if someone moved into a bullet
             BulletController.getInstance().alienBulletColissionDetection();
             BulletController.getInstance().playerBulletColissionDetection();
-            
         }
         
         long endTime = System.currentTimeMillis();
 
         long duration = (endTime - startTime);
+        System.out.println("Total rounds played: "+roundCounter);
         System.out.println("Total time: "+duration);
+        
         
     }
     
@@ -86,10 +88,12 @@ public class SpaceInvader {
     }
     System.out.println("\n");
     
-    int playerPosition = PlayerController.getInstance().getPlayerPosition();
-    board[playerPosition][2] = "A";
-    board[playerPosition+1][2] = "A";
-    board[playerPosition+2][2] = "A";
+    if(PlayerController.getInstance().isPlayerAlive()){
+        int playerPosition = PlayerController.getInstance().getPlayerPosition();
+        board[playerPosition][2] = "A";
+        board[playerPosition+1][2] = "A";
+        board[playerPosition+2][2] = "A";
+    }
     
     ArrayList<Building> buildings = PlayerController.getInstance().getBuildings();
     for(Building building : buildings){

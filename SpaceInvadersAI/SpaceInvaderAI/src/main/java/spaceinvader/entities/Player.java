@@ -24,6 +24,7 @@ public class Player extends GameObject{
         bulletLimit = 1;
         this.lives = 2;
         buildings = new ArrayList();
+        this.isAlive = true;
     }
     
     public ArrayList<String> getPossibleMoves(){
@@ -37,8 +38,6 @@ public class Player extends GameObject{
             possibleMoves.add("MoveRight");
         }
         
-        System.out.println("BulletCont: "+BulletController.getInstance().getPlayerBulletCount());
-        System.out.println("bulletLimit: "+bulletLimit);
         if(BulletController.getInstance().getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
             possibleMoves.add("Shoot");
         }
@@ -48,9 +47,7 @@ public class Player extends GameObject{
             possibleMoves.add("BuildMissileController");
         }
         
-        System.out.println(this.lives);
         if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
-            System.out.println("adding shields");
             possibleMoves.add("BuildShield");
         }
         
@@ -195,6 +192,25 @@ public class Player extends GameObject{
         
         //+1 for the initial limit of 1
         this.bulletLimit = extraBullets + 1;
+    }
+    
+    public boolean isAlive(){
+        return this.isAlive;
+    }
+    
+    public void die(){
+        this.isAlive = false;
+        this.lives--;
+    }
+    
+    public void respawn(){
+        this.xPosition = 8;
+        this.yPosition = 2;
+        this.isAlive = true;
+    }
+    
+    public int getLives(){
+        return this.lives;
     }
     
 
