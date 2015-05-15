@@ -39,8 +39,7 @@ public class Player extends GameObject{
         
         System.out.println("BulletCont: "+BulletController.getInstance().getPlayerBulletCount());
         System.out.println("bulletLimit: "+bulletLimit);
-        if(BulletController.getInstance().getPlayerBulletCount()<bulletLimit){
-            //TODO check if shield infront of player
+        if(BulletController.getInstance().getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
             possibleMoves.add("Shoot");
         }
         
@@ -73,14 +72,21 @@ public class Player extends GameObject{
         return false;
     }
     
+    private boolean isShieldBlockingPlayerBullet(){
+        for(Shield shield : shields){
+            if(shield.getxPosition() == this.getxPosition()+1 ){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private boolean isShieldInfrontOfPlayer(){
-        System.out.println("shields.Size(): "+shields.size());
          for(Shield shield : shields){
 
             if(shield.getxPosition() == this.getxPosition() 
                 || shield.getxPosition() == this.getxPosition()+1 
                 || shield.getxPosition() == this.getxPosition()+2){
-                System.out.println("HIt");
                 return true;
             }
         }
