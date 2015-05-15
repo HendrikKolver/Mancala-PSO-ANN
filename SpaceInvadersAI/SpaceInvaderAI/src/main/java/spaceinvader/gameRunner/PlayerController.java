@@ -93,5 +93,13 @@ public class PlayerController {
         return (player.getLives()<0);
     }
     
+    public void increaseKillCount(){
+        player.increaseKillCount();
+    }
+    
+    public int getKillCount(){
+        return player.getKills();
+    }
+    
     
 }

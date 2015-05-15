@@ -145,6 +145,7 @@ public class BulletController {
                     {
                       aliens.remove(alien);
                       playerBulletList.remove(playerBulletList.get(i));
+                      PlayerController.getInstance().increaseKillCount();
                       increaseCounter = false;
                       break;
                     }

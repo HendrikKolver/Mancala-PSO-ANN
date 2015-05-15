@@ -55,6 +55,7 @@ public class SpaceInvader {
 
         long duration = (endTime - startTime);
         System.out.println("Total rounds played: "+roundCounter);
+        System.out.println("Total kills: "+PlayerController.getInstance().getKillCount());
         System.out.println("Total time: "+duration);
         
         
@@ -125,7 +126,8 @@ public class SpaceInvader {
     }
     //System.out.println("-------------------");
     System.out.print('\r');
-    System.out.println(boardString + "\n" + "Round: "+ roundCounter);
+    System.out.println(boardString + "\n" + "Round: "+ roundCounter + " \n Total kills: "+PlayerController.getInstance().getKillCount());
+
     //System.out.println("Round: "+ roundCounter);
     //System.out.println("-------------------");
  }    

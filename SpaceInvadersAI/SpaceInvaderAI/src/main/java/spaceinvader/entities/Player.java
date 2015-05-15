@@ -25,6 +25,7 @@ public class Player extends GameObject{
         this.lives = 2;
         buildings = new ArrayList();
         this.isAlive = true;
+        this.kills = 0;
     }
     
     public ArrayList<String> getPossibleMoves(){
@@ -211,6 +212,14 @@ public class Player extends GameObject{
     
     public int getLives(){
         return this.lives;
+    }
+    
+    public void increaseKillCount(){
+        this.kills++;
+    }
+    
+    public int getKills(){
+        return this.kills;
     }
     
 
