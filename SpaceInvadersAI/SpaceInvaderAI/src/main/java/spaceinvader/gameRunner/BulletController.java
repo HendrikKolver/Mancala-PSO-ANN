@@ -34,8 +34,8 @@ public class BulletController {
     public void update(){
         removeOutOfBoundsBullets();
         updateAlienBulletPosition();
-        updatePlayerBulletPosition();
         alienBulletColissionDetection();
+        updatePlayerBulletPosition();
         playerBulletColissionDetection();
     }
     
@@ -106,6 +106,19 @@ public class BulletController {
                       shields.remove(shield);
                       alienBulletList.remove(alienBulletList.get(i));
                       break;
+                    }
+                } 
+            }
+            
+            if(i < alienBulletList.size()){
+                for(PlayerBullet playerBullet : playerBulletList){
+                    if(playerBullet.getxPosition() == alienBulletList.get(i).getxPosition()
+                        && playerBullet.getyPosition() == alienBulletList.get(i).getyPosition())
+                    {
+                        alienBulletList.remove(alienBulletList.get(i));
+                        playerBulletList.remove(playerBullet);
+                        increaseCounter = false;
+                        break;
                     }
                 } 
             }
@@ -201,6 +214,14 @@ public class BulletController {
     
     public ArrayList<PlayerBullet> getPlayerbullets(){
         return playerBulletList;
+    }
+    
+    public void setAlienbullets(ArrayList<AlienBullet> alienBullets){
+        this.alienBulletList = alienBullets;
+    }
+    
+    public void setPlayerbullets(ArrayList<PlayerBullet> playerBullets){
+        this.playerBulletList = playerBullets;
     }
     
     

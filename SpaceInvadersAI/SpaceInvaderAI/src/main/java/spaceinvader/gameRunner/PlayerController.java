@@ -73,7 +73,7 @@ public class PlayerController {
     }
     
     public void setBuildings(ArrayList<Building> buildings){
-        
+        player.setBuildings(buildings);
     }
     
     public void setShields(ArrayList<Shield> shields){
@@ -99,6 +99,10 @@ public class PlayerController {
     
     public int getKillCount(){
         return player.getKills();
+    }
+    
+    public void removeAllObjectsInBlock(int xPos){
+        player.removeAllObjectsInBlock(xPos);
     }
     
     

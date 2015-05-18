@@ -2,8 +2,12 @@ package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import spaceinvader.entities.Alien;
+import spaceinvader.entities.AlienBullet;
 import spaceinvader.entities.GameObject;
+import spaceinvader.entities.PlayerBullet;
+import spaceinvader.entities.Shield;
 import spaceinvader.utilities.RandomGenerator;
 
 /**
@@ -14,7 +18,9 @@ public class AlienController {
     private static AlienController instance;
     ArrayList <ArrayList<Alien>> alienRow;
     ArrayList <Alien> latestRowAliens;
+    int fakeOpponentAlienFactory = 0;
     boolean spawnRow = true;
+    private boolean gameOver;
     private int waveSize;
     
     private AlienController(){
@@ -22,7 +28,9 @@ public class AlienController {
         alienRow = new ArrayList();
         latestRowAliens = new ArrayList();
         alienRow.add(latestRowAliens);
+        gameOver = false;
         addAlien();
+        
     }
     
     public static AlienController getInstance(){
@@ -34,14 +42,33 @@ public class AlienController {
     }
   
     public void update(int roundNumber){
+        if(fakeOpponentAlienFactory == 0){
+            int probability = RandomGenerator.randInt(1, 100);
+            if(probability <=5){
+                increaseWaveSize();
+                System.out.println("Added a fake alien factory");
+                fakeOpponentAlienFactory++;
+            }
+        }
+        
+        if(fakeOpponentAlienFactory == 1){
+            int probability = RandomGenerator.randInt(1, 1000);
+            if(probability <=5){
+                increaseWaveSize();
+                System.out.println("Added a fake alien factory");
+                fakeOpponentAlienFactory++;
+            }
+        }
+        
         removeEmptyRows();
-        //TODO remove dead aliens
         updateAlienPosition();
+        checkForShieldColission();
         checkToFireBullet(roundNumber);
         checkToAddRow();
     }
     
     public void checkToFireBullet(int roundNumber){
+        removeEmptyRows();
         if(roundNumber % 6 == 0){
             ArrayList<Alien> firstRow = null;
             ArrayList<Alien> secondRow = null;
@@ -103,6 +130,9 @@ public class AlienController {
          for (ArrayList<Alien> rowAliens : alienRow) { 
             for (Alien alien : rowAliens) {
                 if(moveDown){
+                    if(alien.getyPosition()==1){
+                        gameOver = true;
+                    }
                     alien.updatePosition("DOWN");
                     alien.invertMoveDirection();
                 }else{
@@ -158,6 +188,76 @@ public class AlienController {
     
     public void setAliens(ArrayList<ArrayList<Alien>> allAliens){
         this.alienRow = allAliens;
+    }
+
+    private void checkForShieldColission() {
+         ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
+
+        for(ArrayList<Alien> aliens : alienRow){
+            Iterator<Alien> i = aliens.iterator();
+            while (i.hasNext()) {
+               Alien alien = i.next(); 
+                   
+                for(Shield shield : shields){
+                    if(shield.getyPosition() == alien.getyPosition() 
+                        && (shield.getxPosition() == alien.getxPosition()))
+                    {
+                        int xPos = alien.getxPosition();
+                        i.remove();
+                        removeAllObjectsInBlock(alien.getxPosition()-1,alien.getyPosition()-1);
+                        break;
+                    }
+                } 
+            }     
+        } 
+    }
+    
+    //Similiar to player version but removes shields as well
+    private void removeAllObjectsInBlock(int xPosition, int yPosition) {
+        ArrayList<PlayerBullet> playerBullets = BulletController.getInstance().getPlayerbullets();
+        ArrayList<AlienBullet> alienBullets = BulletController.getInstance().getAlienbullets();
+        ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
+        
+        int xMax = xPosition +3;
+        int y = yPosition;
+        int yMax = y +3;
+        for (int i = xPosition; i < xMax; i++) {
+            for (int j = y; j < yMax; j++) {
+                for (int k = 0; k < playerBullets.size();k++) {
+                    if(playerBullets.get(k).getxPosition() == i
+                        && playerBullets.get(k).getyPosition() == j){
+                        playerBullets.remove(k);
+                        break;
+                    }
+                }
+                
+                for (int k = 0; k < alienBullets.size();k++) {
+                    if(alienBullets.get(k).getxPosition() == i
+                        && alienBullets.get(k).getyPosition() == j){
+                        alienBullets.remove(k);
+                        break;
+                    }
+                }
+                
+                for(Shield shield : shields){
+                    if(shield.getyPosition() == j 
+                            && (shield.getxPosition() == i))
+                    {
+                      shields.remove(shield);
+                      break;
+                    }
+                }
+            }
+        }
+        BulletController.getInstance().setAlienbullets(alienBullets);
+        BulletController.getInstance().setPlayerbullets(playerBullets);
+        PlayerController.getInstance().setShields(shields);
+        
+        
+    }
+    
+    public boolean isGameOver(){
+        return gameOver;
     }
 
 }

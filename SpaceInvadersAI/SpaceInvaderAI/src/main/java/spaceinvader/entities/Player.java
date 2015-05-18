@@ -1,6 +1,7 @@
 package spaceinvader.entities;
 
 import java.util.ArrayList;
+import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 
 /**
@@ -150,6 +151,7 @@ public class Player extends GameObject{
     }
     
     private void buildShield(){
+        removeAllObjectsInBlock(this.getxPosition());
         shields.addAll(createShieldBlock(this.getxPosition()));
         this.lives--;
     }
@@ -221,7 +223,47 @@ public class Player extends GameObject{
     public int getKills(){
         return this.kills;
     }
-    
 
-
+    public void removeAllObjectsInBlock(int xPosition) {
+        ArrayList<ArrayList<Alien>> allAliens = AlienController.getInstance().getAllAliens();
+        ArrayList<PlayerBullet> playerBullets = BulletController.getInstance().getPlayerbullets();
+        ArrayList<AlienBullet> alienBullets = BulletController.getInstance().getAlienbullets();
+        
+        int xMax = xPosition +3;
+        int y = 3;
+        int yMax = y +3;
+        for (int i = xPosition; i < xMax; i++) {
+            for (int j = y; j < yMax; j++) {
+                for(ArrayList<Alien> aliens : allAliens){
+                    for(Alien alien : aliens){
+                        if(alien.getyPosition() == j 
+                                && (alien.getxPosition() == i))
+                        {
+                          aliens.remove(alien);
+                          break;
+                        }
+                    } 
+                }
+                
+                for (int k = 0; k < playerBullets.size();k++) {
+                    if(playerBullets.get(k).getxPosition() == i
+                        && playerBullets.get(k).getyPosition() == j){
+                        playerBullets.remove(k);
+                        break;
+                    }
+                }
+                
+                for (int k = 0; k < alienBullets.size();k++) {
+                    if(alienBullets.get(k).getxPosition() == i
+                        && alienBullets.get(k).getyPosition() == j){
+                        alienBullets.remove(k);
+                        break;
+                    }
+                }
+            }
+        }
+        AlienController.getInstance().setAliens(allAliens);
+        BulletController.getInstance().setAlienbullets(alienBullets);
+        BulletController.getInstance().setPlayerbullets(playerBullets);
+    }
 }

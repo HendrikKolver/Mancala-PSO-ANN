@@ -24,32 +24,35 @@ public class SpaceInvader {
         int roundCounter = 0;
         int waveRoundCounter = 0;
         long startTime = System.currentTimeMillis();
+        int gameCounter = 0;
 
         while(roundCounter<200){
-            Thread.sleep(500);
+            Thread.sleep(300);
             roundCounter++;
             waveRoundCounter++;
-            
+
             if(waveRoundCounter ==40){
                 alienController.increaseWaveSize();
                 //waveRoundCounter=0;
             }
-            
+
             printBoard(alienController, roundCounter);
-            
-            if(PlayerController.getInstance().isGameOver()){
-                System.out.println("Game Over");
+            if(PlayerController.getInstance().isGameOver() || AlienController.getInstance().isGameOver()){
+                //System.out.println("Game Over");
                 break;
             }
-            
+
             BulletController.getInstance().update();
             alienController.update(roundCounter);
             PlayerController.getInstance().update();
-            
+
             //Check again for collisions to see if someone moved into a bullet
             BulletController.getInstance().alienBulletColissionDetection();
             BulletController.getInstance().playerBulletColissionDetection();
         }
+        gameCounter++;
+        
+        
         
         long endTime = System.currentTimeMillis();
 
