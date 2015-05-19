@@ -1,6 +1,9 @@
 package spaceinvader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienBullet;
 import spaceinvader.entities.Building;
@@ -19,12 +22,13 @@ public class SpaceInvader {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {        
+    public static void main(String[] args) throws InterruptedException, FileNotFoundException {        
         AlienController alienController = AlienController.getInstance();
+        String content = new Scanner(new File("jsonTest.json")).useDelimiter("\\Z").next();
+        alienController.importGameState(content);
         int roundCounter = 0;
         int waveRoundCounter = 0;
         long startTime = System.currentTimeMillis();
-        int gameCounter = 0;
 
         while(roundCounter<200){
             Thread.sleep(300);
@@ -33,7 +37,6 @@ public class SpaceInvader {
 
             if(waveRoundCounter ==40){
                 alienController.increaseWaveSize();
-                //waveRoundCounter=0;
             }
 
             printBoard(alienController, roundCounter);
@@ -50,9 +53,6 @@ public class SpaceInvader {
             BulletController.getInstance().alienBulletColissionDetection();
             BulletController.getInstance().playerBulletColissionDetection();
         }
-        gameCounter++;
-        
-        
         
         long endTime = System.currentTimeMillis();
 

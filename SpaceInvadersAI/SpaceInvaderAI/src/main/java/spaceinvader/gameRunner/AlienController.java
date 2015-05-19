@@ -3,9 +3,10 @@ package spaceinvader.gameRunner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienBullet;
-import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.entities.Shield;
 import spaceinvader.utilities.RandomGenerator;
@@ -19,7 +20,6 @@ public class AlienController {
     ArrayList <ArrayList<Alien>> alienRow;
     ArrayList <Alien> latestRowAliens;
     int fakeOpponentAlienFactory = 0;
-    boolean spawnRow = true;
     private boolean gameOver;
     private int waveSize;
     
@@ -251,9 +251,16 @@ public class AlienController {
         }
         BulletController.getInstance().setAlienbullets(alienBullets);
         BulletController.getInstance().setPlayerbullets(playerBullets);
-        PlayerController.getInstance().setShields(shields);
-        
-        
+        PlayerController.getInstance().setShields(shields); 
+    }
+    
+    public String dumpGameState(){
+        return null;
+    }
+    
+    public void importGameState(String gameState){
+        //TODO import from game state
+        JSONObject jsonObj = new JSONObject(gameState);
     }
     
     public boolean isGameOver(){
