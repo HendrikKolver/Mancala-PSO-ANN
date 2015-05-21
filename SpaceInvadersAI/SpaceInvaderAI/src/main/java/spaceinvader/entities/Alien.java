@@ -71,6 +71,14 @@ public class Alien extends GameObject{
         this.bulletController = bulletController;
     }
     
+    @Override
+    public GameObject getCopy(){
+        Alien alien = new Alien(this.xPosition,this.yPosition);
+        alien.moveDirection = this.moveDirection;
+        alien.bulletController = this.bulletController.getCopy();
+        return this;
+    }
+    
     
 
 }

@@ -61,6 +61,10 @@ public class PlayerController {
         }
     }
     
+    public PlayerController getCopy(){
+        return this;
+    }
+    
     public ArrayList<Shield> getAllShields(){
         return player.getAllShields();
     }

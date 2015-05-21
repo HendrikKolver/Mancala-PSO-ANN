@@ -195,6 +195,10 @@ public class BulletController {
         }
     }
     
+    public BulletController getCopy(){
+        return this;
+    }
+    
     public int getPlayerBulletCount(){
         return playerBulletList.size();
     }

@@ -78,6 +78,15 @@ public class GameObject {
         return ySize;
     }
     
+    public GameObject getCopy(){
+        GameObject gameObject = new GameObject();
+        gameObject.xPosition = this.xPosition;
+        gameObject.yPosition = this.yPosition;
+        gameObject.xSize = this.xSize;
+        gameObject.ySize = this.ySize;
+        return gameObject;
+    };
+    
     
     
 }

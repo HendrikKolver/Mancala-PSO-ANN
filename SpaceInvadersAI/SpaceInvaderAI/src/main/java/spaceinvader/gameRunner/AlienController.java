@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienBullet;
+import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.entities.Shield;
 import spaceinvader.utilities.RandomGenerator;
@@ -246,6 +247,11 @@ public class AlienController {
         bulletController.setAlienbullets(alienBullets);
         bulletController.setPlayerbullets(playerBullets);
         playerController.setShields(shields); 
+    }
+    
+    
+    public AlienController getCopy(){
+        return this;
     }
     
     public String dumpGameState(){

@@ -3,6 +3,7 @@ package spaceinvader.entities;
 import java.util.ArrayList;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
+import spaceinvader.utilities.ArrayListCopy;
 
 /**
  *
@@ -267,6 +268,23 @@ public class Player extends GameObject{
         alienController.setAliens(allAliens);
         bulletController.setAlienbullets(alienBullets);
         bulletController.setPlayerbullets(playerBullets);
+    }
+    
+    @Override
+    public GameObject getCopy(){
+        Player player = new Player();
+        player.shields = ArrayListCopy.copyArray(shields);
+        player.buildings = ArrayListCopy.copyArray(buildings);
+        
+        //start location
+        player.xPosition = this.xPosition;
+        player.yPosition = this.yPosition;
+        player.bulletLimit = this.bulletLimit;
+        player.lives = this.lives;
+        player.isAlive = this.isAlive;
+        
+        player.kills = this.kills;
+        return player;
     }
 
     public BulletController getBulletController() {
