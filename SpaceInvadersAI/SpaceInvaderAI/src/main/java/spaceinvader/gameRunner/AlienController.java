@@ -16,29 +16,21 @@ import spaceinvader.utilities.RandomGenerator;
  * @author Hendrik Kolver
  */
 public class AlienController {
-    private static AlienController instance;
     ArrayList <ArrayList<Alien>> alienRow;
     ArrayList <Alien> latestRowAliens;
     int fakeOpponentAlienFactory = 0;
     private boolean gameOver;
     private int waveSize;
+    private PlayerController playerController;
+    private BulletController bulletController;
+    private AlienController alienController;
     
-    private AlienController(){
+    public AlienController(){
         waveSize =3;
         alienRow = new ArrayList();
         latestRowAliens = new ArrayList();
         alienRow.add(latestRowAliens);
-        gameOver = false;
-        addAlien();
-        
-    }
-    
-    public static AlienController getInstance(){
-        if(instance == null){
-            instance = new AlienController();
-        }
-        
-        return instance;
+        gameOver = false;      
     }
   
     public void update(int roundNumber){
@@ -46,7 +38,6 @@ public class AlienController {
             int probability = RandomGenerator.randInt(1, 100);
             if(probability <=5){
                 increaseWaveSize();
-                System.out.println("Added a fake alien factory");
                 fakeOpponentAlienFactory++;
             }
         }
@@ -55,7 +46,6 @@ public class AlienController {
             int probability = RandomGenerator.randInt(1, 1000);
             if(probability <=5){
                 increaseWaveSize();
-                System.out.println("Added a fake alien factory");
                 fakeOpponentAlienFactory++;
             }
         }
@@ -64,6 +54,7 @@ public class AlienController {
         updateAlienPosition();
         checkForShieldColission();
         checkToFireBullet(roundNumber);
+        removeEmptyRows();
         checkToAddRow();
     }
     
@@ -72,7 +63,8 @@ public class AlienController {
         if(roundNumber % 6 == 0){
             ArrayList<Alien> firstRow = null;
             ArrayList<Alien> secondRow = null;
-            if(alienRow.size() >=0){
+            
+            if(alienRow.size() >0){
                 firstRow = alienRow.get(0);
             }
             if(alienRow.size() >1){
@@ -105,7 +97,7 @@ public class AlienController {
     }
     
     public void checkToAddRow(){
-        if(latestRowAliens.get(0).getyPosition() <10){
+        if(alienRow.isEmpty() || alienRow.get(alienRow.size()-1).get(0).getyPosition() <10){
             addNewRow();
             addAlien();
         }
@@ -145,7 +137,9 @@ public class AlienController {
     public void addAlien(){
         int xStartLocation = 17;
         for (int i = 0; i < waveSize; i++) {
-            latestRowAliens.add(new Alien(xStartLocation,11));
+            Alien alien = new Alien(xStartLocation,11);
+            alien.setBulletController(bulletController);
+            latestRowAliens.add(alien);
             xStartLocation -= 3;
         }
         Collections.reverse(latestRowAliens);
@@ -157,13 +151,13 @@ public class AlienController {
     }
     
     private void removeEmptyRows(){ 
-        for (int i = 0; i < alienRow.size();) {
-            if(alienRow.get(i).isEmpty()){
-                alienRow.remove(i);
-            }else{
-                i++;
+        Iterator<ArrayList<Alien>> i = alienRow.iterator();
+            while (i.hasNext()) {
+                ArrayList<Alien> aliens = i.next();
+                 if(aliens.isEmpty()){
+                       i.remove(); 
+                }
             }
-        }
     }
     
     public void increaseWaveSize(){
@@ -191,7 +185,7 @@ public class AlienController {
     }
 
     private void checkForShieldColission() {
-         ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
+         ArrayList<Shield> shields = playerController.getAllShields();
 
         for(ArrayList<Alien> aliens : alienRow){
             Iterator<Alien> i = aliens.iterator();
@@ -214,9 +208,9 @@ public class AlienController {
     
     //Similiar to player version but removes shields as well
     private void removeAllObjectsInBlock(int xPosition, int yPosition) {
-        ArrayList<PlayerBullet> playerBullets = BulletController.getInstance().getPlayerbullets();
-        ArrayList<AlienBullet> alienBullets = BulletController.getInstance().getAlienbullets();
-        ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
+        ArrayList<PlayerBullet> playerBullets = bulletController.getPlayerbullets();
+        ArrayList<AlienBullet> alienBullets = bulletController.getAlienbullets();
+        ArrayList<Shield> shields = playerController.getAllShields();
         
         int xMax = xPosition +3;
         int y = yPosition;
@@ -249,9 +243,9 @@ public class AlienController {
                 }
             }
         }
-        BulletController.getInstance().setAlienbullets(alienBullets);
-        BulletController.getInstance().setPlayerbullets(playerBullets);
-        PlayerController.getInstance().setShields(shields); 
+        bulletController.setAlienbullets(alienBullets);
+        bulletController.setPlayerbullets(playerBullets);
+        playerController.setShields(shields); 
     }
     
     public String dumpGameState(){
@@ -266,5 +260,31 @@ public class AlienController {
     public boolean isGameOver(){
         return gameOver;
     }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
+    }
+
+    public BulletController getBulletController() {
+        return bulletController;
+    }
+
+    public void setBulletController(BulletController bulletController) {
+        this.bulletController = bulletController;
+    }
+
+    public AlienController getAlienController() {
+        return alienController;
+    }
+
+    public void setAlienController(AlienController alienController) {
+        this.alienController = alienController;
+    }
+    
+    
 
 }

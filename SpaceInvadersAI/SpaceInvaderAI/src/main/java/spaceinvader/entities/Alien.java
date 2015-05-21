@@ -8,6 +8,7 @@ import spaceinvader.gameRunner.BulletController;
  */
 public class Alien extends GameObject{
     private String moveDirection = "LEFT";
+    private BulletController bulletController;
     
     public Alien(int xPosition, int yPosition){
         this.xPosition = xPosition;
@@ -59,7 +60,17 @@ public class Alien extends GameObject{
     public void fireBullet(){
         //yPos +1 so that the bullet is spawned below the alien
         AlienBullet alienBullet = new AlienBullet(xPosition,yPosition-1); // check if Alien infront and if so move bullet y ahead with 2
-        BulletController.getInstance().addAlienBullet(alienBullet);
+        bulletController.addAlienBullet(alienBullet);
     }
+
+    public BulletController getBulletController() {
+        return bulletController;
+    }
+
+    public void setBulletController(BulletController bulletController) {
+        this.bulletController = bulletController;
+    }
+    
+    
 
 }

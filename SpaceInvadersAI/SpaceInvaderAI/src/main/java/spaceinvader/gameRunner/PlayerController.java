@@ -11,13 +11,13 @@ import spaceinvader.utilities.RandomGenerator;
  * @author Hendrik Kolver
  */
 public class PlayerController {
-  private static PlayerController instance = null;
         private Player player;
         private int respawnCounter;
+        private BulletController bulletController;
+        private AlienController alienController;
     
     
-    private PlayerController(){
-        instance = this;
+    public PlayerController(){
         player = new Player();
         ArrayList<Shield> shieldBlock1 = player.createShieldBlock(2);
         ArrayList<Shield> shieldBlock2 = player.createShieldBlock(14);
@@ -25,14 +25,7 @@ public class PlayerController {
         player.setShields(shieldBlock1);
         respawnCounter = 0;
     }
-    
-    public static PlayerController getInstance(){
-        if(instance == null){
-            instance = new PlayerController();
-        }
-        
-        return instance;
-    }
+
     
     public void update(){
         if(!player.isAlive() && respawnCounter == 0){
@@ -104,6 +97,22 @@ public class PlayerController {
     public void removeAllObjectsInBlock(int xPos){
         player.removeAllObjectsInBlock(xPos);
     }
-    
-    
+
+    public BulletController getBulletController() {
+        return bulletController;
+    }
+
+    public void setBulletController(BulletController bulletController) {
+        this.bulletController = bulletController;
+        player.setBulletController(this.bulletController);
+    }
+
+    public AlienController getAlienController() {
+        return alienController;
+    }
+
+    public void setAlienController(AlienController alienController) {
+        this.alienController = alienController;
+        player.setAlienController(this.alienController);
+    }
 }

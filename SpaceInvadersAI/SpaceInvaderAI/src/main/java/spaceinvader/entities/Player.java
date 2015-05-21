@@ -15,6 +15,8 @@ public class Player extends GameObject{
     private int lives;
     private int kills;
     private boolean isAlive;
+    private BulletController bulletController;
+    private AlienController alienController;
     
     public Player(){
         //start location
@@ -40,7 +42,7 @@ public class Player extends GameObject{
             possibleMoves.add("MoveRight");
         }
         
-        if(BulletController.getInstance().getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
+        if(bulletController.getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
             possibleMoves.add("Shoot");
         }
         
@@ -131,7 +133,7 @@ public class Player extends GameObject{
     
     private void fireBullet(){
         PlayerBullet playerBullet = new PlayerBullet(this.getxPosition()+1,this.getyPosition()+1);
-        BulletController.getInstance().addPlayerBullet(playerBullet);
+        bulletController.addPlayerBullet(playerBullet);
     }
     
     private void buildBulletFactory(){
@@ -225,9 +227,9 @@ public class Player extends GameObject{
     }
 
     public void removeAllObjectsInBlock(int xPosition) {
-        ArrayList<ArrayList<Alien>> allAliens = AlienController.getInstance().getAllAliens();
-        ArrayList<PlayerBullet> playerBullets = BulletController.getInstance().getPlayerbullets();
-        ArrayList<AlienBullet> alienBullets = BulletController.getInstance().getAlienbullets();
+        ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
+        ArrayList<PlayerBullet> playerBullets = bulletController.getPlayerbullets();
+        ArrayList<AlienBullet> alienBullets = bulletController.getAlienbullets();
         
         int xMax = xPosition +3;
         int y = 3;
@@ -262,8 +264,26 @@ public class Player extends GameObject{
                 }
             }
         }
-        AlienController.getInstance().setAliens(allAliens);
-        BulletController.getInstance().setAlienbullets(alienBullets);
-        BulletController.getInstance().setPlayerbullets(playerBullets);
+        alienController.setAliens(allAliens);
+        bulletController.setAlienbullets(alienBullets);
+        bulletController.setPlayerbullets(playerBullets);
     }
+
+    public BulletController getBulletController() {
+        return bulletController;
+    }
+
+    public void setBulletController(BulletController bulletController) {
+        this.bulletController = bulletController;
+    }
+
+    public AlienController getAlienController() {
+        return alienController;
+    }
+
+    public void setAlienController(AlienController alienController) {
+        this.alienController = alienController;
+    }
+    
+    
 }

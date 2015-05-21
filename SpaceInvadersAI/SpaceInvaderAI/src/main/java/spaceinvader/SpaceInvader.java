@@ -23,48 +23,71 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {        
-        AlienController alienController = AlienController.getInstance();
-        String content = new Scanner(new File("jsonTest.json")).useDelimiter("\\Z").next();
-        alienController.importGameState(content);
         int roundCounter = 0;
         int waveRoundCounter = 0;
         long startTime = System.currentTimeMillis();
+        int gameCounter = 0;
+        
+        while(gameCounter <100000){
+            AlienController alienController = new AlienController();
+            PlayerController playerController = new PlayerController();
+            BulletController bulletController = new BulletController();
+            setupControllers(playerController, alienController, bulletController);
+            
+            while(roundCounter<200){
+                Thread.sleep(300);
+                roundCounter++;
+                waveRoundCounter++;
 
-        while(roundCounter<200){
-            Thread.sleep(300);
-            roundCounter++;
-            waveRoundCounter++;
+                if(waveRoundCounter ==40){
+                    alienController.increaseWaveSize();
+                }
 
-            if(waveRoundCounter ==40){
-                alienController.increaseWaveSize();
+                printBoard(alienController, playerController, bulletController, roundCounter);
+                if(playerController.isGameOver() || alienController.isGameOver()){
+                    //System.out.println("Game Over");
+                    break;
+                }
+
+                bulletController.update();
+                alienController.update(roundCounter);
+                playerController.update();
+
+                //Check again for collisions to see if someone moved into a bullet
+                bulletController.alienBulletColissionDetection();
+                bulletController.playerBulletColissionDetection();
             }
-
-            printBoard(alienController, roundCounter);
-            if(PlayerController.getInstance().isGameOver() || AlienController.getInstance().isGameOver()){
-                //System.out.println("Game Over");
-                break;
-            }
-
-            BulletController.getInstance().update();
-            alienController.update(roundCounter);
-            PlayerController.getInstance().update();
-
-            //Check again for collisions to see if someone moved into a bullet
-            BulletController.getInstance().alienBulletColissionDetection();
-            BulletController.getInstance().playerBulletColissionDetection();
+            
+//            System.out.println("Total rounds played: "+roundCounter);
+//            System.out.println("Total kills: "+playerController.getKillCount());
+//            System.out.println("Games played: "+gameCounter);
+            roundCounter=0;
+            gameCounter++;
+            
         }
+
+        
         
         long endTime = System.currentTimeMillis();
 
         long duration = (endTime - startTime);
-        System.out.println("Total rounds played: "+roundCounter);
-        System.out.println("Total kills: "+PlayerController.getInstance().getKillCount());
         System.out.println("Total time: "+duration);
         
         
     }
     
- public static void printBoard(AlienController alienController, int roundCounter){
+public static void setupControllers(PlayerController playerController, AlienController alienController, BulletController bulletController){
+    alienController.setAlienController(alienController);
+    alienController.setBulletController(bulletController);
+    alienController.setPlayerController(playerController);
+    alienController.addAlien();
+    playerController.setAlienController(alienController);
+    playerController.setBulletController(bulletController);
+    bulletController.setAlienController(alienController);
+    bulletController.setPlayerController(playerController);
+}
+    
+ public static void printBoard(AlienController alienController, PlayerController playerController, BulletController bulletController, int roundCounter){
     String board[][] = new String[19][14];
     
     for (int i = 0; i < board.length; i++) {
@@ -79,8 +102,8 @@ public class SpaceInvader {
         }
     }
      
-    ArrayList<AlienBullet> alienBulletList = BulletController.getInstance().getAlienbullets();
-    ArrayList<PlayerBullet> playerBulletList = BulletController.getInstance().getPlayerbullets();
+    ArrayList<AlienBullet> alienBulletList = bulletController.getAlienbullets();
+    ArrayList<PlayerBullet> playerBulletList = bulletController.getPlayerbullets();
     
     
     
@@ -92,21 +115,21 @@ public class SpaceInvader {
     }
     System.out.println("\n");
     
-    if(PlayerController.getInstance().isPlayerAlive()){
-        int playerPosition = PlayerController.getInstance().getPlayerPosition();
+    if(playerController.isPlayerAlive()){
+        int playerPosition = playerController.getPlayerPosition();
         board[playerPosition][2] = "A";
         board[playerPosition+1][2] = "A";
         board[playerPosition+2][2] = "A";
     }
     
-    ArrayList<Building> buildings = PlayerController.getInstance().getBuildings();
+    ArrayList<Building> buildings = playerController.getBuildings();
     for(Building building : buildings){
         board[building.getxPosition()][building.getyPosition()] = building.getRepresentation();
         board[building.getxPosition()+1][building.getyPosition()] = building.getRepresentation();
         board[building.getxPosition()+2][building.getyPosition()] = building.getRepresentation();
     }
     
-    ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
+    ArrayList<Shield> shields = playerController.getAllShields();
     for(Shield shield : shields){
         board[shield.getxPosition()][shield.getyPosition()] = shield.getRepresentation();
     } 
@@ -129,7 +152,7 @@ public class SpaceInvader {
     }
     //System.out.println("-------------------");
     System.out.print('\r');
-    System.out.println(boardString + "\n" + "Round: "+ roundCounter + " \n Total kills: "+PlayerController.getInstance().getKillCount());
+    System.out.println(boardString + "\n" + "Round: "+ roundCounter + " \n Total kills: "+playerController.getKillCount());
 
     //System.out.println("Round: "+ roundCounter);
     //System.out.println("-------------------");

@@ -12,23 +12,14 @@ import spaceinvader.entities.Shield;
  * @author Hendrik Kolver
  */
 public class BulletController {
-    private static BulletController instance = null;
     private ArrayList<AlienBullet> alienBulletList;
     private ArrayList<PlayerBullet> playerBulletList;
+    private PlayerController playerController;
+    private AlienController alienController; 
     
-    
-    private BulletController(){
-        instance = this;
+    public BulletController(){
         alienBulletList = new ArrayList();
         playerBulletList = new ArrayList();
-    }
-    
-    public static BulletController getInstance(){
-        if(instance == null){
-            instance = new BulletController();
-        }
-        
-        return instance;
     }
     
     public void update(){
@@ -79,9 +70,9 @@ public class BulletController {
     
     public void alienBulletColissionDetection(){
         
-        ArrayList<Building> buildings = PlayerController.getInstance().getBuildings();
-        ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
-        int playerPos = PlayerController.getInstance().getPlayerPosition();
+        ArrayList<Building> buildings = playerController.getBuildings();
+        ArrayList<Shield> shields = playerController.getAllShields();
+        int playerPos = playerController.getPlayerPosition();
         
         for (int i = 0; i < alienBulletList.size();) {
             boolean increaseCounter = true;
@@ -123,14 +114,14 @@ public class BulletController {
                 } 
             }
             
-            if(i < alienBulletList.size() && PlayerController.getInstance().isPlayerAlive()){
+            if(i < alienBulletList.size() && playerController.isPlayerAlive()){
                  if(alienBulletList.get(i).getyPosition() == 2 
                         && (playerPos == alienBulletList.get(i).getxPosition() 
                         || playerPos+1 == alienBulletList.get(i).getxPosition()
                         || playerPos+2 == alienBulletList.get(i).getxPosition()))
                     {
                         alienBulletList.remove(alienBulletList.get(i));
-                        PlayerController.getInstance().killPlayer();
+                        playerController.killPlayer();
                         increaseCounter = false;
                     }
             }
@@ -139,14 +130,14 @@ public class BulletController {
                 i++;
             }
         }
-        PlayerController.getInstance().setBuildings(buildings);
-        PlayerController.getInstance().setShields(shields);
+        playerController.setBuildings(buildings);
+        playerController.setShields(shields);
     }
     
     public void playerBulletColissionDetection(){
         
-        ArrayList<ArrayList<Alien>> allAliens = AlienController.getInstance().getAllAliens();
-        ArrayList<Shield> shields = PlayerController.getInstance().getAllShields();
+        ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
+        ArrayList<Shield> shields = playerController.getAllShields();
         
         for (int i = 0; i < playerBulletList.size();) {
             boolean increaseCounter = true;
@@ -158,7 +149,7 @@ public class BulletController {
                     {
                       aliens.remove(alien);
                       playerBulletList.remove(playerBulletList.get(i));
-                      PlayerController.getInstance().increaseKillCount();
+                      playerController.increaseKillCount();
                       increaseCounter = false;
                       break;
                     }
@@ -187,7 +178,7 @@ public class BulletController {
                 i++;
             }
         }
-        AlienController.getInstance().setAliens(allAliens);
+        alienController.setAliens(allAliens);
     }
     
     public void printAllBullets(){
@@ -223,7 +214,20 @@ public class BulletController {
     public void setPlayerbullets(ArrayList<PlayerBullet> playerBullets){
         this.playerBulletList = playerBullets;
     }
-    
-    
 
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
+    }
+
+    public AlienController getAlienController() {
+        return alienController;
+    }
+
+    public void setAlienController(AlienController alienController) {
+        this.alienController = alienController;
+    }
 }
