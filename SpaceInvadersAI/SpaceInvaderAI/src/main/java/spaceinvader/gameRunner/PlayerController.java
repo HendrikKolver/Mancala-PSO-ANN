@@ -2,6 +2,7 @@ package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
 import spaceinvader.entities.Building;
+import spaceinvader.entities.GameObject;
 import spaceinvader.entities.Player;
 import spaceinvader.entities.Shield;
 import spaceinvader.utilities.RandomGenerator;
@@ -19,28 +20,27 @@ public class PlayerController {
     
     public PlayerController(){
         player = new Player();
-        ArrayList<Shield> shieldBlock1 = player.createShieldBlock(2);
-        ArrayList<Shield> shieldBlock2 = player.createShieldBlock(14);
+        ArrayList<GameObject> shieldBlock1 = player.createShieldBlock(2);
+        ArrayList<GameObject> shieldBlock2 = player.createShieldBlock(14);
         shieldBlock1.addAll(shieldBlock2);
         player.setShields(shieldBlock1);
         respawnCounter = 0;
     }
 
     
-    public void update(){
+    public void update(String move){
         if(!player.isAlive() && respawnCounter == 0){
             player.respawn();
         }else if(!player.isAlive()){
             respawnCounter--;
             return;
         }
-        
-        ArrayList<String> possibleMoves = player.getPossibleMoves();
-        
-        int moveIndex = RandomGenerator.randInt(0, possibleMoves.size()-1);
-        
-        //Some AI witchcraft will happen here
-        player.makeMove(possibleMoves.get(moveIndex));
+
+        player.makeMove(move);
+    }
+    
+    public ArrayList<String> getPossibleMoves(){
+       return player.getPossibleMoves(); 
     }
     
     public void printPlayerPosition(){
@@ -51,29 +51,32 @@ public class PlayerController {
         return player.getxPosition();
     }
     
-    public ArrayList<Building> getBuildings(){
+    public ArrayList<GameObject> getBuildings(){
         return player.getAllBuildings();
     }
     
     public void printBuildingPositions(){
-        for(Building building : player.getAllBuildings()){
+        for(GameObject building : player.getAllBuildings()){
             System.out.println(building.stringContent());
         }
     }
     
     public PlayerController getCopy(){
-        return this;
+        PlayerController playerControllerCopy = new PlayerController();
+        playerControllerCopy.setPlayer((Player) this.player.getCopy());
+        playerControllerCopy.setRespawnCounter(this.respawnCounter);
+        return playerControllerCopy;
     }
     
-    public ArrayList<Shield> getAllShields(){
+    public ArrayList<GameObject> getAllShields(){
         return player.getAllShields();
     }
     
-    public void setBuildings(ArrayList<Building> buildings){
+    public void setBuildings(ArrayList<GameObject> buildings){
         player.setBuildings(buildings);
     }
     
-    public void setShields(ArrayList<Shield> shields){
+    public void setShields(ArrayList<GameObject> shields){
         player.setShields(shields);
     }
     
@@ -119,4 +122,13 @@ public class PlayerController {
         this.alienController = alienController;
         player.setAlienController(this.alienController);
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setRespawnCounter(int respawnCounter) {
+        this.respawnCounter = respawnCounter;
+    }
 }
+

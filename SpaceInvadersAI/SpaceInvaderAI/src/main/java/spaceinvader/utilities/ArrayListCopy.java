@@ -1,7 +1,9 @@
 package spaceinvader.utilities;
 
 import java.util.ArrayList;
+import spaceinvader.entities.Building;
 import spaceinvader.entities.GameObject;
+import spaceinvader.entities.Shield;
 
 /**
  *
@@ -13,7 +15,9 @@ public class ArrayListCopy {
         ArrayList<T> newList = new ArrayList();
         for(T item : list){
             newList.add((T)item.getCopy());
+
         }
         return newList;
     }
+
 }

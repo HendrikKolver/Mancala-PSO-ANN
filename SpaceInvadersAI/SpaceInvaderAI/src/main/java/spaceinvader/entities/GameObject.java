@@ -87,6 +87,15 @@ public class GameObject {
         return gameObject;
     };
     
+    public String getRepresentation(){
+        return "";
+    }
+    
+    public String stringContent(){
+        return "";
+    }
+    
+    
     
     
 }

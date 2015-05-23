@@ -10,8 +10,8 @@ import spaceinvader.utilities.ArrayListCopy;
  * @author Hendrik Kolver
  */
 public class Player extends GameObject{
-    private ArrayList<Building> buildings;
-    private ArrayList<Shield> shields;
+    private ArrayList<GameObject> buildings;
+    private ArrayList<GameObject> shields;
     private int bulletLimit;
     private int lives;
     private int kills;
@@ -66,7 +66,7 @@ public class Player extends GameObject{
     
     private boolean isBuildingBehindPlayer(){
         
-        for(Building building : buildings){
+        for(GameObject building : buildings){
             if(building.getxPosition() >= this.getxPosition()-2 && building.getxPosition() <= this.getxPosition()+2){
                 return true;
             }
@@ -75,7 +75,7 @@ public class Player extends GameObject{
     }
     
     private boolean isShieldBlockingPlayerBullet(){
-        for(Shield shield : shields){
+        for(GameObject shield : shields){
             if(shield.getxPosition() == this.getxPosition()+1 ){
                 return true;
             }
@@ -84,7 +84,7 @@ public class Player extends GameObject{
     }
     
     private boolean isShieldInfrontOfPlayer(){
-         for(Shield shield : shields){
+         for(GameObject shield : shields){
 
             if(shield.getxPosition() == this.getxPosition() 
                 || shield.getxPosition() == this.getxPosition()+1 
@@ -159,20 +159,20 @@ public class Player extends GameObject{
         this.lives--;
     }
     
-    public ArrayList<Building> getAllBuildings(){
+    public ArrayList<GameObject> getAllBuildings(){
         return this.buildings;
     }
     
-    public void setShields(ArrayList<Shield> shields){
+    public void setShields(ArrayList<GameObject> shields){
         this.shields = shields;
     }
     
-    public ArrayList<Shield> getAllShields(){
+    public ArrayList<GameObject> getAllShields(){
         return shields;
     }
     
-    public ArrayList<Shield> createShieldBlock(int startPos){
-        ArrayList<Shield> shields = new ArrayList();
+    public ArrayList<GameObject> createShieldBlock(int startPos){
+        ArrayList<GameObject> shields = new ArrayList();
         int xPosCounter = startPos;
         int yPosCounter = 3;
         for (int i = 0; i < 3; i++) {
@@ -187,10 +187,10 @@ public class Player extends GameObject{
         return shields;
     }
     
-    public void setBuildings(ArrayList<Building> buildings){
+    public void setBuildings(ArrayList<GameObject> buildings){
         this.buildings = buildings;
         int extraBullets = 0;
-        for(Building building : buildings){
+        for(GameObject building : buildings){
             if(building.getRepresentation().equals("B")){
               extraBullets++;  
             }
@@ -229,8 +229,8 @@ public class Player extends GameObject{
 
     public void removeAllObjectsInBlock(int xPosition) {
         ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
-        ArrayList<PlayerBullet> playerBullets = bulletController.getPlayerbullets();
-        ArrayList<AlienBullet> alienBullets = bulletController.getAlienbullets();
+        ArrayList<GameObject> playerBullets = bulletController.getPlayerbullets();
+        ArrayList<GameObject> alienBullets = bulletController.getAlienbullets();
         
         int xMax = xPosition +3;
         int y = 3;
@@ -273,6 +273,7 @@ public class Player extends GameObject{
     @Override
     public GameObject getCopy(){
         Player player = new Player();
+        
         player.shields = ArrayListCopy.copyArray(shields);
         player.buildings = ArrayListCopy.copyArray(buildings);
         

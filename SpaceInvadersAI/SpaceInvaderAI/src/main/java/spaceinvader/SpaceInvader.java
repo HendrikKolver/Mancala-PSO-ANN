@@ -7,11 +7,16 @@ import java.util.Scanner;
 import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienBullet;
 import spaceinvader.entities.Building;
+import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.entities.Shield;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.gameRunner.PlayerController;
+import spaceinvader.treeBuilder.TreeBuilder;
+import spaceinvader.treeBuilder.TreeComposite;
+import spaceinvader.treeBuilder.TreeInterface;
+import spaceinvader.utilities.RandomGenerator;
 
 /**
  *
@@ -28,46 +33,54 @@ public class SpaceInvader {
         long startTime = System.currentTimeMillis();
         int gameCounter = 0;
         
-        while(gameCounter <100000){
+        TreeInterface rootNode = new TreeComposite(null, 0);
+        TreeBuilder treeBuilder = new TreeBuilder(2);
+        
+//        while(gameCounter <10000){
             AlienController alienController = new AlienController();
             PlayerController playerController = new PlayerController();
             BulletController bulletController = new BulletController();
             setupControllers(playerController, alienController, bulletController);
             
-            while(roundCounter<200){
+//            while(!rootNode.isGameOver() && rootNode.roundCount <200){
+//                Thread.sleep(300);
+//                rootNode.roundCount++;
+//                rootNode.printBoard();
+//                rootNode = treeBuilder.build(rootNode);
+            while(roundCounter <200){
                 Thread.sleep(300);
-                roundCounter++;
-                waveRoundCounter++;
 
-                if(waveRoundCounter ==40){
-                    alienController.increaseWaveSize();
-                }
-
+//                if(waveRoundCounter ==40){
+//                    alienController.increaseWaveSize();
+//                }
+//
                 printBoard(alienController, playerController, bulletController, roundCounter);
                 if(playerController.isGameOver() || alienController.isGameOver()){
                     //System.out.println("Game Over");
                     break;
                 }
-
+//
                 bulletController.update();
                 alienController.update(roundCounter);
-                playerController.update();
+                ArrayList<String> moves = playerController.getPossibleMoves();
+                
+                playerController.update(moves.get(RandomGenerator.randInt(1, moves.size()-1)));
 
                 //Check again for collisions to see if someone moved into a bullet
                 bulletController.alienBulletColissionDetection();
                 bulletController.playerBulletColissionDetection();
+                
+                roundCounter++;
             }
             
-//            System.out.println("Total rounds played: "+roundCounter);
-//            System.out.println("Total kills: "+playerController.getKillCount());
-//            System.out.println("Games played: "+gameCounter);
-            roundCounter=0;
-            gameCounter++;
-            
-        }
-
-        
-        
+////            System.out.println("Total rounds played: "+roundCounter);
+////            System.out.println("Total kills: "+playerController.getKillCount());
+////            System.out.println("Games played: "+gameCounter);
+//            roundCounter=0;
+//            gameCounter++;
+//            
+//        }
+               
         long endTime = System.currentTimeMillis();
 
         long duration = (endTime - startTime);
@@ -102,8 +115,8 @@ public static void setupControllers(PlayerController playerController, AlienCont
         }
     }
      
-    ArrayList<AlienBullet> alienBulletList = bulletController.getAlienbullets();
-    ArrayList<PlayerBullet> playerBulletList = bulletController.getPlayerbullets();
+    ArrayList<GameObject> alienBulletList = bulletController.getAlienbullets();
+    ArrayList<GameObject> playerBulletList = bulletController.getPlayerbullets();
     
     
     
@@ -122,23 +135,23 @@ public static void setupControllers(PlayerController playerController, AlienCont
         board[playerPosition+2][2] = "A";
     }
     
-    ArrayList<Building> buildings = playerController.getBuildings();
-    for(Building building : buildings){
+    ArrayList<GameObject> buildings = playerController.getBuildings();
+    for(GameObject building : buildings){
         board[building.getxPosition()][building.getyPosition()] = building.getRepresentation();
         board[building.getxPosition()+1][building.getyPosition()] = building.getRepresentation();
         board[building.getxPosition()+2][building.getyPosition()] = building.getRepresentation();
     }
     
-    ArrayList<Shield> shields = playerController.getAllShields();
-    for(Shield shield : shields){
+    ArrayList<GameObject> shields = playerController.getAllShields();
+    for(GameObject shield : shields){
         board[shield.getxPosition()][shield.getyPosition()] = shield.getRepresentation();
     } 
     
-    for(AlienBullet alienBullet : alienBulletList){
+    for(GameObject alienBullet : alienBulletList){
         board[alienBullet.getxPosition()][alienBullet.getyPosition()] = "|";
     }
     
-    for(PlayerBullet playerBullet : playerBulletList){
+    for(GameObject playerBullet : playerBulletList){
         board[playerBullet.getxPosition()][playerBullet.getyPosition()] = "1";
 
     }

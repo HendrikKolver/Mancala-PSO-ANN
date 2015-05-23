@@ -10,6 +10,7 @@ import spaceinvader.entities.AlienBullet;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.entities.Shield;
+import spaceinvader.utilities.ArrayListCopy;
 import spaceinvader.utilities.RandomGenerator;
 
 /**
@@ -186,14 +187,14 @@ public class AlienController {
     }
 
     private void checkForShieldColission() {
-         ArrayList<Shield> shields = playerController.getAllShields();
+         ArrayList<GameObject> shields = playerController.getAllShields();
 
         for(ArrayList<Alien> aliens : alienRow){
             Iterator<Alien> i = aliens.iterator();
             while (i.hasNext()) {
                Alien alien = i.next(); 
                    
-                for(Shield shield : shields){
+                for(GameObject shield : shields){
                     if(shield.getyPosition() == alien.getyPosition() 
                         && (shield.getxPosition() == alien.getxPosition()))
                     {
@@ -209,9 +210,9 @@ public class AlienController {
     
     //Similiar to player version but removes shields as well
     private void removeAllObjectsInBlock(int xPosition, int yPosition) {
-        ArrayList<PlayerBullet> playerBullets = bulletController.getPlayerbullets();
-        ArrayList<AlienBullet> alienBullets = bulletController.getAlienbullets();
-        ArrayList<Shield> shields = playerController.getAllShields();
+        ArrayList<GameObject> playerBullets = bulletController.getPlayerbullets();
+        ArrayList<GameObject> alienBullets = bulletController.getAlienbullets();
+        ArrayList<GameObject> shields = playerController.getAllShields();
         
         int xMax = xPosition +3;
         int y = yPosition;
@@ -234,7 +235,7 @@ public class AlienController {
                     }
                 }
                 
-                for(Shield shield : shields){
+                for(GameObject shield : shields){
                     if(shield.getyPosition() == j 
                             && (shield.getxPosition() == i))
                     {
@@ -251,7 +252,28 @@ public class AlienController {
     
     
     public AlienController getCopy(){
-        return this;
+        AlienController alienControllerCopy = new AlienController();
+//        ArrayList <ArrayList<Alien>> alienRow;
+
+        alienControllerCopy.setFakeOpponentAlienFactory(fakeOpponentAlienFactory);
+        alienControllerCopy.setGameOver(gameOver);
+        alienControllerCopy.setWaveSize(waveSize);
+        
+        ArrayList <ArrayList<Alien>> tmpAlienRow = new ArrayList();
+        for(ArrayList<Alien> tmpAliens : alienRow){
+            tmpAlienRow.add(ArrayListCopy.copyArray(tmpAliens));
+        }
+        
+        alienControllerCopy.setAliens(tmpAlienRow);
+        if(!tmpAlienRow.isEmpty()){
+            alienControllerCopy.setLatestRowAliens(tmpAlienRow.get(tmpAlienRow.size()-1));
+        }else{
+            ArrayList<Alien> tmpLatestRowAliens = new ArrayList();
+            tmpAlienRow.add(latestRowAliens);
+            alienControllerCopy.setLatestRowAliens(tmpLatestRowAliens);
+        }
+
+        return alienControllerCopy;
     }
     
     public String dumpGameState(){
@@ -289,6 +311,22 @@ public class AlienController {
 
     public void setAlienController(AlienController alienController) {
         this.alienController = alienController;
+    }
+
+    public void setLatestRowAliens(ArrayList<Alien> latestRowAliens) {
+        this.latestRowAliens = latestRowAliens;
+    }
+
+    public void setFakeOpponentAlienFactory(int fakeOpponentAlienFactory) {
+        this.fakeOpponentAlienFactory = fakeOpponentAlienFactory;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public void setWaveSize(int waveSize) {
+        this.waveSize = waveSize;
     }
     
     
