@@ -1,22 +1,15 @@
 package spaceinvader;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import spaceinvader.entities.Alien;
-import spaceinvader.entities.AlienBullet;
-import spaceinvader.entities.Building;
 import spaceinvader.entities.GameObject;
-import spaceinvader.entities.PlayerBullet;
-import spaceinvader.entities.Shield;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.gameRunner.PlayerController;
 import spaceinvader.treeBuilder.TreeBuilder;
 import spaceinvader.treeBuilder.TreeComposite;
 import spaceinvader.treeBuilder.TreeInterface;
-import spaceinvader.utilities.RandomGenerator;
 
 /**
  *
@@ -28,58 +21,21 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {        
-        int roundCounter = 0;
-        int waveRoundCounter = 0;
         long startTime = System.currentTimeMillis();
-        int gameCounter = 0;
         
         TreeInterface rootNode = new TreeComposite(null, 0);
-        TreeBuilder treeBuilder = new TreeBuilder(2);
-        
-//        while(gameCounter <10000){
-            AlienController alienController = new AlienController();
-            PlayerController playerController = new PlayerController();
-            BulletController bulletController = new BulletController();
-            setupControllers(playerController, alienController, bulletController);
+        TreeBuilder treeBuilder = new TreeBuilder(6);
             
-//            while(!rootNode.isGameOver() && rootNode.roundCount <200){
-//                Thread.sleep(300);
-//                rootNode.roundCount++;
-//                rootNode.printBoard();
-//                rootNode = treeBuilder.build(rootNode);
-            while(roundCounter <200){
-                Thread.sleep(300);
+            while(!rootNode.isGameOver() && rootNode.roundCount <200){
 
-//                if(waveRoundCounter ==40){
-//                    alienController.increaseWaveSize();
-//                }
-//
-                printBoard(alienController, playerController, bulletController, roundCounter);
-                if(playerController.isGameOver() || alienController.isGameOver()){
-                    //System.out.println("Game Over");
-                    break;
-                }
-//
-                bulletController.update();
-                alienController.update(roundCounter);
-                ArrayList<String> moves = playerController.getPossibleMoves();
-                
-                playerController.update(moves.get(RandomGenerator.randInt(1, moves.size()-1)));
-
-                //Check again for collisions to see if someone moved into a bullet
-                bulletController.alienBulletColissionDetection();
-                bulletController.playerBulletColissionDetection();
-                
-                roundCounter++;
+                Thread.sleep(200);
+                rootNode.printBoard();
+                long moveStartTime = System.currentTimeMillis();
+                rootNode = treeBuilder.build(rootNode);
+                long moveEndTime = System.currentTimeMillis();
+                System.out.println("move duration: "+(moveEndTime-moveStartTime));
             }
-            
-////            System.out.println("Total rounds played: "+roundCounter);
-////            System.out.println("Total kills: "+playerController.getKillCount());
-////            System.out.println("Games played: "+gameCounter);
-//            roundCounter=0;
-//            gameCounter++;
-//            
-//        }
+            rootNode.printBoard();
                
         long endTime = System.currentTimeMillis();
 

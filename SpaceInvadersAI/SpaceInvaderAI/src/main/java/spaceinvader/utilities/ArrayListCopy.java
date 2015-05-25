@@ -15,7 +15,6 @@ public class ArrayListCopy {
         ArrayList<T> newList = new ArrayList();
         for(T item : list){
             newList.add((T)item.getCopy());
-
         }
         return newList;
     }

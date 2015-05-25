@@ -23,9 +23,6 @@ public abstract class TreeInterface {
     protected PlayerController playerController;
     protected BulletController bulletController;
     
-    
-    
-    
     public NeuralNetwork evaluation;
     
     abstract TreeInterface getCopy();

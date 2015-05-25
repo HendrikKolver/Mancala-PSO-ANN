@@ -23,12 +23,12 @@ public class TreeBuilder {
         plyDepth = depth;    
     }
     
-    public TreeInterface build(TreeInterface node)
+    public TreeInterface build(TreeInterface node) throws InterruptedException
     {
         network = node.evaluation;
         TreeInterface root = node;
         root.nodeDepth = 0;
-        buildTree(root);
+        buildTree(root,null);
        
         TreeInterface tmpNode = root.children;
         TreeInterface finalNode = null;
@@ -49,48 +49,61 @@ public class TreeBuilder {
         return finalNode;
     }
     
-    private double buildTree(TreeInterface node)
+    private double buildTree(TreeInterface node, String move) throws InterruptedException
     {
-       //Todo recursive tree builder.
-       //Takes any node of the tree and calculates all possible children for that node
+        
+        //Todo recursive tree builder.
+        //Takes any node of the tree and calculates all possible children for that node
+        
+        
+        //Run a game update cycle, updating the board to a new state if not root node
+        if(move != null){
+            node.nextMove(move, node.roundCount); 
+            node.nodeDepth++;
+            node.roundCount++;
+        }
+
+        if(node.isGameOver()){
+            //System.out.println("gameOver");
+            node.evaluateMyself();
+            return node.nodeScore;
+        }
+
+        if(node.roundCount >=200){
+            //System.out.println("round limit reached");
+            node.evaluateMyself();
+            return node.nodeScore;
+        }
+
+        //System.out.println("plyDepth: "+node.nodeDepth);
+        if(node.nodeDepth >= plyDepth){
+            
+            node.evaluateMyself();
+            return node.nodeScore;
+        }
        
-       if(node.isGameOver()){
-           node.evaluateMyself();
-           return node.nodeScore;
-       }
+        ArrayList<String> possibleMoves = node.getPossibleMoves();  
+        //System.out.println("Outside loop possibleMoves: "+ possibleMoves);
+        
+        
+        TreeInterface tmpNode = null;
+       //Increase the node depth
+        double tmpNodeScore = 0;
+        double tmpNodeScoreMax = 0;
+
+        for(String possibleMove : possibleMoves){
+            tmpNode = node.getCopy();
+
+            tmpNodeScore = buildTree(tmpNode,possibleMove);
+            node.addChild(tmpNode);
+            if(tmpNodeScore>tmpNodeScoreMax){
+                tmpNodeScoreMax = tmpNodeScore;
+            }
+
+        }
+        node.nodeScore = tmpNodeScoreMax;
        
-       if(node.roundCount >=200){
-           node.evaluateMyself();
-           return node.nodeScore;
-       }
-       
-       if(node.nodeDepth >= plyDepth){
-           node.evaluateMyself();
-           return node.nodeScore;
-       }
-       
-       ArrayList<String> possibleMoves = node.getPossibleMoves();       
-       TreeInterface tmpNode = null;
-       for(String possibleMove : possibleMoves){
-           if(node.children == null){
-               node.children = node.getCopy();
-               tmpNode = node.children;
-           }else{
-               tmpNode.next = node.getCopy();
-               tmpNode = tmpNode.next;
-           }
-           
-           //Increase the node depth
-           tmpNode.nodeDepth = node.nodeDepth+1;
-          
-           //Run a game update cycle, updating the board to a new state
-           tmpNode.nextMove(possibleMove, node.roundCount);         
-           tmpNode.nodeScore = buildTree(tmpNode);
-           
-       }
-       
-       node.evaluateMyself();
-       return node.nodeScore;
+        return node.nodeScore;
     }
     
     public TreeInterface makeMove(TreeInterface node, String move)

@@ -32,12 +32,14 @@ public class TreeComposite extends TreeInterface {
         alienController = new AlienController();
         playerController = new PlayerController();
         bulletController = new BulletController();
-        setupControllers(this, playerController, alienController, bulletController);
+        setupInitialControllers(this, playerController, alienController, bulletController);
     }
     
-    
-    
-     
+    public TreeComposite()
+    {
+       
+    }
+ 
     @Override
     public TreeInterface getNext()
     {
@@ -53,7 +55,6 @@ public class TreeComposite extends TreeInterface {
     @Override
     public void addChild(TreeInterface node)
     {
-
         if(children == null)
        {
            children = node;
@@ -75,18 +76,25 @@ public class TreeComposite extends TreeInterface {
     @Override
      public void evaluateMyself()
      {
-        this.nodeScore = RandomGenerator.randInt(0, 20);
+        double score = this.playerController.getKillCount();
+        score += this.playerController.getLives();
+
+        if(isGameOver()){
+            score-=50;
+        }
+        this.nodeScore = score;
          //TODO Simple evaluation function  
      }
 
     @Override
     public boolean isGameOver() {
-        return (alienController.isGameOver() || playerController.isGameOver());
+        this.finalState = (alienController.isGameOver() || playerController.isGameOver());
+        return this.finalState;
     }
 
     @Override
     TreeInterface getCopy() {
-        TreeInterface nodeCopy = new TreeComposite(null, this.roundCount);
+        TreeInterface nodeCopy = new TreeComposite();
         AlienController tmpAlienController = this.alienController.getCopy();
         nodeCopy.alienController = tmpAlienController;
         
@@ -97,6 +105,13 @@ public class TreeComposite extends TreeInterface {
         nodeCopy.bulletController = tmpBulletController;
         setupControllers(nodeCopy, tmpPlayerController, tmpAlienController, tmpBulletController);
         
+        nodeCopy.children = null;
+        nodeCopy.next =null;
+        nodeCopy.nodeScore = this.nodeScore;
+        nodeCopy.nodeDepth = this.nodeDepth;
+        nodeCopy.finalState = this.finalState;
+        nodeCopy.roundCount = this.roundCount;
+        
         return nodeCopy;
     }
     
@@ -105,6 +120,9 @@ public class TreeComposite extends TreeInterface {
         this.bulletController.update();
         this.alienController.update(roundCounter);
         this.playerController.update(move);
+        //Check again for collisions to see if someone moved into a bullet
+        this.bulletController.alienBulletColissionDetection();
+        this.bulletController.playerBulletColissionDetection();
     }
 
     @Override
@@ -112,7 +130,7 @@ public class TreeComposite extends TreeInterface {
         return this.playerController.getPossibleMoves();
     }
     
-    private void setupControllers(TreeInterface node, PlayerController playerController, AlienController alienController, BulletController bulletController){
+    private void setupInitialControllers(TreeInterface node, PlayerController playerController, AlienController alienController, BulletController bulletController){
         node.alienController.setAlienController(alienController);
         node.alienController.setBulletController(bulletController);
         node.alienController.setPlayerController(playerController);
@@ -123,6 +141,17 @@ public class TreeComposite extends TreeInterface {
         node.bulletController.setPlayerController(playerController);
     }
     
+     private void setupControllers(TreeInterface node, PlayerController playerController, AlienController alienController, BulletController bulletController){
+        node.alienController.setAlienController(alienController);
+        node.alienController.setBulletController(bulletController);
+        node.alienController.setPlayerController(playerController);
+        node.playerController.setAlienController(alienController);
+        node.playerController.setBulletController(bulletController);
+        node.bulletController.setAlienController(alienController);
+        node.bulletController.setPlayerController(playerController);
+    }
+    
+    @Override
     public void printBoard(){
     String board[][] = new String[19][14];
     
@@ -167,7 +196,7 @@ public class TreeComposite extends TreeInterface {
     
     ArrayList<GameObject> shields = playerController.getAllShields();
     for(GameObject shield : shields){
-        board[shield.getxPosition()][shield.getyPosition()] = shield.getRepresentation();
+        board[shield.getxPosition()][shield.getyPosition()] = "-";
     } 
     
     for(GameObject alienBullet : alienBulletList){

@@ -88,11 +88,11 @@ public class GameObject {
     };
     
     public String getRepresentation(){
-        return "";
+        return "D";
     }
     
     public String stringContent(){
-        return "";
+        return "R";
     }
     
     

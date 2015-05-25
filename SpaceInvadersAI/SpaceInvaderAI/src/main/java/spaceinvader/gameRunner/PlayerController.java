@@ -111,7 +111,7 @@ public class PlayerController {
 
     public void setBulletController(BulletController bulletController) {
         this.bulletController = bulletController;
-        player.setBulletController(this.bulletController);
+        player.setBulletController(bulletController);
     }
 
     public AlienController getAlienController() {
@@ -120,7 +120,7 @@ public class PlayerController {
 
     public void setAlienController(AlienController alienController) {
         this.alienController = alienController;
-        player.setAlienController(this.alienController);
+        player.setAlienController(alienController);
     }
 
     public void setPlayer(Player player) {
@@ -129,6 +129,10 @@ public class PlayerController {
 
     public void setRespawnCounter(int respawnCounter) {
         this.respawnCounter = respawnCounter;
+    }
+    
+    public int getLives(){
+        return this.player.getLives();
     }
 }
 

@@ -36,6 +36,10 @@ public class AlienController {
     }
   
     public void update(int roundNumber){
+        if(roundNumber == 40){
+            this.increaseWaveSize();
+        }
+        
         if(fakeOpponentAlienFactory == 0){
             int probability = RandomGenerator.randInt(1, 100);
             if(probability <=5){
@@ -76,7 +80,10 @@ public class AlienController {
             if(firstRow != null){
                 int probability = RandomGenerator.randInt(1, 1000);
                 if(probability <= 333){
-                    //TODO Alien infront of player should shoot
+                    if(!firstRow.isEmpty()){
+                        Alien alienToShoot = getClosestAlienToPlayer(firstRow);
+                        alienToShoot.fireBullet();
+                    }
                 }else{
                     int rowChoice = 0;
                     if(secondRow != null){
@@ -90,6 +97,7 @@ public class AlienController {
                     }else{
                         int alienToShoot = RandomGenerator.randInt(0, secondRow.size()-1);
                         Alien secondRowAlienToShoot = secondRow.get(alienToShoot);
+                        secondRowAlienToShoot = getAlienInfront(firstRow, secondRowAlienToShoot);
                         secondRowAlienToShoot.fireBullet();
                     }
                     
@@ -98,8 +106,39 @@ public class AlienController {
         }
     }
     
+    private Alien getClosestAlienToPlayer(ArrayList<Alien> aliens){
+        Alien tmpClosest = aliens.get(0);
+        int closestDistance = 1000;
+        
+        for(Alien alien : aliens){
+            int tmpDistance = alien.getxPosition() - playerController.getPlayerPosition();
+            
+            if(tmpDistance <0){
+                tmpDistance *= (-1);
+            }
+            
+            if(tmpDistance < closestDistance){
+                closestDistance = tmpDistance;
+                tmpClosest = alien;
+            }
+        }
+        return tmpClosest;
+    }
+    
+    private Alien getAlienInfront(ArrayList<Alien> aliens, Alien alien){
+        for(Alien firstRowAlien : aliens){
+            if(firstRowAlien.getxPosition() == alien.getxPosition()){
+                return firstRowAlien;
+            }
+        }
+        return alien;
+    }
+    
+    
+    
     public void checkToAddRow(){
         if(alienRow.isEmpty() || alienRow.get(alienRow.size()-1).get(0).getyPosition() <10){
+            
             addNewRow();
             addAlien();
         }
@@ -273,6 +312,7 @@ public class AlienController {
             alienControllerCopy.setLatestRowAliens(tmpLatestRowAliens);
         }
 
+
         return alienControllerCopy;
     }
     
@@ -303,6 +343,13 @@ public class AlienController {
 
     public void setBulletController(BulletController bulletController) {
         this.bulletController = bulletController;
+        for(ArrayList<Alien> aliens : alienRow){
+            Iterator<Alien> i = aliens.iterator();
+            while (i.hasNext()) {
+               Alien alien = i.next(); 
+               alien.setBulletController(bulletController);
+            }     
+        } 
     }
 
     public AlienController getAlienController() {
