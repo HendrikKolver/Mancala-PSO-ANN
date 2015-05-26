@@ -18,7 +18,7 @@ public class SpaceInvaderTrain {
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException { 
         Trainer trainer = new Trainer();
-        NeuralNetwork nn = trainer.train(200, 4);
+        NeuralNetwork nn = trainer.train(500, 2);
 //        AIPlayer player = new AIPlayer(6,nn);
 //            
 //        while(!player.isGameOver() && player.getRoundCount() <200){

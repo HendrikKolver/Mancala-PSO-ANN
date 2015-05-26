@@ -29,7 +29,7 @@ public class AIPlayer {
     }
     
     public boolean isGameOver(){
-        return currentPosition.isGameOver();
+        return (currentPosition.isGameOver() || this.roundCount >=200);
     }
 
     public TreeInterface getCurrentPosition() {

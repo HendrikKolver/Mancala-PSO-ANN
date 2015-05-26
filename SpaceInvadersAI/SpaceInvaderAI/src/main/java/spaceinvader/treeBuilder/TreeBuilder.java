@@ -35,9 +35,9 @@ public class TreeBuilder {
         //Root has no children... 
         //Probably caused by it being the last round or something
         //very rare bug.. still consider looking into it
-        if(tmpNode == null){
-            return root;
-        }
+//        if(tmpNode == null){
+//            return root;
+//        }
         
         TreeInterface finalNode = null;
         double tmpCount = tmpNode.nodeScore;

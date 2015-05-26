@@ -31,7 +31,7 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {           
-        NeuralNetwork nn = new NeuralNetwork(10,1,4,1);
+        NeuralNetwork nn = new NeuralNetwork(10,1,30,1);
         //setRandomWeights(nn);
         getWeightsFromFile(nn);
         AIPlayer player = new AIPlayer(6,nn);
@@ -67,7 +67,7 @@ public class SpaceInvader {
         
         //read from file
         try {
-            String name = JOptionPane.showInputDialog("Name of file");
+            String name = "tmpFile.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {

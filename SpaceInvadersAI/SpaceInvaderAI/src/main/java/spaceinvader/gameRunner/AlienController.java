@@ -3,13 +3,9 @@ package spaceinvader.gameRunner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import spaceinvader.entities.Alien;
-import spaceinvader.entities.AlienBullet;
 import spaceinvader.entities.GameObject;
-import spaceinvader.entities.PlayerBullet;
-import spaceinvader.entities.Shield;
 import spaceinvader.utilities.ArrayListCopy;
 import spaceinvader.utilities.RandomGenerator;
 
@@ -40,21 +36,21 @@ public class AlienController {
             this.increaseWaveSize();
         }
         
-        if(fakeOpponentAlienFactory == 0){
-            int probability = RandomGenerator.randInt(1, 100);
-            if(probability <=5){
-                increaseWaveSize();
-                fakeOpponentAlienFactory++;
-            }
-        }
-        
-        if(fakeOpponentAlienFactory == 1){
-            int probability = RandomGenerator.randInt(1, 1000);
-            if(probability <=5){
-                increaseWaveSize();
-                fakeOpponentAlienFactory++;
-            }
-        }
+//        if(fakeOpponentAlienFactory == 0){
+//            int probability = RandomGenerator.randInt(1, 1000);
+//            if(probability <=5){
+//                increaseWaveSize();
+//                fakeOpponentAlienFactory++;
+//            }
+//        }
+//        
+//        if(fakeOpponentAlienFactory == 1){
+//            int probability = RandomGenerator.randInt(1, 10000);
+//            if(probability <=5){
+//                increaseWaveSize();
+//                fakeOpponentAlienFactory++;
+//            }
+//        }
         
         removeEmptyRows();
         updateAlienPosition();
