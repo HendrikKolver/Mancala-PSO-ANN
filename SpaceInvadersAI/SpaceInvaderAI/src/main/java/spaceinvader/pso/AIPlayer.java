@@ -18,7 +18,7 @@ public class AIPlayer {
     public AIPlayer(int plyDepth, NeuralNetwork neuralNetwork){
         this.plyDepth = plyDepth;
         this.neuralNetwork = neuralNetwork;
-        this.roundCount = 0;
+        this.roundCount = 1;
         currentPosition = new TreeComposite(neuralNetwork, roundCount);
     }
     

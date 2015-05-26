@@ -55,7 +55,7 @@ public class PSO {
        this.sigmoid = sigmoid;
        tournamentSize = 10;
        plyDepth = p;
-       gamesPlayed = 10;
+       gamesPlayed = 5;
        
   
     }
@@ -408,8 +408,6 @@ public class PSO {
             writer.print(lines.get(x));
 
         writer.close();
-    
-  
     }
     
 }
