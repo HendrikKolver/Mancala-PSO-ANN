@@ -8,7 +8,7 @@ public class NeuralNetwork {
     Neuron inputs[];
     Neuron outputs[];
     Neuron hidden[];
-    double weights[];
+    public double weights[];
     int outputCount;
     Neuron inputBias;
     Neuron hiddenBias;

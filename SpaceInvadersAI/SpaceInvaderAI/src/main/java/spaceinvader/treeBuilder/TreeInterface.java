@@ -34,6 +34,7 @@ public abstract class TreeInterface {
     abstract void evaluateMyself();
     public abstract boolean isGameOver();
     public abstract void printBoard();
+    public abstract int boardFinalRating();
     
      
 }

@@ -1,18 +1,15 @@
 package spaceinvader.treeBuilder;
 
 import java.util.ArrayList;
-import java.util.Random;
 import spaceinvader.entities.Alien;
-import spaceinvader.entities.AlienBullet;
-import spaceinvader.entities.Building;
+import spaceinvader.entities.AlienFactory;
+import spaceinvader.entities.BulletFactory;
 import spaceinvader.entities.GameObject;
-import spaceinvader.entities.PlayerBullet;
-import spaceinvader.entities.Shield;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.gameRunner.PlayerController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
-import spaceinvader.utilities.RandomGenerator;
+import spaceinvader.neuralNetwork.Neuron;
 
 /**
  *
@@ -76,15 +73,56 @@ public class TreeComposite extends TreeInterface {
     @Override
      public void evaluateMyself()
      {
-        double score = this.playerController.getKillCount();
-        score += this.playerController.getLives();
-
-        if(isGameOver()){
-            score-=50;
-        }
-        this.nodeScore = score;
+//        double score = this.playerController.getKillCount();
+//        score += this.playerController.getLives();
+//
+//        if(isGameOver()){
+//            score-=50;
+//        }
+//        this.nodeScore = score;
          //TODO Simple evaluation function  
+        
+        double input[] = getInputs();
+         //node evaluation
+        Neuron out[] = evaluation.calculate(input);
+        this.nodeScore = out[0].fireOutput();
+        out[0].clear(); 
      }
+    
+    private double[] getInputs(){
+        double[] inputs = new double[10];
+        inputs[0] = this.alienController.getAlienCount();
+        inputs[1] = this.playerController.getAllShields().size();
+        inputs[2] = this.bulletController.getPlayerBulletCount();
+        inputs[3] = this.bulletController.getAlienbullets().size();
+        inputs[4] = this.playerController.getLives();
+        inputs[5] = this.playerController.getKillCount();
+        ArrayList<GameObject> buildings = this.playerController.getBuildings();
+        
+        int bulletFactoryCount = 0;
+        for(GameObject building : buildings){
+            if(building instanceof BulletFactory){
+                bulletFactoryCount++;
+            }
+        }
+        
+        inputs[6] = bulletFactoryCount;
+        
+        int alienFactoryCount = 0;
+        for(GameObject building : buildings){
+            if(building instanceof AlienFactory){
+                alienFactoryCount++;
+            }
+        }
+       
+        inputs[7] = alienFactoryCount;
+        
+        inputs[8] = this.alienController.getAlienDistanceFromWall();
+        inputs[9] = this.roundCount;
+        
+        return inputs;
+    }
+     
 
     @Override
     public boolean isGameOver() {
@@ -111,6 +149,7 @@ public class TreeComposite extends TreeInterface {
         nodeCopy.nodeDepth = this.nodeDepth;
         nodeCopy.finalState = this.finalState;
         nodeCopy.roundCount = this.roundCount;
+        nodeCopy.evaluation = this.evaluation;
         
         return nodeCopy;
     }
@@ -222,5 +261,14 @@ public class TreeComposite extends TreeInterface {
     //System.out.println("Round: "+ roundCounter);
     //System.out.println("-------------------");
  }   
+
+    @Override
+    public int boardFinalRating() {
+        int finalRating = 
+                this.roundCount
+                +this.playerController.getKillCount()
+                +this.playerController.getLives();
+        return finalRating;
+    }
          
 }

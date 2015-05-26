@@ -35,16 +35,14 @@ public class Player extends GameObject{
     public ArrayList<String> getPossibleMoves(){
         ArrayList<String> possibleMoves = new ArrayList();
 
-        possibleMoves.add("Nothing");
-        if(this.xPosition >1){
-            possibleMoves.add("MoveLeft");
-        }
-        if(this.xPosition+this.xSize <17){
-            possibleMoves.add("MoveRight");
-        }
-        
         if(bulletController.getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
             possibleMoves.add("Shoot");
+        }
+        
+        possibleMoves.add("Nothing");
+        
+        if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
+            possibleMoves.add("BuildShield");
         }
         
         if(canLifeBeUsed() && !isBuildingBehindPlayer()){
@@ -52,9 +50,13 @@ public class Player extends GameObject{
             possibleMoves.add("BuildMissileController");
         }
         
-        if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
-            possibleMoves.add("BuildShield");
+        if(this.xPosition >1){
+            possibleMoves.add("MoveLeft");
         }
+        if(this.xPosition+this.xSize <17){
+            possibleMoves.add("MoveRight");
+        }
+
         
         
         return possibleMoves;

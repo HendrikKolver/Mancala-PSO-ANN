@@ -316,6 +316,28 @@ public class AlienController {
         return alienControllerCopy;
     }
     
+    public int getAlienCount(){
+        int count = 0;
+        for(ArrayList<Alien> aliens : alienRow){
+            Iterator<Alien> i = aliens.iterator();
+            while (i.hasNext()) {
+                Alien alien = i.next(); 
+                count++;
+            }     
+        }
+        return count;
+    }
+    
+    public int getAlienDistanceFromWall(){
+        int minDistance = 13;
+        for(Alien alien : alienRow.get(0)){
+           minDistance = alien.getyPosition();
+           break;
+        }
+        return minDistance;
+    }
+    
+    
     public String dumpGameState(){
         return null;
     }

@@ -32,7 +32,9 @@ public class TreeBuilder {
        
         TreeInterface tmpNode = root.children;
         TreeInterface finalNode = null;
-        double tmpCount = -1000.0;
+        double tmpCount = tmpNode.nodeScore;
+        finalNode = tmpNode;
+        tmpNode = tmpNode.next;      
         
         while(tmpNode != null)
         {
@@ -42,8 +44,7 @@ public class TreeBuilder {
                 finalNode = tmpNode;
             }
             
-            tmpNode = tmpNode.next;
-            
+            tmpNode = tmpNode.next; 
         }
         
         return finalNode;
@@ -51,11 +52,6 @@ public class TreeBuilder {
     
     private double buildTree(TreeInterface node, String move) throws InterruptedException
     {
-        
-        //Todo recursive tree builder.
-        //Takes any node of the tree and calculates all possible children for that node
-        
-        
         //Run a game update cycle, updating the board to a new state if not root node
         if(move != null){
             node.nextMove(move, node.roundCount); 
@@ -64,18 +60,15 @@ public class TreeBuilder {
         }
 
         if(node.isGameOver()){
-            //System.out.println("gameOver");
             node.evaluateMyself();
             return node.nodeScore;
         }
 
         if(node.roundCount >=200){
-            //System.out.println("round limit reached");
             node.evaluateMyself();
             return node.nodeScore;
         }
 
-        //System.out.println("plyDepth: "+node.nodeDepth);
         if(node.nodeDepth >= plyDepth){
             
             node.evaluateMyself();
@@ -90,6 +83,7 @@ public class TreeBuilder {
        //Increase the node depth
         double tmpNodeScore = 0;
         double tmpNodeScoreMax = 0;
+        
 
         for(String possibleMove : possibleMoves){
             tmpNode = node.getCopy();
