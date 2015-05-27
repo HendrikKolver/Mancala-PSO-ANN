@@ -30,9 +30,9 @@ public class Trainer {
         double lB = -1; //lower bound
         int inputs = 10;
         int outputs = 1;
-        int hidden = 30;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
+        int hidden = 20;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
         int sigmoid = 1;
-        int neighSize = 4;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
+        int neighSize = 3;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
         int global= 0;//Integer.parseInt(JOptionPane.showInputDialog("Global = 1, Local = 0"));
         
        PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid);
