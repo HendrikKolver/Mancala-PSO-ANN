@@ -15,10 +15,12 @@ public class SpaceInvaderTrain {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.InterruptedException
+     * @throws java.io.FileNotFoundException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException { 
         Trainer trainer = new Trainer();
-        NeuralNetwork nn = trainer.train(200, 5);
+        NeuralNetwork nn = trainer.train(100, 3);
 //        AIPlayer player = new AIPlayer(6,nn);
 //            
 //        while(!player.isGameOver() && player.getRoundCount() <200){

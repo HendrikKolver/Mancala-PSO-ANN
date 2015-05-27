@@ -31,18 +31,39 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {           
-        NeuralNetwork nn = new NeuralNetwork(10,1,30,1);
+        int plyDepth = 6;
+        int hiddenLayers = 6;
+        
+        NeuralNetwork nn = new NeuralNetwork(10,1,hiddenLayers,1);
         //setRandomWeights(nn);
         getWeightsFromFile(nn);
-        AIPlayer player = new AIPlayer(6,nn);
+       
+        AIPlayer player = new AIPlayer(plyDepth,nn);
+        int totalRoundCount = 0;
+        int totalKillCount = 0;
+        
+        double gamesToPlay = 100.0;
+        
+        for (int i = 0; i < gamesToPlay; i++) {
             
             while(!player.isGameOver() && player.getRoundCount() <200){
 
-                Thread.sleep(200);
-                player.getCurrentPosition().printBoard();
+                //Thread.sleep(200);
+                //player.getCurrentPosition().printBoard();
                 player.playRound();
                 
             }
+            totalRoundCount += player.getRoundCount();
+            totalKillCount += player.getKillCount();
+            player = new AIPlayer(plyDepth,nn);
+            System.out.println("Game: "+ i + "\r");
+        }
+        System.out.println("Average round count: "+ (totalRoundCount/gamesToPlay));
+        System.out.println("Average kill count: "+ (totalKillCount/gamesToPlay));
+            
+            
+            
+            
    
     }
     

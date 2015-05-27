@@ -39,4 +39,8 @@ public class AIPlayer {
     public int getRoundCount(){
         return roundCount;
     }
+    
+    public int getKillCount(){
+        return this.currentPosition.getKillCount();
+    }
 }

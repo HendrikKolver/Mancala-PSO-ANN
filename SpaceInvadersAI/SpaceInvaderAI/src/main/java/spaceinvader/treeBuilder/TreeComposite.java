@@ -270,5 +270,10 @@ public class TreeComposite extends TreeInterface {
                 +this.playerController.getLives();
         return finalRating;
     }
+    
+    @Override
+    public int getKillCount(){
+        return this.playerController.getKillCount();
+    }
          
 }
