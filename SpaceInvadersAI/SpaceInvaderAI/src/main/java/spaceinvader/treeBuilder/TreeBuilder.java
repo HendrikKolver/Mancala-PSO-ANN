@@ -28,9 +28,47 @@ public class TreeBuilder {
         network = node.evaluation;
         TreeInterface root = node;
         root.nodeDepth = 0;
-        buildTree(root,null);
+        
+        ArrayList<String> possibleMoves = node.getPossibleMoves();  
+        //System.out.println("Outside loop possibleMoves: "+ possibleMoves);
+        
+        
+        TreeInterface tmpNode = null;
+       //Increase the node depth
+        double tmpNodeScore = 0;
+        double tmpNodeScoreMax = 0;
+        
+        ArrayList<ThreadedBuilder> builders = new ArrayList();
+
+        for(String possibleMove : possibleMoves){
+            tmpNode = root.getCopy();
+            root.addChild(tmpNode);
+            ThreadedBuilder builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
+            Thread t = new Thread(builderThread);
+            t.start();
+            builders.add(builderThread);
+        }
+        
+        
+        
+        boolean isAllCompleted = true;
+        while(true){
+           
+            for(ThreadedBuilder builder : builders){
+                if(!builder.isCompleted){
+                    isAllCompleted = false;
+                    break;
+                }
+            }
+            if(isAllCompleted){
+                break;
+            }
+            isAllCompleted = true;
+        }
+        
+       // buildTree(root,null);
        
-        TreeInterface tmpNode = root.children;
+        tmpNode = root.children;
         
         //Root has no children... 
         //Probably caused by it being the last round or something
@@ -106,14 +144,5 @@ public class TreeBuilder {
         node.nodeScore = tmpNodeScoreMax;
        
         return node.nodeScore;
-    }
-    
-    public TreeInterface makeMove(TreeInterface node, String move)
-    {
-         
-       
-        return null;   
-    }
-    
-    
+    }  
 }

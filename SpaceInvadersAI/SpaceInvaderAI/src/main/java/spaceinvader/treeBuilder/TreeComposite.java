@@ -73,20 +73,26 @@ public class TreeComposite extends TreeInterface {
     @Override
      public void evaluateMyself()
      {
-//        double score = this.playerController.getKillCount();
-//        score += this.playerController.getLives();
-//
-//        if(isGameOver()){
-//            score-=50;
-//        }
-//        this.nodeScore = score;
-         //TODO Simple evaluation function  
-        
+        nnEval();
+//        normalEval();
+     }
+     
+     private void nnEval(){
         double input[] = getInputs();
          //node evaluation
         Neuron out[] = evaluation.calculate(input);
         this.nodeScore = out[0].fireOutput();
         out[0].clear(); 
+     }
+     
+     private void normalEval(){
+                 double score = this.playerController.getKillCount();
+        score += this.playerController.getLives();
+
+        if(isGameOver()){
+            score-=50;
+        }
+        this.nodeScore = score;
      }
     
     private double[] getInputs(){
@@ -149,7 +155,7 @@ public class TreeComposite extends TreeInterface {
         nodeCopy.nodeDepth = this.nodeDepth;
         nodeCopy.finalState = this.finalState;
         nodeCopy.roundCount = this.roundCount;
-        nodeCopy.evaluation = this.evaluation;
+        nodeCopy.evaluation = this.evaluation.getCopy();
         
         return nodeCopy;
     }

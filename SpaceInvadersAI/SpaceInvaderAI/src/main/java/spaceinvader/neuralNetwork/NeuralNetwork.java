@@ -13,10 +13,26 @@ public class NeuralNetwork {
     Neuron inputBias;
     Neuron hiddenBias;
     int sigmoid;
+    int inputCount;
+    int hiddenCount;
+    int outputNumber;
+    
+    public NeuralNetwork getCopy(){
+        NeuralNetwork neuralNetworkCopy = new NeuralNetwork(inputCount,outputNumber,hiddenCount,sigmoid);
+        
+        neuralNetworkCopy.sigmoid = this.sigmoid;
+        neuralNetworkCopy.updateWeights(this.weights);
+        
+        return neuralNetworkCopy;
+    }
+    
     
     
     public NeuralNetwork(int inputs, int outputs, int hidden, int sigmoid)
     {
+        this.inputCount = inputs;
+        this.hiddenCount = hidden;
+        this.outputNumber = outputs;
         
         outputCount = (int)(hidden/outputs);
         

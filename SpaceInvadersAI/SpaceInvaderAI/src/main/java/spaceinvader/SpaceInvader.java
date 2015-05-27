@@ -31,8 +31,8 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {           
-        int plyDepth = 6;
-        int hiddenLayers = 6;
+        int plyDepth = 5;
+        int hiddenLayers = 16;
         
         NeuralNetwork nn = new NeuralNetwork(10,1,hiddenLayers,1);
         //setRandomWeights(nn);
@@ -48,7 +48,7 @@ public class SpaceInvader {
             
             while(!player.isGameOver() && player.getRoundCount() <200){
 
-                //Thread.sleep(200);
+                //Thread.sleep(500);
                 //player.getCurrentPosition().printBoard();
                 player.playRound();
                 
@@ -88,7 +88,7 @@ public class SpaceInvader {
         
         //read from file
         try {
-            String name = "tmpFile.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = "tmp.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {
