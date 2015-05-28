@@ -62,7 +62,7 @@ public class AlienController {
     
     public void checkToFireBullet(int roundNumber){
         removeEmptyRows();
-        if(roundNumber % 6 == 0){
+        if(roundNumber+1 % 6 == 0){
             ArrayList<Alien> firstRow = null;
             ArrayList<Alien> secondRow = null;
             

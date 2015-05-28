@@ -310,6 +310,45 @@ public class Player extends GameObject{
     public void setAlienController(AlienController alienController) {
         this.alienController = alienController;
     }
-    
+
+    public void setBulletLimit(int bulletLimit) {
+        this.bulletLimit = bulletLimit;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public void setIsAlive(boolean isAlive) {
+        this.isAlive = isAlive;
+    }
+
+    public void setxPosition(int xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public void setyPosition(int yPosition) {
+        this.yPosition = yPosition;
+    }
+
+    public void setxSize(int xSize) {
+        this.xSize = xSize;
+    }
+
+    public void setySize(int ySize) {
+        this.ySize = ySize;
+    }
+
+    public ArrayList<GameObject> getBuildings() {
+        return buildings;
+    }
+
+    public ArrayList<GameObject> getShields() {
+        return shields;
+    }
     
 }

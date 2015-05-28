@@ -129,6 +129,8 @@ public class BulletController {
                     }
             }
             
+            //TODO alien bullets should hit each other
+            
             if(increaseCounter){
                 i++;
             }
@@ -239,5 +241,13 @@ public class BulletController {
 
     public void setAlienController(AlienController alienController) {
         this.alienController = alienController;
+    }
+
+    public ArrayList<GameObject> getAlienBulletList() {
+        return alienBulletList;
+    }
+
+    public ArrayList<GameObject> getPlayerBulletList() {
+        return playerBulletList;
     }
 }

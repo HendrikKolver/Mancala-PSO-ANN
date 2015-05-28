@@ -34,7 +34,7 @@ public class TreeComposite extends TreeInterface {
     
     public TreeComposite()
     {
-       
+        
     }
  
     @Override
@@ -162,6 +162,7 @@ public class TreeComposite extends TreeInterface {
     
     @Override
     void nextMove(String move, int roundCounter) {
+        this.move = move;
         this.bulletController.update();
         this.alienController.update(roundCounter);
         this.playerController.update(move);
@@ -285,6 +286,41 @@ public class TreeComposite extends TreeInterface {
     @Override
     public int getKillCount(){
         return this.playerController.getKillCount();
+    }
+
+    public AlienController getAlienController() {
+        return alienController;
+    }
+
+    public void setAlienController(AlienController alienController) {
+        this.alienController = alienController;
+    }
+
+    @Override
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
+    }
+
+    @Override
+    public BulletController getBulletController() {
+        return bulletController;
+    }
+
+    public void setBulletController(BulletController bulletController) {
+        this.bulletController = bulletController;
+    }
+
+    public void setRoundCount(int roundCount) {
+        this.roundCount = roundCount;
+    }
+    
+    @Override
+    public String getMove(){
+        return this.move;
     }
          
 }

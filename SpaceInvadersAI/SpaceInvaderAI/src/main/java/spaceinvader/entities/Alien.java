@@ -7,7 +7,7 @@ import spaceinvader.gameRunner.BulletController;
  * @author Hendrik Kolver
  */
 public class Alien extends GameObject{
-    private String moveDirection = "LEFT";
+    public String moveDirection = "LEFT";
     private BulletController bulletController;
     
     public Alien(int xPosition, int yPosition){

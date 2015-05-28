@@ -29,7 +29,7 @@ public class PlayerController {
 
     
     public void update(String move){
-        if(!player.isAlive() && respawnCounter == 0){
+        if(!player.isAlive() && respawnCounter < 0){
             player.respawn();
         }else if(!player.isAlive()){
             respawnCounter--;
@@ -85,7 +85,7 @@ public class PlayerController {
     }
     
     public void killPlayer(){
-        respawnCounter =3;
+        respawnCounter =2;
         player.die();
     }
     
@@ -134,5 +134,10 @@ public class PlayerController {
     public int getLives(){
         return this.player.getLives();
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+     
 }
 

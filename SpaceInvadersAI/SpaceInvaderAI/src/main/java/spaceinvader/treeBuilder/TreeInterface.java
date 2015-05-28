@@ -18,6 +18,7 @@ public abstract class TreeInterface {
     protected int nodeDepth;
     protected boolean finalState;
     public int roundCount;
+    protected String move;
     
     protected AlienController alienController;
     protected PlayerController playerController;
@@ -36,6 +37,11 @@ public abstract class TreeInterface {
     public abstract void printBoard();
     public abstract int boardFinalRating();
     public abstract int getKillCount();
+    public abstract String getMove();
+    public abstract PlayerController getPlayerController();
+    public abstract BulletController getBulletController();
+    public abstract AlienController getAlienController();
+    
     
      
 }

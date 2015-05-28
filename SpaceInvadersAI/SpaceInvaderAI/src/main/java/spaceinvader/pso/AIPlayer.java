@@ -43,4 +43,8 @@ public class AIPlayer {
     public int getKillCount(){
         return this.currentPosition.getKillCount();
     }
+    
+    public String getMove(){
+        return this.currentPosition.getMove();
+    }
 }
