@@ -1,6 +1,8 @@
 package spaceinvader.treeBuilder;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 
 /**
@@ -25,6 +27,7 @@ public class TreeBuilder {
     
     public TreeInterface build(TreeInterface node) throws InterruptedException
     {
+//        double start = System.currentTimeMillis();
         network = node.evaluation;
         TreeInterface root = node;
         root.nodeDepth = 0;
@@ -34,48 +37,23 @@ public class TreeBuilder {
         
         
         TreeInterface tmpNode = null;
-       //Increase the node depth
-        double tmpNodeScore = 0;
-        double tmpNodeScoreMax = 0;
         
-        ArrayList<ThreadedBuilder> builders = new ArrayList();
+        ExecutorService executor = Executors.newFixedThreadPool(3);
 
         for(String possibleMove : possibleMoves){
             tmpNode = root.getCopy();
             root.addChild(tmpNode);
-            ThreadedBuilder builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
-            Thread t = new Thread(builderThread);
-            t.start();
-            builders.add(builderThread);
+            Runnable builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
+            executor.execute(builderThread);
         }
-        
-        
-        
-        boolean isAllCompleted = true;
-        while(true){
-           
-            for(ThreadedBuilder builder : builders){
-                if(!builder.isCompleted){
-                    isAllCompleted = false;
-                    break;
-                }
-            }
-            if(isAllCompleted){
-                break;
-            }
-            isAllCompleted = true;
+        executor.shutdown();
+
+        while (!executor.isTerminated()) {
         }
-        
-       // buildTree(root,null);
+       
+//        buildTree(root,null);
        
         tmpNode = root.children;
-        
-        //Root has no children... 
-        //Probably caused by it being the last round or something
-        //very rare bug.. still consider looking into it
-//        if(tmpNode == null){
-//            return root;
-//        }
         
         TreeInterface finalNode = null;
         double tmpCount = tmpNode.nodeScore;
@@ -92,6 +70,8 @@ public class TreeBuilder {
             
             tmpNode = tmpNode.next; 
         }
+//        double end = System.currentTimeMillis();
+//        System.out.println("Total time in method: "+ (end-start));
         
         return finalNode;
     }

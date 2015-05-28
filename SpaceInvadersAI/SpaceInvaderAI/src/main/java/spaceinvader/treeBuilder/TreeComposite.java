@@ -86,7 +86,7 @@ public class TreeComposite extends TreeInterface {
      }
      
      private void normalEval(){
-                 double score = this.playerController.getKillCount();
+        double score = this.playerController.getKillCount();
         score += this.playerController.getLives();
 
         if(isGameOver()){
@@ -270,10 +270,15 @@ public class TreeComposite extends TreeInterface {
 
     @Override
     public int boardFinalRating() {
-        int finalRating = 
-                this.roundCount
-                +this.playerController.getKillCount()
-                +this.playerController.getLives();
+        int finalRating = 0;
+        if(this.roundCount >= 200){
+            finalRating+= 250;
+            finalRating+=this.playerController.getKillCount();
+        }else{
+            finalRating+= this.roundCount;
+            finalRating+= this.playerController.getKillCount();    
+        }
+
         return finalRating;
     }
     

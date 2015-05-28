@@ -55,7 +55,7 @@ public class PSO {
        this.sigmoid = sigmoid;
        tournamentSize = 10;
        plyDepth = p;
-       gamesPlayed = 4;
+       gamesPlayed = 5;
        
   
     }

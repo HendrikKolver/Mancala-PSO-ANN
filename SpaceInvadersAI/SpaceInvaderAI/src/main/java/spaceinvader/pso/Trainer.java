@@ -32,7 +32,7 @@ public class Trainer {
         int outputs = 1;
         int hidden = 16;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
         int sigmoid = 1;
-        int neighSize = 3;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
+        int neighSize = 4;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
         int global= 0;//Integer.parseInt(JOptionPane.showInputDialog("Global = 1, Local = 0"));
         
        PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid);

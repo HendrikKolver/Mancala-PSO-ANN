@@ -22,8 +22,10 @@ public class ThreadedBuilder implements Runnable {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
+            //Quick fix for bug caused by the first node's node depth being increased twice (first time in addChild(), second time in buildTree()
+            rootNode.nodeDepth--;
             buildTree(rootNode,initialMove);
             this.isCompleted = true;
         } catch (InterruptedException ex) {
@@ -34,7 +36,6 @@ public class ThreadedBuilder implements Runnable {
     
     private double buildTree(TreeInterface node, String move) throws InterruptedException
     {
-        
         //Run a game update cycle, updating the board to a new state if not root node
         if(move != null){
             node.nextMove(move, node.roundCount); 
@@ -59,13 +60,10 @@ public class ThreadedBuilder implements Runnable {
         }
        
         ArrayList<String> possibleMoves = node.getPossibleMoves();  
-        //System.out.println("Outside loop possibleMoves: "+ possibleMoves);
         
         TreeInterface tmpNode = null;
-       //Increase the node depth
         double tmpNodeScore = 0;
         double tmpNodeScoreMax = 0;
-        
 
         for(String possibleMove : possibleMoves){
             tmpNode = node.getCopy();
