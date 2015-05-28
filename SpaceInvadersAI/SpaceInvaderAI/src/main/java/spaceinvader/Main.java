@@ -26,7 +26,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 8;
+        int plyDepth = 6;
         int hiddenLayers = 16;
         
         NeuralNetwork nn = new NeuralNetwork(10,1,hiddenLayers,1);
@@ -36,10 +36,13 @@ public class Main {
         
         player = InputParser.getState(player);
         
-//        player.getCurrentPosition().printBoard();
+        player.getCurrentPosition().printBoard();
         player.playRound();
 //         player.getCurrentPosition().printBoard();
-        
+//        while(true){
+//            player.playRound();
+//            player.getCurrentPosition().printBoard();
+//        }
 
         
         String move = player.getMove();
@@ -56,7 +59,7 @@ public class Main {
         
         //read from file
         try {
-            String name = "tmpFile.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = "player2.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {

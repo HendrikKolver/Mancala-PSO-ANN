@@ -17,9 +17,7 @@ public class TreeBuilder {
     public double mainA, mainB;
     public int globalPlayer = 2;
     public NeuralNetwork network;
- 
-    
-    
+
     public TreeBuilder(int depth)
     {
         plyDepth = depth;    
@@ -58,6 +56,7 @@ public class TreeBuilder {
         TreeInterface finalNode = null;
         double tmpCount = tmpNode.nodeScore;
         finalNode = tmpNode;
+        System.out.println("nodeScore: "+ tmpNode.nodeScore + "; "+ tmpNode.move);
         tmpNode = tmpNode.next;      
         
         while(tmpNode != null)
@@ -67,7 +66,7 @@ public class TreeBuilder {
                 tmpCount = tmpNode.nodeScore;
                 finalNode = tmpNode;
             }
-            
+            System.out.println("nodeScore: "+ tmpNode.nodeScore + "; "+ tmpNode.move);
             tmpNode = tmpNode.next; 
         }
 //        double end = System.currentTimeMillis();

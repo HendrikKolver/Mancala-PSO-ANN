@@ -156,7 +156,7 @@ public class InputParser {
         Player playerObj = aiPlayer.getCurrentPosition().getPlayerController().getPlayer();
         PlayerController playerController = aiPlayer.getCurrentPosition().getPlayerController();
         playerObj.setBulletLimit((int) bulletLimit);
-        playerObj.setIsAlive((respawnTimer<0));
+        playerObj.setIsAlive((respawnTimer<=0));
         playerController.setRespawnCounter((int) respawnTimer);
         playerObj.setKills((int) kills);
         playerObj.setLives((int) lives);

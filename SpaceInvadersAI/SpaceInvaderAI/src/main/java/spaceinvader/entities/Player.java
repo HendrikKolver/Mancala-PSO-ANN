@@ -34,18 +34,12 @@ public class Player extends GameObject{
     
     public ArrayList<String> getPossibleMoves(){
         ArrayList<String> possibleMoves = new ArrayList();
-        
-//        if(this.lives>0 && this.buildings.size()<1 && !isBuildingBehindPlayer()){
-//             possibleMoves.add("BuildMissileController");
-//             return possibleMoves;
-//        }
-
+          
         if(bulletController.getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
             possibleMoves.add("Shoot");
         }
         
         possibleMoves.add("Nothing");
-        
         if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
             possibleMoves.add("BuildShield");
         }
