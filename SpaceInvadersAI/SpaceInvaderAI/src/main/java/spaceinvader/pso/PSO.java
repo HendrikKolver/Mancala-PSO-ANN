@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import spaceinvader.entities.GameObject;
+import spaceinvader.entities.PlayerBullet;
+import spaceinvader.gameRunner.BulletController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 
 /**
@@ -58,6 +61,157 @@ public class PSO {
        gamesPlayed = 5;
        
   
+    }
+    
+    public void trainLocal2Player(int size) throws InterruptedException, IOException
+    {
+       //Particle init
+       particles = new Particle[particleCount];
+       localBestParticles = new Particle[particleCount];
+         
+       for(int x=0; x<particleCount;x++)
+        {
+           particles[x] = new Particle(inputs,outputs,hidden,sigmoid);
+           particles[x].initParticle(lowerBound,upperBound);
+           localBestParticles[x] = new Particle(inputs,outputs,hidden,sigmoid);
+           localBestParticles[x].initParticle(lowerBound,upperBound);
+        }
+        int currentIteration = 0;
+        
+        //local best values init
+        localBest = new double[particleCount][particles[0].dimensions];
+        
+        for(int x=0;x<localBest.length;x++)
+            for(int k =0; k< localBest[x].length;k++)
+                localBest[x][k] =1;
+        
+        //training loop init
+        while(currentIteration<numIterations)
+        {
+            
+            System.out.println("Iteration---"+currentIteration);
+            
+            //initial partical value init for each iteration
+            for(int x=0; x< particles.length;x++)
+            {
+                particles[x].bestLosses =0;
+                particles[x].bestWins =0;
+                particles[x].bestTies =0;
+                particles[x].losses =0;
+                particles[x].wins =0;
+                particles[x].ties =0;
+            }
+            
+            //Noise value
+            Random r = new Random();
+            double randomValue = 0 + (1 - 0) * r.nextDouble();
+            
+            for(int x=0; x<particles.length;x++)
+            {  
+                for(int i = 0; i<particles.length-1;i++){
+                    if(x == i){
+                        break;
+                    }
+
+                    //creating new "you" players after every round to reset the board
+                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
+                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                    
+                    AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                    AIPlayer opponentBest = new AIPlayer(plyDepth,particles[i].bestNetwork);
+
+                    while(true)
+                    { 
+                        if(you.isGameOver() || opponent.isGameOver())
+                        {
+                            break;
+                        }
+                        you.playRound();
+                        opponent.playRound();
+                        syncBoards(you, opponent);
+                    }
+                    //updateWins
+                    setOpponentWinsNormal(particles[x],you,opponent);
+
+                    while(true)
+                    { 
+                        if(yourBest.isGameOver() || opponent.isGameOver())
+                        {
+                            break;
+                        }
+                        yourBest.playRound();
+                        opponent.playRound();
+                        syncBoards(you, opponent);
+                    }
+                    //updateWins
+                    setOpponentWinsBest(particles[x],yourBest, opponent);
+                }
+
+                //updating the personal best
+                if(particles[x].bestFitness() < particles[x].fitness())
+                {
+                    particles[x].personalBestFitness = particles[x].fitness();
+                    for(int y=0; y<particles[x].dimensions;y++)
+                    {
+                        particles[x].personalBest[y] = particles[x].position[y];
+                        particles[x].particleBestUpdate();
+                    }
+                }
+            }
+            //updating the local best
+            localBestCalculate(size);
+            
+            //calculate new particle velocities
+            double particleVelocity[] = new double[particles[0].dimensions];
+            for(int x=0; x<particles.length;x++)
+            {
+                for(int y=0; y<particles[x].dimensions;y++)
+                {
+
+                    particleVelocity[y] = ((w*particles[x].avgMomentum())+
+                            cognitiveCalculate(randomValue,particles[x].personalBest[y],particles[x].position[y])+ //(c1*randomValue*(particles[x].personalBest[y]-particles[x].position[y]))+
+                            //cognitive
+                            socialCalculate(randomValue,localBest[x][y],particles[x].position[y])//(c2*randomValue*(globalBest[y]-particles[x].position[y]))
+                            );
+                            //social
+
+                    if(particleVelocity[y] > maxVelocity)
+                    {
+                        particleVelocity[y] = maxVelocity;
+
+                    }
+                }
+
+                //calculate new positions
+                for(int y=0; y<particles[x].dimensions;y++)
+                {
+                    Random n = new Random();
+                    double noise = 0 + ((localBest[x][y]-particles[x].personalBest[y]) - 0) * n.nextDouble();
+                    double tmpVal = particles[x].position[y]+(particleVelocity[y]+noise);
+
+                    particles[x].position[y] = tmpVal; 
+                    if(particles[x].position[y]>upperBound)
+                    {
+                        particles[x].position[y] = upperBound;
+                        particles[x].momentum[y] =0;
+                    }
+                    else if(particles[x].position[y]<lowerBound)
+                    {
+                        particles[x].position[y] = lowerBound;
+                        particles[x].momentum[y] =0;  
+                    }
+                    else
+                    {
+                        particles[x].momentum[y] = particleVelocity[y];
+                    }
+
+                }
+                particles[x].updateWeights();
+            }
+            
+            currentIteration++;
+            printTmpFile();
+        }
     }
     
       public void trainLocal(int size) throws InterruptedException, IOException
@@ -203,27 +357,69 @@ public class PSO {
         }
     }
     
-    public int[][] updateGrid(int[][] board)
-    {
-        int[][] tmp = new int[2][8];
-        for(int y=0; y<2;y++)
-        {
-            for(int i =0; i<8; i++)
-            {  
-                tmp[y][i] = board[y][i];
-            }     
-        } 
-        return tmp;
-    }
+     private void syncBoards(AIPlayer player1, AIPlayer player2){
+         BulletController p1Controller = player1.getCurrentPosition().getBulletController();
+         BulletController p2Controller = player2.getCurrentPosition().getBulletController();
+         
+         ArrayList<GameObject> p1Bullets = p1Controller.getPlayerBulletList();
+         ArrayList<GameObject> p2Bullets = p2Controller.getPlayerBulletList();
+         Iterator p1Bullet = p1Bullets.iterator();
+         while(p1Bullet.hasNext()){
+             GameObject bullet = (GameObject) p1Bullet.next();
+             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+                 p2Controller.addEnemyBullet(newBullet);
+                 p1Bullet.remove();
+             }
+         }
+         
+         Iterator p2Bullet = p2Bullets.iterator();
+         while(p2Bullet.hasNext()){
+             GameObject bullet = (GameObject) p2Bullet.next();
+             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+                 p1Controller.addEnemyBullet(newBullet);
+                 p2Bullet.remove();
+             }
+         }  
+     }
     
     public void setWinsNormal(Particle you, AIPlayer player)
     {
             you.wins += player.getCurrentPosition().boardFinalRating();
     }
     
+    public void setOpponentWinsNormal(Particle you, AIPlayer player, AIPlayer opponent)
+    {
+        if(player.getRoundCount() >=200 && player.getKillCount() > opponent.getKillCount()){
+            you.wins += 1;
+        }else if(player.isGameOver() == opponent.isGameOver()
+                && player.getKillCount() > opponent.getKillCount()){
+            you.wins += 1;
+        }else if(!player.isGameOver()){
+            you.wins += 1;
+        }else{
+            you.losses +=1;
+        }
+    }
+    
     public void setWinsBest(Particle you, AIPlayer player)
     {
         you.bestWins += player.getCurrentPosition().boardFinalRating();
+    }
+    
+        public void setOpponentWinsBest(Particle you, AIPlayer player, AIPlayer opponent)
+    {
+        if(player.getRoundCount() >=200 && player.getKillCount() > opponent.getKillCount()){
+            you.bestWins += 1;
+        }else if(player.isGameOver() == opponent.isGameOver()
+                && player.getKillCount() > opponent.getKillCount()){
+            you.bestWins += 1;
+        }else if(!player.isGameOver()){
+            you.bestWins += 1;
+        }else{
+            you.bestLosses +=1;
+        }
     }
     
     public void localBestCalculate(int size)
@@ -326,6 +522,102 @@ public class PSO {
             }
             //updateWins
             setWinsBest(particles[x],yourBest);
+
+            //updating the personal best
+            if(particles[x].bestFitness() < particles[x].fitness())
+            {
+                particles[x].personalBestFitness = particles[x].fitness();
+                for(int y=0; y<particles[x].dimensions;y++)
+                {
+                    particles[x].personalBest[y] = particles[x].position[y];
+                    particles[x].particleBestUpdate();
+                }
+            }
+        }
+        
+       Particle winner = null;
+       
+       double tmpFitness = 0.0;
+       for(int x=0; x<particles.length;x++)
+       {
+           if(particles[x].bestFitness()>tmpFitness)
+           {
+               winner = particles[x];
+               tmpFitness = particles[x].bestFitness();
+           }
+           
+       }
+       return winner;
+    }
+    
+     public Particle winningOpponentParticle() throws InterruptedException, IOException
+    {
+        //one last tournament
+        int totalParticlesPassed=0;
+        System.out.println("Calculating winning Particle");
+        for(int x=0; x< particles.length;x++)
+        {
+            particles[x].bestLosses =0;
+            particles[x].bestWins =0;
+            particles[x].bestTies =0;
+            particles[x].losses =0;
+            particles[x].wins =0;
+            particles[x].ties =0;
+        }
+            
+            
+        Random r = new Random();
+        double randomValue = 0 + (1 - 0) * r.nextDouble();
+        //competitionStart
+        Particle competitionPool[] = new Particle[particleCount];
+
+        for(int x=0; x<competitionPool.length;x++)
+        {
+            competitionPool[x] = particles[x];
+        }
+
+        for(int x=0; x<particles.length;x++)
+        {
+            for(int i = 0; i<particles.length-1;i++){
+                if(x == i){
+                    break;
+                }
+
+                //creating new "you" players after every round to reset the board
+                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
+                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+
+                AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                AIPlayer opponentBest = new AIPlayer(plyDepth,particles[i].bestNetwork);
+
+                while(true)
+                { 
+                    if(you.isGameOver() || opponent.isGameOver())
+                    {
+                        break;
+                    }
+                    you.playRound();
+                    opponent.playRound();
+                    syncBoards(you, opponent);
+                }
+                //updateWins
+                setOpponentWinsNormal(particles[x],you,opponent);
+
+                //play 5
+
+                while(true)
+                { 
+                    if(yourBest.isGameOver() || opponent.isGameOver())
+                    {
+                        break;
+                    }
+                    yourBest.playRound();
+                    opponent.playRound();
+                    syncBoards(you, opponent);
+                }
+                //updateWins
+                setOpponentWinsBest(particles[x],yourBest, opponent);
+            }
 
             //updating the personal best
             if(particles[x].bestFitness() < particles[x].fitness())

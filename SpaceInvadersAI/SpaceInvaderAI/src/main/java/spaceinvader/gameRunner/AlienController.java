@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.json.JSONObject;
 import spaceinvader.entities.Alien;
 import spaceinvader.entities.GameObject;
+import spaceinvader.entities.Player;
 import spaceinvader.utilities.ArrayListCopy;
 import spaceinvader.utilities.RandomGenerator;
 
@@ -44,17 +45,12 @@ public class AlienController {
 //            }
 //        }
 //        
-//        if(fakeOpponentAlienFactory == 1){
-//            int probability = RandomGenerator.randInt(1, 10000);
-//            if(probability <=5){
-//                increaseWaveSize();
-//                fakeOpponentAlienFactory++;
-//            }
 //        }
         
         removeEmptyRows();
         updateAlienPosition();
         checkForShieldColission();
+        checkForPlayerColission();
         checkToFireBullet(roundNumber);
         removeEmptyRows();
         checkToAddRow();
@@ -242,6 +238,31 @@ public class AlienController {
             }     
         } 
     }
+    
+    private void checkForPlayerColission() {
+          Player player = playerController.getPlayer();
+
+        for(ArrayList<Alien> aliens : alienRow){
+            Iterator<Alien> i = aliens.iterator();
+            while (i.hasNext()) {
+               Alien alien = i.next(); 
+
+                if(player.getyPosition() == alien.getyPosition() 
+                    && (player.getxPosition() == alien.getxPosition()
+                        || player.getxPosition()+1 == alien.getxPosition()
+                        || player.getxPosition()+2 == alien.getxPosition()))
+                {
+                    int xPos = alien.getxPosition();
+                    i.remove();
+                    playerController.killPlayer();
+                    break;
+                }
+                
+            }     
+        } 
+    }
+    
+    
     
     //Similiar to player version but removes shields as well
     private void removeAllObjectsInBlock(int xPosition, int yPosition) {

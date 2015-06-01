@@ -9,11 +9,11 @@ public class GameObject {
     protected int yPosition;
     protected int xSize;
     protected int ySize;
+    protected int player = 1;
     
     public void updatePosition(String direction){
         switch(direction){
             case "LEFT" : {
-                //System.out.println("Called Left");
                 int newX = xPosition-1;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
@@ -21,7 +21,6 @@ public class GameObject {
                 break;
             }
             case "RIGHT" : {
-               // System.out.println("Called Right");
                 int newX = xPosition+1;
                 if(isPositionInBounds(newX,yPosition)){
                     xPosition = newX;
@@ -29,7 +28,6 @@ public class GameObject {
                 break;
             }
             case "UP" : {
-               // System.out.println("Called Up");
                 int newY = yPosition+1;
                 if(isPositionInBounds(xPosition,newY)){
                     yPosition = newY;
@@ -37,7 +35,6 @@ public class GameObject {
                 break;
             }
             case "DOWN" : {
-               // System.out.println("Called Down");
                  int newY = yPosition-1;
                 if(isPositionInBounds(xPosition,newY)){
                     yPosition = newY;
@@ -55,7 +52,7 @@ public class GameObject {
             return false;
         }
         
-        if((newY + ySize-1 >= 12) || (newY + ySize-1 <= 0)){
+        if((newY + ySize-1 >= 14) || (newY + ySize-1 <= 0)){
             return false;
         }
         return true;
@@ -94,8 +91,8 @@ public class GameObject {
     public String stringContent(){
         return "R";
     }
-    
-    
-    
-    
+
+    public int getPlayer() {
+        return player;
+    }
 }

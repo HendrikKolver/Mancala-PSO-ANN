@@ -17,12 +17,14 @@ import spaceinvader.utilities.ArrayListCopy;
 public class BulletController {
     private ArrayList<GameObject> alienBulletList;
     private ArrayList<GameObject> playerBulletList;
+    private ArrayList<GameObject> enemyBulletList;
     private PlayerController playerController;
     private AlienController alienController; 
     
     public BulletController(){
         alienBulletList = new ArrayList();
         playerBulletList = new ArrayList();
+        enemyBulletList = new ArrayList();
     }
     
     public void update(){
@@ -31,6 +33,8 @@ public class BulletController {
         alienBulletColissionDetection();
         updatePlayerBulletPosition();
         playerBulletColissionDetection();
+        updateEnemyBulletPosition();
+        enemyBulletColissionDetection();
     }
     
     public void updateAlienBulletPosition(){
@@ -45,12 +49,22 @@ public class BulletController {
         } 
     }
     
+    public void updateEnemyBulletPosition(){
+       for(GameObject playerBullet : enemyBulletList){
+            playerBullet.updatePosition("DOWN");
+        } 
+    }
+    
     public void addAlienBullet(AlienBullet alienBullet){
         alienBulletList.add(alienBullet);
     }
     
     public void addPlayerBullet(PlayerBullet playerBullet){
         playerBulletList.add(playerBullet);
+    }
+    
+    public void addEnemyBullet(PlayerBullet enemyBullet){
+        enemyBulletList.add(enemyBullet);
     }
     
     private void removeOutOfBoundsBullets(){
@@ -63,12 +77,22 @@ public class BulletController {
             }
 
              for (int i = 0; i < playerBulletList.size();) {
-                if(playerBulletList.get(i).getyPosition() == 11){
+                if(playerBulletList.get(i).getyPosition() == 13){
                     playerBulletList.remove(i);
                 }else{
                     i++;
                 }
             }
+             
+            for (int i = 0; i < enemyBulletList.size();) {
+                if(enemyBulletList.get(i).getyPosition() == 1){
+                    enemyBulletList.remove(i);
+                }else{
+                    i++;
+                }
+            }
+             
+             
     }
     
     public void alienBulletColissionDetection(){
@@ -129,8 +153,6 @@ public class BulletController {
                     }
             }
             
-            //TODO alien bullets should hit each other
-            
             if(increaseCounter){
                 i++;
             }
@@ -184,6 +206,91 @@ public class BulletController {
             }
         }
         alienController.setAliens(allAliens);
+    }
+    
+    public void enemyBulletColissionDetection(){
+        
+        ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
+        ArrayList<GameObject> shields = playerController.getAllShields();
+        ArrayList<GameObject> buildings = playerController.getBuildings();
+        int playerPos = playerController.getPlayerPosition();
+
+        
+        for (int i = 0; i < enemyBulletList.size();) {
+            boolean increaseCounter = true;
+            
+            for(ArrayList<Alien> aliens : allAliens){
+                for(Alien alien : aliens){
+                    if(alien.getyPosition() == enemyBulletList.get(i).getyPosition() 
+                            && (alien.getxPosition() == enemyBulletList.get(i).getxPosition()))
+                    {
+                      aliens.remove(alien);
+                      enemyBulletList.remove(enemyBulletList.get(i));
+                      increaseCounter = false;
+                      break;
+                    }
+                } 
+                if(!increaseCounter){
+                    break;
+                }
+                    
+            }
+            for(GameObject building : buildings){
+                if(building.getyPosition() == enemyBulletList.get(i).getyPosition() 
+                        && (building.getxPosition() == enemyBulletList.get(i).getxPosition() 
+                        || building.getxPosition()+1 == enemyBulletList.get(i).getxPosition()
+                        || building.getxPosition()+2 == enemyBulletList.get(i).getxPosition()))
+                {
+                  buildings.remove(building);
+                  enemyBulletList.remove(enemyBulletList.get(i));
+                  break;
+                }
+            }
+            
+            if(i < enemyBulletList.size()){
+                for(GameObject shield : shields){
+                    if(shield.getyPosition() == enemyBulletList.get(i).getyPosition() 
+                            && (shield.getxPosition() == enemyBulletList.get(i).getxPosition()))
+                    {
+                      shields.remove(shield);
+                      enemyBulletList.remove(enemyBulletList.get(i));
+                      break;
+                    }
+                } 
+            }
+            
+            if(i < enemyBulletList.size()){
+                for(GameObject playerBullet : enemyBulletList){
+                    if(playerBullet.getxPosition() == enemyBulletList.get(i).getxPosition()
+                        && playerBullet.getyPosition() == enemyBulletList.get(i).getyPosition())
+                    {
+                        enemyBulletList.remove(enemyBulletList.get(i));
+                        playerBulletList.remove(playerBullet);
+                        increaseCounter = false;
+                        break;
+                    }
+                } 
+            }
+            
+            if(i < enemyBulletList.size() && playerController.isPlayerAlive()){
+                 if(enemyBulletList.get(i).getyPosition() == 2 
+                        && (playerPos == enemyBulletList.get(i).getxPosition() 
+                        || playerPos+1 == enemyBulletList.get(i).getxPosition()
+                        || playerPos+2 == enemyBulletList.get(i).getxPosition()))
+                    {
+                        enemyBulletList.remove(enemyBulletList.get(i));
+                        playerController.killPlayer();
+                        increaseCounter = false;
+                    }
+            }
+
+            if(increaseCounter){
+                i++;
+            }
+        }
+        alienController.setAliens(allAliens);
+        playerController.setBuildings(buildings);
+        playerController.setShields(shields);
     }
     
     public void printAllBullets(){

@@ -57,8 +57,10 @@ public class InputParser {
             long RoundNumber = (long) jsonObject.get("RoundNumber");
             JSONArray players = (JSONArray) jsonObject.get("Players");
             JSONObject player = (JSONObject)players.get(0);
+            JSONObject player2 = (JSONObject)players.get(1);
             long waveSize = (long) player.get("AlienWaveSize");
             JSONArray bullets = (JSONArray) player.get("Missiles");
+            JSONArray enemyBullets = (JSONArray) player.get("Missiles");
             
             
             aiPlayer.getCurrentPosition().roundCount = (int) RoundNumber;
@@ -68,6 +70,7 @@ public class InputParser {
             
             ArrayList<GameObject> shields = setupPlayer(player, aiPlayer);
             setupPlayerBullets(bullets, bulletFactory);
+            setupEnemyBullets(enemyBullets,bulletFactory);
             setupMapObjects(jsonObject, shields, bulletFactory, alienController);
             
             
@@ -89,6 +92,17 @@ public class InputParser {
             if(bullet.get("Alive").equals(true)){
                 PlayerBullet playerBullet = new PlayerBullet((int)(long)bullet.get("X"),24-(int)(long)bullet.get("Y"));
                 bulletFactory.addPlayerBullet(playerBullet);
+            }
+        }
+    }
+    
+    private static void setupEnemyBullets(JSONArray bullets, BulletController bulletFactory) {
+        Iterator<JSONObject> bulletIterator = bullets.iterator();
+        while (bulletIterator.hasNext()) {
+            JSONObject bullet = bulletIterator.next();
+            if(bullet.get("Alive").equals(true)){
+                PlayerBullet playerBullet = new PlayerBullet((int)(long)bullet.get("X"),24-(int)(long)bullet.get("Y"),2);
+                bulletFactory.addEnemyBullet(playerBullet);
             }
         }
     }

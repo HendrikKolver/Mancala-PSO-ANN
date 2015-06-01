@@ -50,8 +50,8 @@ public class SpaceInvader {
             
             while(!player.isGameOver() && player.getRoundCount() <200){
 
-                //Thread.sleep(500);
-                //player.getCurrentPosition().printBoard();
+                Thread.sleep(200);
+                player.getCurrentPosition().printBoard();
                 player.playRound();
                 
             }
