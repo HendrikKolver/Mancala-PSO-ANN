@@ -118,7 +118,6 @@ public class PSO {
                     AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
                     
                     AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
-                    AIPlayer opponentBest = new AIPlayer(plyDepth,particles[i].bestNetwork);
 
                     while(true)
                     { 
@@ -132,6 +131,9 @@ public class PSO {
                     }
                     //updateWins
                     setOpponentWinsNormal(particles[x],you,opponent);
+                    
+                    //Reset the opponent board for another game
+                    opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
 
                     while(true)
                     { 
@@ -588,7 +590,6 @@ public class PSO {
                 AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
 
                 AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
-                AIPlayer opponentBest = new AIPlayer(plyDepth,particles[i].bestNetwork);
 
                 while(true)
                 { 
@@ -603,7 +604,7 @@ public class PSO {
                 //updateWins
                 setOpponentWinsNormal(particles[x],you,opponent);
 
-                //play 5
+                opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
 
                 while(true)
                 { 
