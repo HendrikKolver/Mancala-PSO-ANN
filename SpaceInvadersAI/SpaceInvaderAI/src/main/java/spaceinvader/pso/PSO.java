@@ -672,7 +672,7 @@ public class PSO {
                tmp= particles[x];
            }
         }
-        
+        //TODO tmp was null for some reason meaning there were no particles in the pool. This for me is strange
         return tmp.neuralNetwork;
     }
     

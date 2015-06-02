@@ -42,7 +42,7 @@ public class SpaceInvader {
         int totalRoundCount = 0;
         int totalKillCount = 0;
         
-        double gamesToPlay = 300.0;
+        double gamesToPlay = 200.0;
         
         double start = System.currentTimeMillis();
         
@@ -50,8 +50,8 @@ public class SpaceInvader {
             
             while(!player.isGameOver() && player.getRoundCount() <200){
 
-                Thread.sleep(200);
-                player.getCurrentPosition().printBoard();
+                //Thread.sleep(200);
+                //player.getCurrentPosition().printBoard();
                 player.playRound();
                 
             }
