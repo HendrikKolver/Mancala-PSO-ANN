@@ -250,8 +250,9 @@ public class TreeComposite extends TreeInterface {
     }
     
     for(GameObject playerBullet : playerBulletList){
-        board[playerBullet.getxPosition()][playerBullet.getyPosition()] = "1";
-
+        if(playerBullet.getyPosition() <13){
+            board[playerBullet.getxPosition()][playerBullet.getyPosition()] = "1";
+        }
     }
     
     String boardString = "";

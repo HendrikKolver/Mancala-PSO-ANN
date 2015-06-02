@@ -192,10 +192,12 @@ public class Player extends GameObject{
         this.buildings = buildings;
         int extraBullets = 0;
         for(GameObject building : buildings){
-            if(building.getRepresentation().equals("B")){
-              extraBullets++;  
+            if(building instanceof BulletFactory){
+              extraBullets++; 
             }
         }
+
+       
         
         //+1 for the initial limit of 1
         this.bulletLimit = extraBullets + 1;

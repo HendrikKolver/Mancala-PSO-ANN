@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import spaceinvader.entities.AlienFactory;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
+import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 
@@ -108,45 +110,44 @@ public class PSO {
             
             for(int x=0; x<particles.length;x++)
             {  
-                for(int i = 0; i<particles.length-1;i++){
-                    if(x == i){
-                        break;
-                    }
+                for(int i = 0; i<particles.length;i++){
+                    if(x != i){                       
+                        //creating new "you" players after every round to reset the board
+                        AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
+                        AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
 
-                    //creating new "you" players after every round to reset the board
-                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
-                    
-                    AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                        AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
 
-                    while(true)
-                    { 
-                        if(you.isGameOver() || opponent.isGameOver())
-                        {
-                            break;
+                        while(true)
+                        { 
+                            if(you.isGameOver() || opponent.isGameOver())
+                            {
+                                break;
+                            }
+                            you.playRound();
+                            opponent.playRound();
+                            syncBoards(you, opponent);
                         }
-                        you.playRound();
-                        opponent.playRound();
-                        syncBoards(you, opponent);
-                    }
-                    //updateWins
-                    setOpponentWinsNormal(particles[x],you,opponent);
-                    
-                    //Reset the opponent board for another game
-                    opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                        //updateWins
+                        setOpponentWinsNormal(particles[x],you,opponent);
 
-                    while(true)
-                    { 
-                        if(yourBest.isGameOver() || opponent.isGameOver())
-                        {
-                            break;
+                        //Reset the opponent board for another game
+                        opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+
+                        while(true)
+                        { 
+                            if(yourBest.isGameOver() || opponent.isGameOver())
+                            {
+                                break;
+                            }
+                            yourBest.playRound();
+                            opponent.playRound();
+                            syncBoards(you, opponent);
                         }
-                        yourBest.playRound();
-                        opponent.playRound();
-                        syncBoards(you, opponent);
+                        //updateWins
+                        setOpponentWinsBest(particles[x],yourBest, opponent);
                     }
-                    //updateWins
-                    setOpponentWinsBest(particles[x],yourBest, opponent);
+
                 }
 
                 //updating the personal best
@@ -359,31 +360,65 @@ public class PSO {
         }
     }
     
-     private void syncBoards(AIPlayer player1, AIPlayer player2){
-         BulletController p1Controller = player1.getCurrentPosition().getBulletController();
-         BulletController p2Controller = player2.getCurrentPosition().getBulletController();
+    private void syncBoards(AIPlayer player1, AIPlayer player2){
+        BulletController p1Controller = player1.getCurrentPosition().getBulletController();
+        BulletController p2Controller = player2.getCurrentPosition().getBulletController();
+
+
+
+        ArrayList<GameObject> p1Bullets = p1Controller.getPlayerBulletList();
+        ArrayList<GameObject> p2Bullets = p2Controller.getPlayerBulletList();
+        Iterator p1Bullet = p1Bullets.iterator();
+        while(p1Bullet.hasNext()){
+            GameObject bullet = (GameObject) p1Bullet.next();
+            if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+               PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+               p2Controller.addEnemyBullet(newBullet);
+               p1Bullet.remove();
+            }
+        }
+
+        Iterator p2Bullet = p2Bullets.iterator();
+        while(p2Bullet.hasNext()){
+            GameObject bullet = (GameObject) p2Bullet.next();
+            if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+                p1Controller.addEnemyBullet(newBullet);
+                p2Bullet.remove();
+            }
+        }
+
+        AlienController p1AlienController = player1.getCurrentPosition().getAlienController();
+        AlienController p2AlienController = player2.getCurrentPosition().getAlienController();
+        ArrayList<GameObject> p1Buildings = player1.getCurrentPosition().getPlayerController().getBuildings();
+        ArrayList<GameObject> p2Buildings = player2.getCurrentPosition().getPlayerController().getBuildings();
+        int counter = 0;
          
-         ArrayList<GameObject> p1Bullets = p1Controller.getPlayerBulletList();
-         ArrayList<GameObject> p2Bullets = p2Controller.getPlayerBulletList();
-         Iterator p1Bullet = p1Bullets.iterator();
-         while(p1Bullet.hasNext()){
-             GameObject bullet = (GameObject) p1Bullet.next();
-             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
-                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
-                 p2Controller.addEnemyBullet(newBullet);
-                 p1Bullet.remove();
-             }
-         }
+        for(GameObject building : p1Buildings){
+            if(building instanceof AlienFactory){
+                counter++;
+            }
+        }
          
-         Iterator p2Bullet = p2Bullets.iterator();
-         while(p2Bullet.hasNext()){
-             GameObject bullet = (GameObject) p2Bullet.next();
-             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
-                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
-                 p1Controller.addEnemyBullet(newBullet);
-                 p2Bullet.remove();
-             }
-         }  
+        if (player1.getRoundCount() >=40){
+            p2AlienController.setWaveSize(4+counter);
+        }else {
+            p2AlienController.setWaveSize(3+counter);
+        }
+        
+        counter = 0;
+        
+        for(GameObject building : p2Buildings){
+            if(building instanceof AlienFactory){
+                counter++;
+            }
+        }
+         
+        if (player2.getRoundCount() >=40){
+            p1AlienController.setWaveSize(4+counter);
+        }else {
+            p1AlienController.setWaveSize(3+counter);
+        }
      }
     
     public void setWinsNormal(Particle you, AIPlayer player)
@@ -663,9 +698,11 @@ public class PSO {
     
     public NeuralNetwork Winner()
     {
-        double max=0;
+        
         Particle tmp = null;
-        for(int x= 0; x<particles.length;x++)
+        tmp = particles[0];
+        double max= particles[0].fitness();
+        for(int x= 1; x<particles.length;x++)
         {
            if(particles[x].fitness() > max)
            {
@@ -673,6 +710,7 @@ public class PSO {
            }
         }
         //TODO tmp was null for some reason meaning there were no particles in the pool. This for me is strange
+        //I think I fixed it
         return tmp.neuralNetwork;
     }
     

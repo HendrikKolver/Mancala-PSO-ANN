@@ -63,7 +63,7 @@ public class BulletController {
         playerBulletList.add(playerBullet);
     }
     
-    public void addEnemyBullet(PlayerBullet enemyBullet){
+    public void addEnemyBullet(GameObject enemyBullet){
         enemyBulletList.add(enemyBullet);
     }
     
@@ -75,9 +75,9 @@ public class BulletController {
                     i++;
                 }
             }
-
+            
              for (int i = 0; i < playerBulletList.size();) {
-                if(playerBulletList.get(i).getyPosition() == 13){
+                if(playerBulletList.get(i).getyPosition() > 22){
                     playerBulletList.remove(i);
                 }else{
                     i++;
@@ -131,7 +131,8 @@ public class BulletController {
             if(i < alienBulletList.size()){
                 for(GameObject playerBullet : playerBulletList){
                     if(playerBullet.getxPosition() == alienBulletList.get(i).getxPosition()
-                        && playerBullet.getyPosition() == alienBulletList.get(i).getyPosition())
+                        && playerBullet.getyPosition() == alienBulletList.get(i).getyPosition()
+                            && playerBullet.getPlayer() == 1)
                     {
                         alienBulletList.remove(alienBulletList.get(i));
                         playerBulletList.remove(playerBullet);
@@ -169,39 +170,43 @@ public class BulletController {
         for (int i = 0; i < playerBulletList.size();) {
             boolean increaseCounter = true;
             
-            for(ArrayList<Alien> aliens : allAliens){
-                for(Alien alien : aliens){
-                    if(alien.getyPosition() == playerBulletList.get(i).getyPosition() 
-                            && (alien.getxPosition() == playerBulletList.get(i).getxPosition()))
-                    {
-                      aliens.remove(alien);
-                      playerBulletList.remove(playerBulletList.get(i));
-                      playerController.increaseKillCount();
-                      increaseCounter = false;
-                      break;
+            if(playerBulletList.get(i).getPlayer() == 1){
+                for(ArrayList<Alien> aliens : allAliens){
+                    for(Alien alien : aliens){
+                        if(alien.getyPosition() == playerBulletList.get(i).getyPosition() 
+                                && (alien.getxPosition() == playerBulletList.get(i).getxPosition()))
+                        {
+                          aliens.remove(alien);
+                          playerBulletList.remove(playerBulletList.get(i));
+                          playerController.increaseKillCount();
+                          increaseCounter = false;
+                          break;
+                        }
+                    } 
+                    if(!increaseCounter){
+                        break;
                     }
-                } 
-                if(!increaseCounter){
-                    break;
-                }
-                    
-            }
-            
-            //This is incase a player fires a bullet and then builds a shield on top of that bullet.
-            //This is allowed since there may be enemy bullets in that area that the player wants to mitigate as well
-            if(i < playerBulletList.size()){
-                for(GameObject shield : shields){
-                    if(shield.getyPosition() == playerBulletList.get(i).getyPosition() 
-                            && (shield.getxPosition() == playerBulletList.get(i).getxPosition()))
-                    {
-                      shields.remove(shield);
-                      playerBulletList.remove(playerBulletList.get(i));
-                      break;
-                    }
-                } 
-            }
 
-            if(increaseCounter){
+                }
+
+                //This is incase a player fires a bullet and then builds a shield on top of that bullet.
+                //This is allowed since there may be enemy bullets in that area that the player wants to mitigate as well
+                if(i < playerBulletList.size()){
+                    for(GameObject shield : shields){
+                        if(shield.getyPosition() == playerBulletList.get(i).getyPosition() 
+                                && (shield.getxPosition() == playerBulletList.get(i).getxPosition()))
+                        {
+                          shields.remove(shield);
+                          playerBulletList.remove(playerBulletList.get(i));
+                          break;
+                        }
+                    } 
+                }
+
+                if(increaseCounter){
+                    i++;
+                }
+            }else{
                 i++;
             }
         }
@@ -235,15 +240,17 @@ public class BulletController {
                 }
                     
             }
-            for(GameObject building : buildings){
-                if(building.getyPosition() == enemyBulletList.get(i).getyPosition() 
-                        && (building.getxPosition() == enemyBulletList.get(i).getxPosition() 
-                        || building.getxPosition()+1 == enemyBulletList.get(i).getxPosition()
-                        || building.getxPosition()+2 == enemyBulletList.get(i).getxPosition()))
-                {
-                  buildings.remove(building);
-                  enemyBulletList.remove(enemyBulletList.get(i));
-                  break;
+            if(i < enemyBulletList.size()){
+                for(GameObject building : buildings){
+                    if(building.getyPosition() == enemyBulletList.get(i).getyPosition() 
+                            && (building.getxPosition() == enemyBulletList.get(i).getxPosition() 
+                            || building.getxPosition()+1 == enemyBulletList.get(i).getxPosition()
+                            || building.getxPosition()+2 == enemyBulletList.get(i).getxPosition()))
+                    {
+                      buildings.remove(building);
+                      enemyBulletList.remove(enemyBulletList.get(i));
+                      break;
+                    }
                 }
             }
             
@@ -311,6 +318,7 @@ public class BulletController {
         BulletController bulletControllerCopy = new BulletController();
         bulletControllerCopy.setAlienbullets(ArrayListCopy.copyArray(alienBulletList));
         bulletControllerCopy.setPlayerbullets(ArrayListCopy.copyArray(playerBulletList));
+        bulletControllerCopy.setEnemyBulletList(ArrayListCopy.copyArray(enemyBulletList));
         return bulletControllerCopy;
     }
     
@@ -357,4 +365,10 @@ public class BulletController {
     public ArrayList<GameObject> getPlayerBulletList() {
         return playerBulletList;
     }
+
+    public void setEnemyBulletList(ArrayList<GameObject> enemyBulletList) {
+        this.enemyBulletList = enemyBulletList;
+    }
+    
+    
 }

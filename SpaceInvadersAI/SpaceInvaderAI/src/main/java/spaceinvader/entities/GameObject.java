@@ -52,7 +52,7 @@ public class GameObject {
             return false;
         }
         
-        if((newY + ySize-1 >= 14) || (newY + ySize-1 <= 0)){
+        if((newY + ySize-1 >= 24) || (newY + ySize-1 <= 0)){
             return false;
         }
         return true;
@@ -94,5 +94,13 @@ public class GameObject {
 
     public int getPlayer() {
         return player;
+    }
+    
+    public void setPlayer(int player){
+        this.player = player;
+    }
+    
+    public void setxPos(int xPos){
+        this.xPosition = xPos;
     }
 }

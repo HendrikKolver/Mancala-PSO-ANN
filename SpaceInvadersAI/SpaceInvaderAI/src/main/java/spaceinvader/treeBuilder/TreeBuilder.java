@@ -36,7 +36,7 @@ public class TreeBuilder {
         
         TreeInterface tmpNode = null;
         
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
 
         for(String possibleMove : possibleMoves){
             tmpNode = root.getCopy();
