@@ -5,13 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import spaceinvader.entities.Alien;
+import spaceinvader.entities.AlienFactory;
 import spaceinvader.entities.GameObject;
+import spaceinvader.entities.PlayerBullet;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.gameRunner.PlayerController;
@@ -31,14 +34,16 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {           
-        int plyDepth = 6;
+        int plyDepth = 7;
         int hiddenLayers = 16;
         
-        NeuralNetwork nn = new NeuralNetwork(10,1,hiddenLayers,1);
-        //setRandomWeights(nn);
-        getWeightsFromFile(nn);
+        NeuralNetwork nnp1 = new NeuralNetwork(10,1,hiddenLayers,1);
+        NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayers,1);
+        setRandomWeights(nnp2);
+        getWeightsFromFile(nnp1);
        
-        AIPlayer player = new AIPlayer(plyDepth,nn);
+        AIPlayer player1 = new AIPlayer(plyDepth,nnp1);
+        AIPlayer player2 = new AIPlayer(plyDepth,nnp2);
         int totalRoundCount = 0;
         int totalKillCount = 0;
         
@@ -47,17 +52,22 @@ public class SpaceInvader {
         double start = System.currentTimeMillis();
         
         for (int i = 0; i < gamesToPlay; i++) {
-            
-            while(!player.isGameOver() && player.getRoundCount() <200){
-
-               // Thread.sleep(300);
-                //player.getCurrentPosition().printBoard();
-                player.playRound();
-                
+            while(true)
+            { 
+                if(player1.isGameOver() || player2.isGameOver())
+                {
+                    break;
+                }
+                player1.playRound();
+                player2.playRound();
+                syncBoards(player1, player2);
+                System.out.println("P1 board---------------");
+                player1.getCurrentPosition().printBoard();
+                System.out.println("P2 board---------------");
+                player2.getCurrentPosition().printBoard();
             }
-            totalRoundCount += player.getRoundCount();
-            totalKillCount += player.getKillCount();
-            player = new AIPlayer(plyDepth,nn);
+            totalRoundCount += player1.getRoundCount();
+            totalKillCount += player1.getKillCount();
             System.out.println("Game: "+ i + "\r");
         }
         System.out.println("Average round count: "+ (totalRoundCount/gamesToPlay));
@@ -70,6 +80,67 @@ public class SpaceInvader {
             
    
     }
+    
+    private static void syncBoards(AIPlayer player1, AIPlayer player2){
+        BulletController p1Controller = player1.getCurrentPosition().getBulletController();
+        BulletController p2Controller = player2.getCurrentPosition().getBulletController();
+
+
+
+        ArrayList<GameObject> p1Bullets = p1Controller.getPlayerBulletList();
+        ArrayList<GameObject> p2Bullets = p2Controller.getPlayerBulletList();
+        Iterator p1Bullet = p1Bullets.iterator();
+        while(p1Bullet.hasNext()){
+            GameObject bullet = (GameObject) p1Bullet.next();
+            if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+               PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+               p2Controller.addEnemyBullet(newBullet);
+               p1Bullet.remove();
+            }
+        }
+
+        Iterator p2Bullet = p2Bullets.iterator();
+        while(p2Bullet.hasNext()){
+            GameObject bullet = (GameObject) p2Bullet.next();
+            if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+                p1Controller.addEnemyBullet(newBullet);
+                p2Bullet.remove();
+            }
+        }
+
+        AlienController p1AlienController = player1.getCurrentPosition().getAlienController();
+        AlienController p2AlienController = player2.getCurrentPosition().getAlienController();
+        ArrayList<GameObject> p1Buildings = player1.getCurrentPosition().getPlayerController().getBuildings();
+        ArrayList<GameObject> p2Buildings = player2.getCurrentPosition().getPlayerController().getBuildings();
+        int counter = 0;
+         
+        for(GameObject building : p1Buildings){
+            if(building instanceof AlienFactory){
+                counter++;
+            }
+        }
+         
+        if (player1.getRoundCount() >=40){
+            p2AlienController.setWaveSize(4+counter);
+        }else {
+            p2AlienController.setWaveSize(3+counter);
+        }
+        
+        counter = 0;
+        
+        for(GameObject building : p2Buildings){
+            if(building instanceof AlienFactory){
+                counter++;
+            }
+        }
+         
+        if (player2.getRoundCount() >=40){
+            p1AlienController.setWaveSize(4+counter);
+        }else {
+            p1AlienController.setWaveSize(3+counter);
+        }
+     }
     
     public static void setRandomWeights(NeuralNetwork nn){
         double weights[] = new double[nn.getConnections()];
@@ -92,11 +163,11 @@ public class SpaceInvader {
         
         //read from file
         try {
-            String name = "tmpFile.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = "p1.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {
-                System.out.println("Cannot, file is empty please train first");
+                throw(new RuntimeException("Error file missing"));
             }
             else
             {
