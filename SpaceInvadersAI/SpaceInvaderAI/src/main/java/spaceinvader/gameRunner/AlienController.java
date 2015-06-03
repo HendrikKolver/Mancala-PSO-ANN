@@ -37,16 +37,6 @@ public class AlienController {
             this.increaseWaveSize();
         }
         
-//        if(fakeOpponentAlienFactory == 0){
-//            int probability = RandomGenerator.randInt(1, 1000);
-//            if(probability <=5){
-//                increaseWaveSize();
-//                fakeOpponentAlienFactory++;
-//            }
-//        }
-//        
-//        }
-        
         removeEmptyRows();
         updateAlienPosition();
         checkForShieldColission();
@@ -196,18 +186,6 @@ public class AlienController {
         this.waveSize++;
     }
     
-    public void printAllAliens(){
-        
-        for (ArrayList<Alien> rowAliens : alienRow) { 
-            String alienString = "";
-            for (Alien alien : rowAliens) {   
-                alienString += "["+alien.getxPosition()+"][" + alien.getyPosition()+"],";
-            }
-            System.out.println(alienString);  
-        }
-        System.out.println("\n");
-    }
-    
     public ArrayList<ArrayList<Alien>> getAllAliens(){
         return alienRow;
     }
@@ -260,8 +238,6 @@ public class AlienController {
             }     
         } 
     }
-    
-    
     
     //Similiar to player version but removes shields as well
     private void removeAllObjectsInBlock(int xPosition, int yPosition) {

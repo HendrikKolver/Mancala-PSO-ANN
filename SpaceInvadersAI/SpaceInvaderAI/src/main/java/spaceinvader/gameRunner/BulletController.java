@@ -6,6 +6,7 @@ import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienBullet;
 import spaceinvader.entities.Building;
 import spaceinvader.entities.GameObject;
+import spaceinvader.entities.Player;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.entities.Shield;
 import spaceinvader.utilities.ArrayListCopy;
@@ -95,20 +96,29 @@ public class BulletController {
              
     }
     
+    private boolean bulletColissionDetection(GameObject bullet, GameObject objectToCollide, int size){
+        if(size == 3){
+            return (objectToCollide.getyPosition() == bullet.getyPosition() 
+                        && (objectToCollide.getxPosition() == bullet.getxPosition() 
+                        || objectToCollide.getxPosition()+1 == bullet.getxPosition()
+                        || objectToCollide.getxPosition()+2 == bullet.getxPosition()));
+        }else{
+            return (objectToCollide.getyPosition() == bullet.getyPosition() 
+                            && (objectToCollide.getxPosition() == bullet.getxPosition()));
+        }
+    }
+    
     public void alienBulletColissionDetection(){
         
         ArrayList<GameObject> buildings = playerController.getBuildings();
         ArrayList<GameObject> shields = playerController.getAllShields();
-        int playerPos = playerController.getPlayerPosition();
+        Player player = playerController.getPlayer();
         
         for (int i = 0; i < alienBulletList.size();) {
             boolean increaseCounter = true;
             
             for(GameObject building : buildings){
-                if(building.getyPosition() == alienBulletList.get(i).getyPosition() 
-                        && (building.getxPosition() == alienBulletList.get(i).getxPosition() 
-                        || building.getxPosition()+1 == alienBulletList.get(i).getxPosition()
-                        || building.getxPosition()+2 == alienBulletList.get(i).getxPosition()))
+                if(bulletColissionDetection(alienBulletList.get(i),building,3))
                 {
                   buildings.remove(building);
                   alienBulletList.remove(alienBulletList.get(i));
@@ -118,8 +128,7 @@ public class BulletController {
             
             if(i < alienBulletList.size()){
                 for(GameObject shield : shields){
-                    if(shield.getyPosition() == alienBulletList.get(i).getyPosition() 
-                            && (shield.getxPosition() == alienBulletList.get(i).getxPosition()))
+                    if(bulletColissionDetection(alienBulletList.get(i),shield,1))
                     {
                       shields.remove(shield);
                       alienBulletList.remove(alienBulletList.get(i));
@@ -130,8 +139,7 @@ public class BulletController {
             
             if(i < alienBulletList.size()){
                 for(GameObject playerBullet : playerBulletList){
-                    if(playerBullet.getxPosition() == alienBulletList.get(i).getxPosition()
-                        && playerBullet.getyPosition() == alienBulletList.get(i).getyPosition()
+                    if(bulletColissionDetection(alienBulletList.get(i),playerBullet,1)
                             && playerBullet.getPlayer() == 1)
                     {
                         alienBulletList.remove(alienBulletList.get(i));
@@ -143,10 +151,7 @@ public class BulletController {
             }
             
             if(i < alienBulletList.size() && playerController.isPlayerAlive()){
-                 if(alienBulletList.get(i).getyPosition() == 2 
-                        && (playerPos == alienBulletList.get(i).getxPosition() 
-                        || playerPos+1 == alienBulletList.get(i).getxPosition()
-                        || playerPos+2 == alienBulletList.get(i).getxPosition()))
+                 if(bulletColissionDetection(alienBulletList.get(i),player,3))
                     {
                         alienBulletList.remove(alienBulletList.get(i));
                         playerController.killPlayer();
@@ -173,8 +178,7 @@ public class BulletController {
             if(playerBulletList.get(i).getPlayer() == 1){
                 for(ArrayList<Alien> aliens : allAliens){
                     for(Alien alien : aliens){
-                        if(alien.getyPosition() == playerBulletList.get(i).getyPosition() 
-                                && (alien.getxPosition() == playerBulletList.get(i).getxPosition()))
+                        if(bulletColissionDetection(playerBulletList.get(i),alien,1))
                         {
                           aliens.remove(alien);
                           playerBulletList.remove(playerBulletList.get(i));
@@ -193,8 +197,7 @@ public class BulletController {
                 //This is allowed since there may be enemy bullets in that area that the player wants to mitigate as well
                 if(i < playerBulletList.size()){
                     for(GameObject shield : shields){
-                        if(shield.getyPosition() == playerBulletList.get(i).getyPosition() 
-                                && (shield.getxPosition() == playerBulletList.get(i).getxPosition()))
+                        if(bulletColissionDetection(playerBulletList.get(i),shield,1))
                         {
                           shields.remove(shield);
                           playerBulletList.remove(playerBulletList.get(i));
@@ -218,7 +221,7 @@ public class BulletController {
         ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
         ArrayList<GameObject> shields = playerController.getAllShields();
         ArrayList<GameObject> buildings = playerController.getBuildings();
-        int playerPos = playerController.getPlayerPosition();
+        Player player = playerController.getPlayer();
 
         
         for (int i = 0; i < enemyBulletList.size();) {
@@ -226,8 +229,7 @@ public class BulletController {
             
             for(ArrayList<Alien> aliens : allAliens){
                 for(Alien alien : aliens){
-                    if(alien.getyPosition() == enemyBulletList.get(i).getyPosition() 
-                            && (alien.getxPosition() == enemyBulletList.get(i).getxPosition()))
+                    if(bulletColissionDetection(enemyBulletList.get(i),alien,1))
                     {
                       aliens.remove(alien);
                       enemyBulletList.remove(enemyBulletList.get(i));
@@ -242,10 +244,7 @@ public class BulletController {
             }
             if(i < enemyBulletList.size()){
                 for(GameObject building : buildings){
-                    if(building.getyPosition() == enemyBulletList.get(i).getyPosition() 
-                            && (building.getxPosition() == enemyBulletList.get(i).getxPosition() 
-                            || building.getxPosition()+1 == enemyBulletList.get(i).getxPosition()
-                            || building.getxPosition()+2 == enemyBulletList.get(i).getxPosition()))
+                    if(bulletColissionDetection(enemyBulletList.get(i),building,3))
                     {
                       buildings.remove(building);
                       enemyBulletList.remove(enemyBulletList.get(i));
@@ -256,8 +255,7 @@ public class BulletController {
             
             if(i < enemyBulletList.size()){
                 for(GameObject shield : shields){
-                    if(shield.getyPosition() == enemyBulletList.get(i).getyPosition() 
-                            && (shield.getxPosition() == enemyBulletList.get(i).getxPosition()))
+                    if(bulletColissionDetection(enemyBulletList.get(i),shield,1))
                     {
                       shields.remove(shield);
                       enemyBulletList.remove(enemyBulletList.get(i));
@@ -268,8 +266,7 @@ public class BulletController {
             
             if(i < enemyBulletList.size()){
                 for(GameObject playerBullet : enemyBulletList){
-                    if(playerBullet.getxPosition() == enemyBulletList.get(i).getxPosition()
-                        && playerBullet.getyPosition() == enemyBulletList.get(i).getyPosition())
+                    if(bulletColissionDetection(enemyBulletList.get(i),playerBullet,1))
                     {
                         enemyBulletList.remove(enemyBulletList.get(i));
                         playerBulletList.remove(playerBullet);
@@ -280,10 +277,7 @@ public class BulletController {
             }
             
             if(i < enemyBulletList.size() && playerController.isPlayerAlive()){
-                 if(enemyBulletList.get(i).getyPosition() == 2 
-                        && (playerPos == enemyBulletList.get(i).getxPosition() 
-                        || playerPos+1 == enemyBulletList.get(i).getxPosition()
-                        || playerPos+2 == enemyBulletList.get(i).getxPosition()))
+                 if(bulletColissionDetection(enemyBulletList.get(i),player,1))
                     {
                         enemyBulletList.remove(enemyBulletList.get(i));
                         playerController.killPlayer();
