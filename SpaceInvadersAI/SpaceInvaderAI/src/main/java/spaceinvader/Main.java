@@ -59,7 +59,7 @@ public class Main {
         
         //read from file
         try {
-            String name = "player2.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = "p2.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {

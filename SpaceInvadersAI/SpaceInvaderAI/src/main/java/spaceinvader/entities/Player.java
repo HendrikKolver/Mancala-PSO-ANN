@@ -27,9 +27,9 @@ public class Player extends GameObject{
         this.ySize =1;
         bulletLimit = 1;
         this.lives = 2;
-        buildings = new ArrayList();
         this.isAlive = true;
         this.kills = 0;
+        buildings = new ArrayList();
     }
     
     public ArrayList<String> getPossibleMoves(){
@@ -55,8 +55,6 @@ public class Player extends GameObject{
         if(this.xPosition+this.xSize <17){
             possibleMoves.add("MoveRight");
         }
-
-        
         
         return possibleMoves;
     }
@@ -66,7 +64,6 @@ public class Player extends GameObject{
     }
     
     private boolean isBuildingBehindPlayer(){
-        
         for(GameObject building : buildings){
             if(building.getxPosition() >= this.getxPosition()-2 && building.getxPosition() <= this.getxPosition()+2){
                 return true;
@@ -196,8 +193,6 @@ public class Player extends GameObject{
               extraBullets++; 
             }
         }
-
-       
         
         //+1 for the initial limit of 1
         this.bulletLimit = extraBullets + 1;

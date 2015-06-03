@@ -9,9 +9,7 @@ public abstract class Building extends GameObject{
         this.xPosition = xPos;
         this.yPosition = yPos;
         this.xSize = xSize;
-        this.ySize = ySize;
-        
-        
+        this.ySize = ySize;      
     }
     
     public abstract String stringContent();

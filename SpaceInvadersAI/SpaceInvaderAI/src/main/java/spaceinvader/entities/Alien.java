@@ -29,34 +29,6 @@ public class Alien extends GameObject{
         }   
     }
     
-
-    public void updatePosition(String direction){
-        switch(direction){
-            case "LEFT" : {
-                int newX = xPosition-1;
-                if(isPositionInBounds(newX,yPosition)){
-                    xPosition = newX;
-                }
-                break;
-            }
-            case "RIGHT" : {
-                int newX = xPosition+1;
-                if(isPositionInBounds(newX,yPosition)){
-                    xPosition = newX;
-                }
-                break;
-            }
-            case "DOWN" : {
-                 int newY = yPosition-1;
-                if(isPositionInBounds(xPosition,newY)){
-                    yPosition = newY;
-                }else{
-                    //System.out.println("Game Over");
-                }
-            }
-        }
-    }
-    
     public void fireBullet(){
         //yPos +1 so that the bullet is spawned below the alien
         AlienBullet alienBullet = new AlienBullet(xPosition,yPosition-1); // check if Alien infront and if so move bullet y ahead with 2

@@ -50,8 +50,8 @@ public class SpaceInvader {
             
             while(!player.isGameOver() && player.getRoundCount() <200){
 
-                Thread.sleep(200);
-                player.getCurrentPosition().printBoard();
+               // Thread.sleep(300);
+                //player.getCurrentPosition().printBoard();
                 player.playRound();
                 
             }
@@ -92,7 +92,7 @@ public class SpaceInvader {
         
         //read from file
         try {
-            String name = "player2.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = "tmpFile.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {
