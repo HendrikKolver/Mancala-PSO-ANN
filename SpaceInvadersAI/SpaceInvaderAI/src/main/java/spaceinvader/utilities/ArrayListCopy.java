@@ -1,9 +1,7 @@
 package spaceinvader.utilities;
 
 import java.util.ArrayList;
-import spaceinvader.entities.Building;
 import spaceinvader.entities.GameObject;
-import spaceinvader.entities.Shield;
 
 /**
  *

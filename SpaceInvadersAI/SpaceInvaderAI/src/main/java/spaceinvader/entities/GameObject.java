@@ -12,7 +12,8 @@ public class GameObject {
     protected int xSize;
     protected int ySize;
     protected int player = 1;
-    protected int objectID = -1;
+    protected int objectID = 0;
+    protected String representation;
     
     public void updatePosition(String direction){
         switch(direction){
@@ -84,11 +85,13 @@ public class GameObject {
         gameObject.yPosition = this.yPosition;
         gameObject.xSize = this.xSize;
         gameObject.ySize = this.ySize;
+        gameObject.representation = this.representation;
+        gameObject.objectID = this.objectID;
         return gameObject;
     };
     
     public String getRepresentation(){
-        return "D";
+        return representation;
     }
     
     public String stringContent(){
@@ -113,8 +116,8 @@ public class GameObject {
     }
     
     public void generateObjectID(){
-        if(this.objectID == -1){
-            this.objectID = RandomGenerator.randInt(0, 10000);
+        if(this.objectID == 0){
+            this.objectID = RandomGenerator.randInt(1, 10000);
         }
     }
 

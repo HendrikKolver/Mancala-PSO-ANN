@@ -39,14 +39,14 @@ public class Player extends GameObject{
             possibleMoves.add("Shoot");
         }
         
-        possibleMoves.add("Nothing");
-        if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
-            possibleMoves.add("BuildShield");
-        }
-        
         if(canLifeBeUsed() && !isBuildingBehindPlayer()){
             possibleMoves.add("BuildAlienFactory");
             possibleMoves.add("BuildMissileController");
+        }
+        
+        
+        if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
+            possibleMoves.add("BuildShield");
         }
         
         if(this.xPosition >1){
@@ -55,6 +55,8 @@ public class Player extends GameObject{
         if(this.xPosition+this.xSize <17){
             possibleMoves.add("MoveRight");
         }
+
+        possibleMoves.add("Nothing");
         
         return possibleMoves;
     }

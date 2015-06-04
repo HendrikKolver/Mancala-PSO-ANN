@@ -18,11 +18,13 @@ public class BulletController {
     private ArrayList<GameObject> enemyBulletList;
     private PlayerController playerController;
     private AlienController alienController; 
+    private ArrayList bulletIdsToRemove;
     
     public BulletController(){
         alienBulletList = new ArrayList();
         playerBulletList = new ArrayList();
         enemyBulletList = new ArrayList();
+        bulletIdsToRemove = new ArrayList();
     }
     
     public void update(){
@@ -75,7 +77,7 @@ public class BulletController {
             }
             
              for (int i = 0; i < playerBulletList.size();) {
-                if(playerBulletList.get(i).getyPosition() > 22){
+                if(playerBulletList.get(i).getyPosition() >= 23){
                     playerBulletList.remove(i);
                 }else{
                     i++;
@@ -84,6 +86,7 @@ public class BulletController {
              
             for (int i = 0; i < enemyBulletList.size();) {
                 if(enemyBulletList.get(i).getyPosition() == 1){
+                    bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
                     enemyBulletList.remove(i);
                 }else{
                     i++;
@@ -119,6 +122,7 @@ public class BulletController {
                 {
                   buildings.remove(building);
                   alienBulletList.remove(alienBulletList.get(i));
+                  increaseCounter = false;
                   break;
                 }
             }
@@ -129,6 +133,7 @@ public class BulletController {
                     {
                       shields.remove(shield);
                       alienBulletList.remove(alienBulletList.get(i));
+                      increaseCounter = false;
                       break;
                     }
                 } 
@@ -171,14 +176,14 @@ public class BulletController {
         
         for (int i = 0; i < playerBulletList.size();) {
             boolean increaseCounter = true;
-            
-            if(playerBulletList.get(i).getPlayer() == 1){
+            GameObject playerBullet = playerBulletList.get(i);
+            if(playerBullet.getPlayer() == 1){
                 for(ArrayList<Alien> aliens : allAliens){
                     for(Alien alien : aliens){
-                        if(bulletColissionDetection(playerBulletList.get(i),alien,1))
+                        if(bulletColissionDetection(playerBullet,alien,1))
                         {
                           aliens.remove(alien);
-                          playerBulletList.remove(playerBulletList.get(i));
+                          playerBulletList.remove(playerBullet);
                           playerController.increaseKillCount();
                           increaseCounter = false;
                           break;
@@ -194,10 +199,10 @@ public class BulletController {
                 //This is allowed since there may be enemy bullets in that area that the player wants to mitigate as well
                 if(i < playerBulletList.size()){
                     for(GameObject shield : shields){
-                        if(bulletColissionDetection(playerBulletList.get(i),shield,1))
+                        if(bulletColissionDetection(playerBullet,shield,1))
                         {
                           shields.remove(shield);
-                          playerBulletList.remove(playerBulletList.get(i));
+                          playerBulletList.remove(playerBullet);
                           break;
                         }
                     } 
@@ -229,6 +234,7 @@ public class BulletController {
                     if(bulletColissionDetection(enemyBulletList.get(i),alien,1))
                     {
                       aliens.remove(alien);
+                      bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
                       enemyBulletList.remove(enemyBulletList.get(i));
                       increaseCounter = false;
                       break;
@@ -236,15 +242,17 @@ public class BulletController {
                 } 
                 if(!increaseCounter){
                     break;
-                }
-                    
+                }   
             }
             if(i < enemyBulletList.size()){
                 for(GameObject building : buildings){
+                    
                     if(bulletColissionDetection(enemyBulletList.get(i),building,3))
                     {
                       buildings.remove(building);
+                      bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
                       enemyBulletList.remove(enemyBulletList.get(i));
+                      increaseCounter = false;
                       break;
                     }
                 }
@@ -252,10 +260,13 @@ public class BulletController {
             
             if(i < enemyBulletList.size()){
                 for(GameObject shield : shields){
+                    
                     if(bulletColissionDetection(enemyBulletList.get(i),shield,1))
                     {
                       shields.remove(shield);
+                      bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
                       enemyBulletList.remove(enemyBulletList.get(i));
+                      increaseCounter = false;
                       break;
                     }
                 } 
@@ -263,8 +274,12 @@ public class BulletController {
             
             if(i < enemyBulletList.size()){
                 for(GameObject playerBullet : enemyBulletList){
-                    if(bulletColissionDetection(enemyBulletList.get(i),playerBullet,1) && enemyBulletList.get(i).getObjectID() != playerBullet.getObjectID())
+                    
+                    if(bulletColissionDetection(enemyBulletList.get(i),playerBullet,1) && 
+                            enemyBulletList.get(i).getObjectID() != playerBullet.getObjectID() && 
+                            playerBullet.getPlayer() == 1)
                     {
+                        bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
                         enemyBulletList.remove(enemyBulletList.get(i));
                         playerBulletList.remove(playerBullet);
                         increaseCounter = false;
@@ -274,8 +289,9 @@ public class BulletController {
             }
             
             if(i < enemyBulletList.size() && playerController.isPlayerAlive()){
-                 if(bulletColissionDetection(enemyBulletList.get(i),player,1))
+                 if(bulletColissionDetection(enemyBulletList.get(i),player,3))
                     {
+                        bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
                         enemyBulletList.remove(enemyBulletList.get(i));
                         playerController.killPlayer();
                         increaseCounter = false;
@@ -363,6 +379,10 @@ public class BulletController {
 
     public ArrayList<GameObject> getEnemyBulletList() {
         return enemyBulletList;
+    }
+
+    public ArrayList getBulletIdsToRemove() {
+        return bulletIdsToRemove;
     }
     
     

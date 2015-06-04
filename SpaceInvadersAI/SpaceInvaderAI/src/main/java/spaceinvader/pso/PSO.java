@@ -360,6 +360,7 @@ public class PSO {
         }
     }
     
+      //TODO consolidate this and the copy of this function in SpaceInvader.java
     private void syncBoards(AIPlayer player1, AIPlayer player2){
         BulletController p1Controller = player1.getCurrentPosition().getBulletController();
         BulletController p2Controller = player2.getCurrentPosition().getBulletController();
@@ -376,7 +377,6 @@ public class PSO {
                PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
                newBullet.setObjectID(bullet.getObjectID());
                p2Controller.addEnemyBullet(newBullet);
-               p1Bullet.remove();
             }
         }
 
@@ -388,7 +388,6 @@ public class PSO {
                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
                 newBullet.setObjectID(bullet.getObjectID());
                 p1Controller.addEnemyBullet(newBullet);
-                p2Bullet.remove();
             }
         }
 
@@ -398,8 +397,10 @@ public class PSO {
         ArrayList<GameObject> p2Buildings = player2.getCurrentPosition().getPlayerController().getBuildings();
         int counter = 0;
          
+        //Checking the representation because I stuffed up the polymorphism. Should have created seperate lists for the objects or I
+        //Should rectify the deep copy function. Because the arrayCopy function is templatized it casts the objects to instances of GameObject and kills their type 
         for(GameObject building : p1Buildings){
-            if(building instanceof AlienFactory){
+            if(building.getRepresentation().equals("X")){
                 counter++;
             }
         }
@@ -413,7 +414,7 @@ public class PSO {
         counter = 0;
         
         for(GameObject building : p2Buildings){
-            if(building instanceof AlienFactory){
+            if(building.getRepresentation().equals("X")){
                 counter++;
             }
         }
@@ -422,6 +423,31 @@ public class PSO {
             p1AlienController.setWaveSize(4+counter);
         }else {
             p1AlienController.setWaveSize(3+counter);
+        }
+        
+                //Remove the enemy bullet once it is destroyed so that the player that fired it can fire again
+        ArrayList p1IdsToRemove = p1Controller.getBulletIdsToRemove();
+        ArrayList p2IdsToRemove = p2Controller.getBulletIdsToRemove();
+        
+        for(Object id : p1IdsToRemove){
+            Iterator p1Iterator = p2Bullets.iterator();
+            while(p1Iterator.hasNext()){
+                
+                GameObject bullet = (GameObject) p1Iterator.next();
+                if((int)id == bullet.getObjectID()){
+                   p1Iterator.remove();    
+                } 
+            }
+        }
+        
+        for(Object id : p2IdsToRemove){
+            Iterator p2Iterator = p1Bullets.iterator();
+            while(p2Iterator.hasNext()){
+                GameObject bullet = (GameObject) p2Iterator.next();
+                if((int)id == bullet.getObjectID()){
+                   p2Iterator.remove();    
+                } 
+            }
         }
      }
     

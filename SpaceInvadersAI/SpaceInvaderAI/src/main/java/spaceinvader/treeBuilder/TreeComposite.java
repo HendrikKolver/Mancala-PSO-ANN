@@ -169,6 +169,8 @@ public class TreeComposite extends TreeInterface {
         //Check again for collisions to see if someone moved into a bullet
         this.bulletController.alienBulletColissionDetection();
         this.bulletController.playerBulletColissionDetection();
+        this.bulletController.enemyBulletColissionDetection();
+        
     }
 
     @Override
@@ -253,6 +255,8 @@ public class TreeComposite extends TreeInterface {
     for(GameObject playerBullet : playerBulletList){
         if(playerBullet.getyPosition() <13){
             board[playerBullet.getxPosition()][playerBullet.getyPosition()] = "1";
+        }else{
+            board[playerBullet.getxPosition()][13] = "1";
         }
     }
     

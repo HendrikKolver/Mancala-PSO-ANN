@@ -9,21 +9,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienFactory;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
-import spaceinvader.gameRunner.PlayerController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.pso.AIPlayer;
-import spaceinvader.treeBuilder.TreeBuilder;
-import spaceinvader.treeBuilder.TreeComposite;
-import spaceinvader.treeBuilder.TreeInterface;
 
 /**
  *
@@ -34,13 +26,14 @@ public class SpaceInvader {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException, FileNotFoundException {           
-        int plyDepth = 7;
+    public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
+        int plyDepth = 6;
         int hiddenLayers = 16;
         
         NeuralNetwork nnp1 = new NeuralNetwork(10,1,hiddenLayers,1);
         NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayers,1);
-        setRandomWeights(nnp2);
+        //setRandomWeights(nnp2);
+        getWeightsFromFile(nnp2);
         getWeightsFromFile(nnp1);
        
         
@@ -56,25 +49,27 @@ public class SpaceInvader {
             AIPlayer player2 = new AIPlayer(plyDepth,nnp2);
             while(true)
             { 
-                sleep(200);
+                //sleep(200);
+                //System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
                     break;
                 }
+                //System.out.println("P1 board---------------");
+                //player1.getCurrentPosition().printBoard();
+                //System.out.println("P2 board---------------");
+                //player2.getCurrentPosition().printBoard();
                 player1.playRound();
                 player2.playRound();
                 syncBoards(player1, player2);
-                System.out.println("P1 board---------------");
-                player1.getCurrentPosition().printBoard();
-                System.out.println("P2 board---------------");
-                player2.getCurrentPosition().printBoard();
+                
             }
             totalRoundCount += player1.getRoundCount();
             totalKillCount += player1.getKillCount();
             System.out.println("Game: "+ i + "\r");
         }
         System.out.println("Average round count: "+ (totalRoundCount/gamesToPlay));
-        System.out.println("Average kill count: "+ (totalKillCount/gamesToPlay));
+        System.out.println("Average kill count p1: "+ (totalKillCount/gamesToPlay));
         double end = System.currentTimeMillis();
         System.out.println("Total time: "+ (end-start));
             
@@ -84,14 +79,15 @@ public class SpaceInvader {
    
     }
     
+    
+    //TODO consolidate this and the copy of this function in PSO.java
     private static void syncBoards(AIPlayer player1, AIPlayer player2){
         BulletController p1Controller = player1.getCurrentPosition().getBulletController();
         BulletController p2Controller = player2.getCurrentPosition().getBulletController();
-
-
-
+        
         ArrayList<GameObject> p1Bullets = p1Controller.getPlayerBulletList();
         ArrayList<GameObject> p2Bullets = p2Controller.getPlayerBulletList();
+        
         Iterator p1Bullet = p1Bullets.iterator();
         while(p1Bullet.hasNext()){
             GameObject bullet = (GameObject) p1Bullet.next();
@@ -100,7 +96,6 @@ public class SpaceInvader {
                PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
                newBullet.setObjectID(bullet.getObjectID());
                p2Controller.addEnemyBullet(newBullet);
-               p1Bullet.remove();
             }
         }
 
@@ -108,11 +103,13 @@ public class SpaceInvader {
         while(p2Bullet.hasNext()){
             GameObject bullet = (GameObject) p2Bullet.next();
             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                
                 bullet.generateObjectID();
+                System.out.println(bullet.getObjectID());
                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
                 newBullet.setObjectID(bullet.getObjectID());
+                System.out.println(newBullet.getObjectID());
                 p1Controller.addEnemyBullet(newBullet);
-                p2Bullet.remove();
             }
         }
 
@@ -122,8 +119,10 @@ public class SpaceInvader {
         ArrayList<GameObject> p2Buildings = player2.getCurrentPosition().getPlayerController().getBuildings();
         int counter = 0;
          
+        //Checking the representation because I stuffed up the polymorphism. Should have created seperate lists for the objects or I
+        //Should rectify the deep copy function. Because the arrayCopy function is templatized it casts the objects to instances of GameObject and kills their type 
         for(GameObject building : p1Buildings){
-            if(building instanceof AlienFactory){
+            if(building.getRepresentation().equals("X")){
                 counter++;
             }
         }
@@ -137,7 +136,7 @@ public class SpaceInvader {
         counter = 0;
         
         for(GameObject building : p2Buildings){
-            if(building instanceof AlienFactory){
+            if(building.getRepresentation().equals("X")){
                 counter++;
             }
         }
@@ -146,6 +145,31 @@ public class SpaceInvader {
             p1AlienController.setWaveSize(4+counter);
         }else {
             p1AlienController.setWaveSize(3+counter);
+        }
+        
+        //Remove the enemy bullet once it is destroyed so that the player that fired it can fire again
+        ArrayList p1IdsToRemove = p1Controller.getBulletIdsToRemove();
+        ArrayList p2IdsToRemove = p2Controller.getBulletIdsToRemove();
+        
+        for(Object id : p1IdsToRemove){
+            Iterator p1Iterator = p2Bullets.iterator();
+            while(p1Iterator.hasNext()){
+                
+                GameObject bullet = (GameObject) p1Iterator.next();
+                if((int)id == bullet.getObjectID()){
+                   p1Iterator.remove();    
+                } 
+            }
+        }
+        
+        for(Object id : p2IdsToRemove){
+            Iterator p2Iterator = p1Bullets.iterator();
+            while(p2Iterator.hasNext()){
+                GameObject bullet = (GameObject) p2Iterator.next();
+                if((int)id == bullet.getObjectID()){
+                   p2Iterator.remove();    
+                } 
+            }
         }
      }
     
@@ -164,7 +188,7 @@ public class SpaceInvader {
         return (lower + (upper - lower) * r.nextDouble());
     }
     
-    private static void getWeightsFromFile(NeuralNetwork nn){
+    private static void getWeightsFromFile(NeuralNetwork nn) throws IOException{
         double weights[] = new double[nn.getConnections()];
         List<String> lines;
         
@@ -190,6 +214,7 @@ public class SpaceInvader {
 
         } catch (IOException ex) {
             System.out.println("Some file error");
+            throw(ex);
         }
     }
     

@@ -1,11 +1,8 @@
 package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
-import spaceinvader.entities.Building;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.Player;
-import spaceinvader.entities.Shield;
-import spaceinvader.utilities.RandomGenerator;
 
 /**
  *
