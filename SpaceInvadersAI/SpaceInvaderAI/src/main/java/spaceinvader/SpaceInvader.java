@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,8 +43,7 @@ public class SpaceInvader {
         setRandomWeights(nnp2);
         getWeightsFromFile(nnp1);
        
-        AIPlayer player1 = new AIPlayer(plyDepth,nnp1);
-        AIPlayer player2 = new AIPlayer(plyDepth,nnp2);
+        
         int totalRoundCount = 0;
         int totalKillCount = 0;
         
@@ -52,8 +52,11 @@ public class SpaceInvader {
         double start = System.currentTimeMillis();
         
         for (int i = 0; i < gamesToPlay; i++) {
+            AIPlayer player1 = new AIPlayer(plyDepth,nnp1);
+            AIPlayer player2 = new AIPlayer(plyDepth,nnp2);
             while(true)
             { 
+                sleep(200);
                 if(player1.isGameOver() || player2.isGameOver())
                 {
                     break;
@@ -93,7 +96,9 @@ public class SpaceInvader {
         while(p1Bullet.hasNext()){
             GameObject bullet = (GameObject) p1Bullet.next();
             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                bullet.generateObjectID();
                PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+               newBullet.setObjectID(bullet.getObjectID());
                p2Controller.addEnemyBullet(newBullet);
                p1Bullet.remove();
             }
@@ -103,7 +108,9 @@ public class SpaceInvader {
         while(p2Bullet.hasNext()){
             GameObject bullet = (GameObject) p2Bullet.next();
             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                bullet.generateObjectID();
                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+                newBullet.setObjectID(bullet.getObjectID());
                 p1Controller.addEnemyBullet(newBullet);
                 p2Bullet.remove();
             }

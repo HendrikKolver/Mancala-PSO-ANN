@@ -1,5 +1,7 @@
 package spaceinvader.entities;
 
+import spaceinvader.utilities.RandomGenerator;
+
 /**
  *
  * @author Hendrik Kolver
@@ -10,6 +12,7 @@ public class GameObject {
     protected int xSize;
     protected int ySize;
     protected int player = 1;
+    protected int objectID = -1;
     
     public void updatePosition(String direction){
         switch(direction){
@@ -102,5 +105,20 @@ public class GameObject {
     
     public void setxPos(int xPos){
         this.xPosition = xPos;
+    }
+    
+    public int getObjectID(){
+        this.generateObjectID();
+        return this.objectID;
+    }
+    
+    public void generateObjectID(){
+        if(this.objectID == -1){
+            this.objectID = RandomGenerator.randInt(0, 10000);
+        }
+    }
+
+    public void setObjectID(int objectID) {
+        this.objectID = objectID;
     }
 }

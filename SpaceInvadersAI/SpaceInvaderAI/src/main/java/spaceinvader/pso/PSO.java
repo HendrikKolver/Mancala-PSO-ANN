@@ -372,7 +372,9 @@ public class PSO {
         while(p1Bullet.hasNext()){
             GameObject bullet = (GameObject) p1Bullet.next();
             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                bullet.generateObjectID();
                PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+               newBullet.setObjectID(bullet.getObjectID());
                p2Controller.addEnemyBullet(newBullet);
                p1Bullet.remove();
             }
@@ -382,7 +384,9 @@ public class PSO {
         while(p2Bullet.hasNext()){
             GameObject bullet = (GameObject) p2Bullet.next();
             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
+                bullet.generateObjectID();
                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
+                newBullet.setObjectID(bullet.getObjectID());
                 p1Controller.addEnemyBullet(newBullet);
                 p2Bullet.remove();
             }

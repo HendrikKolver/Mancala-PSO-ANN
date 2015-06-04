@@ -215,6 +215,7 @@ public class TreeComposite extends TreeInterface {
      
     ArrayList<GameObject> alienBulletList = bulletController.getAlienbullets();
     ArrayList<GameObject> playerBulletList = bulletController.getPlayerbullets();
+    ArrayList<GameObject> enemyBulletList = bulletController.getEnemyBulletList();
     
     
     
@@ -252,6 +253,12 @@ public class TreeComposite extends TreeInterface {
     for(GameObject playerBullet : playerBulletList){
         if(playerBullet.getyPosition() <13){
             board[playerBullet.getxPosition()][playerBullet.getyPosition()] = "1";
+        }
+    }
+    
+    for(GameObject enemyBullet : enemyBulletList){
+        if(enemyBullet.getyPosition() <13){
+            board[enemyBullet.getxPosition()][enemyBullet.getyPosition()] = ";";
         }
     }
     

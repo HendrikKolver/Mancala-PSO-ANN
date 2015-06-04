@@ -1,14 +1,11 @@
 package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import spaceinvader.entities.Alien;
 import spaceinvader.entities.AlienBullet;
-import spaceinvader.entities.Building;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.Player;
 import spaceinvader.entities.PlayerBullet;
-import spaceinvader.entities.Shield;
 import spaceinvader.utilities.ArrayListCopy;
 
 /**
@@ -266,7 +263,7 @@ public class BulletController {
             
             if(i < enemyBulletList.size()){
                 for(GameObject playerBullet : enemyBulletList){
-                    if(bulletColissionDetection(enemyBulletList.get(i),playerBullet,1))
+                    if(bulletColissionDetection(enemyBulletList.get(i),playerBullet,1) && enemyBulletList.get(i).getObjectID() != playerBullet.getObjectID())
                     {
                         enemyBulletList.remove(enemyBulletList.get(i));
                         playerBulletList.remove(playerBullet);
@@ -363,6 +360,12 @@ public class BulletController {
     public void setEnemyBulletList(ArrayList<GameObject> enemyBulletList) {
         this.enemyBulletList = enemyBulletList;
     }
+
+    public ArrayList<GameObject> getEnemyBulletList() {
+        return enemyBulletList;
+    }
+    
+    
     
     
 }
