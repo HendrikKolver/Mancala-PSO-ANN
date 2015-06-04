@@ -239,11 +239,12 @@ public class AlienController {
         } 
     }
     
-    //Similiar to player version but removes shields as well
+    //Similiar to player version but removes shields and players as well
     private void removeAllObjectsInBlock(int xPosition, int yPosition) {
         ArrayList<GameObject> playerBullets = bulletController.getPlayerbullets();
         ArrayList<GameObject> alienBullets = bulletController.getAlienbullets();
         ArrayList<GameObject> shields = playerController.getAllShields();
+        Player player = playerController.getPlayer();
         
         int xMax = xPosition +3;
         int y = yPosition;
@@ -273,6 +274,14 @@ public class AlienController {
                       shields.remove(shield);
                       break;
                     }
+                }
+                
+                //remove the player is they are in range of a shield collision
+                if(player.getyPosition()== j &&
+                        (player.getxPosition() == i ||
+                        player.getxPosition()+1 == i ||
+                        player.getxPosition()+2 == i)){
+                    playerController.killPlayer();
                 }
             }
         }
