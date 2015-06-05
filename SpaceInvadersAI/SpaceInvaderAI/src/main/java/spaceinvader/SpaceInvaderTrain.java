@@ -2,9 +2,7 @@ package spaceinvader;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Random;
 import spaceinvader.neuralNetwork.NeuralNetwork;
-import spaceinvader.pso.AIPlayer;
 import spaceinvader.pso.Trainer;
 
 /**
@@ -20,7 +18,8 @@ public class SpaceInvaderTrain {
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException { 
         Trainer trainer = new Trainer();
-        NeuralNetwork nn = trainer.trainWithOpponent(100, 5);
+        NeuralNetwork nn = trainer.train(100, 4);
+        //NeuralNetwork nn = trainer.trainWithOpponent(300, 3);
 //        AIPlayer player = new AIPlayer(6,nn);
 //            
 //        while(!player.isGameOver() && player.getRoundCount() <200){

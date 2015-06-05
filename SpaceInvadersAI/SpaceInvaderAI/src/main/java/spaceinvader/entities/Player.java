@@ -39,11 +39,12 @@ public class Player extends GameObject{
             possibleMoves.add("Shoot");
         }
         
+        possibleMoves.add("Nothing");
+        
         if(canLifeBeUsed() && !isBuildingBehindPlayer()){
             possibleMoves.add("BuildAlienFactory");
             possibleMoves.add("BuildMissileController");
         }
-        
         
         if(canLifeBeUsed() && !isShieldInfrontOfPlayer()){
             possibleMoves.add("BuildShield");
@@ -56,8 +57,6 @@ public class Player extends GameObject{
             possibleMoves.add("MoveRight");
         }
 
-        possibleMoves.add("Nothing");
-        
         return possibleMoves;
     }
     

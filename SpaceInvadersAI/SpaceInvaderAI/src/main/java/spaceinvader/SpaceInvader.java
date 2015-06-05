@@ -32,15 +32,19 @@ public class SpaceInvader {
         
         NeuralNetwork nnp1 = new NeuralNetwork(10,1,hiddenLayers,1);
         NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayers,1);
-        //setRandomWeights(nnp2);
-        getWeightsFromFile(nnp2);
-        getWeightsFromFile(nnp1);
+//        setRandomWeights(nnp2);
+//        setRandomWeights(nnp1);
+        getWeightsFromFile(nnp2,"p2.txt");
+        getWeightsFromFile(nnp1,"tmpFile.txt");
        
         
-        int totalRoundCount = 0;
-        int totalKillCount = 0;
+        int totalRoundCountp1 = 0;
+        int totalKillCountp1 = 0;
+        int totalRoundCountp2 = 0;
+        int totalKillCountp2 = 0;
+        int winsp1 = 0;
         
-        double gamesToPlay = 200.0;
+        double gamesToPlay = 100.0;
         
         double start = System.currentTimeMillis();
         
@@ -53,23 +57,31 @@ public class SpaceInvader {
                 //System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
+                    if(!player1.isGameOver()){
+                        winsp1++;
+                    }
                     break;
                 }
-                //System.out.println("P1 board---------------");
-                //player1.getCurrentPosition().printBoard();
-                //System.out.println("P2 board---------------");
-                //player2.getCurrentPosition().printBoard();
+//                System.out.println("P1 board---------------");
+//                player1.getCurrentPosition().printBoard();
+//                System.out.println("P2 board---------------");
+//                player2.getCurrentPosition().printBoard();
                 player1.playRound();
                 player2.playRound();
                 syncBoards(player1, player2);
                 
             }
-            totalRoundCount += player1.getRoundCount();
-            totalKillCount += player1.getKillCount();
+            totalRoundCountp1 += player1.getRoundCount();
+            totalKillCountp1 += player1.getKillCount();
+            totalRoundCountp2 += player2.getRoundCount();
+            totalKillCountp2 += player2.getKillCount();
             System.out.println("Game: "+ i + "\r");
         }
-        System.out.println("Average round count: "+ (totalRoundCount/gamesToPlay));
-        System.out.println("Average kill count p1: "+ (totalKillCount/gamesToPlay));
+        System.out.println("Average round count p1: "+ (totalRoundCountp1/gamesToPlay));
+        System.out.println("Average kill count p1: "+ (totalKillCountp1/gamesToPlay));
+        System.out.println("Average round count p2: "+ (totalRoundCountp2/gamesToPlay));
+        System.out.println("Average kill count p2: "+ (totalKillCountp2/gamesToPlay));
+        System.out.println("Wins p1: "+ (winsp1));
         double end = System.currentTimeMillis();
         System.out.println("Total time: "+ (end-start));
             
@@ -103,12 +115,9 @@ public class SpaceInvader {
         while(p2Bullet.hasNext()){
             GameObject bullet = (GameObject) p2Bullet.next();
             if (bullet.getyPosition() == 12 && bullet.getPlayer() == 1){
-                
                 bullet.generateObjectID();
-                System.out.println(bullet.getObjectID());
                 PlayerBullet newBullet = new PlayerBullet(18-bullet.getxPosition(),12,2);
                 newBullet.setObjectID(bullet.getObjectID());
-                System.out.println(newBullet.getObjectID());
                 p1Controller.addEnemyBullet(newBullet);
             }
         }
@@ -188,13 +197,13 @@ public class SpaceInvader {
         return (lower + (upper - lower) * r.nextDouble());
     }
     
-    private static void getWeightsFromFile(NeuralNetwork nn) throws IOException{
+    private static void getWeightsFromFile(NeuralNetwork nn, String filename) throws IOException{
         double weights[] = new double[nn.getConnections()];
         List<String> lines;
         
         //read from file
         try {
-            String name = "p1.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = filename;//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {

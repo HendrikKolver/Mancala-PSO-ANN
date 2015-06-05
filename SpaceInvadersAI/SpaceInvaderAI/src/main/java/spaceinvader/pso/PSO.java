@@ -364,11 +364,10 @@ public class PSO {
     private void syncBoards(AIPlayer player1, AIPlayer player2){
         BulletController p1Controller = player1.getCurrentPosition().getBulletController();
         BulletController p2Controller = player2.getCurrentPosition().getBulletController();
-
-
-
+        
         ArrayList<GameObject> p1Bullets = p1Controller.getPlayerBulletList();
         ArrayList<GameObject> p2Bullets = p2Controller.getPlayerBulletList();
+        
         Iterator p1Bullet = p1Bullets.iterator();
         while(p1Bullet.hasNext()){
             GameObject bullet = (GameObject) p1Bullet.next();
@@ -425,7 +424,7 @@ public class PSO {
             p1AlienController.setWaveSize(3+counter);
         }
         
-                //Remove the enemy bullet once it is destroyed so that the player that fired it can fire again
+        //Remove the enemy bullet once it is destroyed so that the player that fired it can fire again
         ArrayList p1IdsToRemove = p1Controller.getBulletIdsToRemove();
         ArrayList p2IdsToRemove = p2Controller.getBulletIdsToRemove();
         
