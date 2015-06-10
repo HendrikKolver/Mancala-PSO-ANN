@@ -27,15 +27,15 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 6;
+        int plyDepth = 4;
         int hiddenLayers = 16;
         
         NeuralNetwork nnp1 = new NeuralNetwork(10,1,hiddenLayers,1);
         NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayers,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
-        getWeightsFromFile(nnp2,"p2.txt");
-        getWeightsFromFile(nnp1,"tmpFile.txt");
+        getWeightsFromFile(nnp2,"tmpFile.txt");
+        getWeightsFromFile(nnp1,"p2.txt");
        
         
         int totalRoundCountp1 = 0;
@@ -43,6 +43,8 @@ public class SpaceInvader {
         int totalRoundCountp2 = 0;
         int totalKillCountp2 = 0;
         int winsp1 = 0;
+        int winsp2 = 0;
+        int ties = 0;
         
         double gamesToPlay = 100.0;
         
@@ -57,8 +59,13 @@ public class SpaceInvader {
                 //System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
-                    if(!player1.isGameOver()){
+                    if(!player2.isGameOver()){
+                        winsp2++;
+                    }
+                    else if(!player1.isGameOver()){
                         winsp1++;
+                    }else{
+                        ties++;
                     }
                     break;
                 }
@@ -82,6 +89,8 @@ public class SpaceInvader {
         System.out.println("Average round count p2: "+ (totalRoundCountp2/gamesToPlay));
         System.out.println("Average kill count p2: "+ (totalKillCountp2/gamesToPlay));
         System.out.println("Wins p1: "+ (winsp1));
+        System.out.println("Wins p2: "+ (winsp2));
+        System.out.println("ties: "+ (ties));
         double end = System.currentTimeMillis();
         System.out.println("Total time: "+ (end-start));
             
