@@ -11,6 +11,7 @@ import spaceinvader.entities.PlayerBullet;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
+import spaceinvader.utilities.RandomGenerator;
 
 /**
  *
@@ -109,44 +110,51 @@ public class PSO {
             double randomValue = 0 + (1 - 0) * r.nextDouble();
             
             for(int x=0; x<particles.length;x++)
-            {  
-                for(int i = 0; i<particles.length;i++){
-                    if(x != i){                       
+            { 
+                Particle tournamentPool[];
+                ArrayList<Particle> allParticles = new ArrayList(Arrays.asList(particles));
+                tournamentPool = new Particle[tournamentSize];
+                for (int i = 0; i < tournamentPool.length; i++) {
+                    int particleIndex = RandomGenerator.randInt(0, allParticles.size()-1);
+                    tournamentPool[i] = allParticles.get(particleIndex);
+                    allParticles.remove(particleIndex);
+                }
+                
+                for(int i = 0; i<tournamentPool.length;i++){                      
                         //creating new "you" players after every round to reset the board
-                        AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                        AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
+                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
 
-                        AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                    AIPlayer opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork);
 
-                        while(true)
-                        { 
-                            if(you.isGameOver() || opponent.isGameOver())
-                            {
-                                break;
-                            }
-                            you.playRound();
-                            opponent.playRound();
-                            syncBoards(you, opponent);
+                    while(true)
+                    { 
+                        if(you.isGameOver() || opponent.isGameOver())
+                        {
+                            break;
                         }
-                        //updateWins
-                        setOpponentWinsNormal(particles[x],you,opponent);
-
-                        //Reset the opponent board for another game
-                        opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
-
-                        while(true)
-                        { 
-                            if(yourBest.isGameOver() || opponent.isGameOver())
-                            {
-                                break;
-                            }
-                            yourBest.playRound();
-                            opponent.playRound();
-                            syncBoards(you, opponent);
-                        }
-                        //updateWins
-                        setOpponentWinsBest(particles[x],yourBest, opponent);
+                        you.playRound();
+                        opponent.playRound();
+                        syncBoards(you, opponent);
                     }
+                    //updateWins
+                    setOpponentWinsNormal(particles[x],you,opponent);
+
+                    //Reset the opponent board for another game
+                    opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork);
+
+                    while(true)
+                    { 
+                        if(yourBest.isGameOver() || opponent.isGameOver())
+                        {
+                            break;
+                        }
+                        yourBest.playRound();
+                        opponent.playRound();
+                        syncBoards(you, opponent);
+                    }
+                    //updateWins
+                    setOpponentWinsBest(particles[x],yourBest, opponent);
 
                 }
 
