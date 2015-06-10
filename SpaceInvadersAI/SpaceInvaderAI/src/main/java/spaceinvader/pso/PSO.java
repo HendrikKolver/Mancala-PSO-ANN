@@ -111,14 +111,7 @@ public class PSO {
             
             for(int x=0; x<particles.length;x++)
             { 
-                Particle tournamentPool[];
-                ArrayList<Particle> allParticles = new ArrayList(Arrays.asList(particles));
-                tournamentPool = new Particle[tournamentSize];
-                for (int i = 0; i < tournamentPool.length; i++) {
-                    int particleIndex = RandomGenerator.randInt(0, allParticles.size()-1);
-                    tournamentPool[i] = allParticles.get(particleIndex);
-                    allParticles.remove(particleIndex);
-                }
+                Particle tournamentPool[] = getRandomTournamentPool(particles);
                 
                 for(int i = 0; i<tournamentPool.length;i++){                      
                         //creating new "you" players after every round to reset the board
@@ -223,6 +216,18 @@ public class PSO {
             currentIteration++;
             printTmpFile();
         }
+    }
+
+    private Particle[] getRandomTournamentPool(Particle[] particles) {
+        Particle tournamentPool[];
+        ArrayList<Particle> allParticles = new ArrayList(Arrays.asList(particles));
+        tournamentPool = new Particle[tournamentSize];
+        for (int i = 0; i < tournamentPool.length; i++) {
+            int particleIndex = RandomGenerator.randInt(0, allParticles.size()-1);
+            tournamentPool[i] = allParticles.get(particleIndex);
+            allParticles.remove(particleIndex);
+        }
+        return tournamentPool;
     }
     
       public void trainLocal(int size) throws InterruptedException, IOException
