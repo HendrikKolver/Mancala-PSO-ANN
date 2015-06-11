@@ -471,15 +471,17 @@ public class PSO {
     public void setOpponentWinsNormal(Particle you, AIPlayer player, AIPlayer opponent)
     {
         if(player.getRoundCount() >=200 && player.getKillCount() > opponent.getKillCount()){
-            you.wins += 1;
+            you.wins += 100;
         }else if(player.isGameOver() == opponent.isGameOver()
                 && player.getKillCount() > opponent.getKillCount()){
-            you.wins += 1;
+            you.wins += 100;
         }else if(!player.isGameOver()){
-            you.wins += 1;
+            you.wins += 100;
         }else{
-            you.losses +=1;
+            you.losses +=100;
         }
+        
+        you.wins += player.getCurrentPosition().boardFinalRating();
     }
     
     public void setWinsBest(Particle you, AIPlayer player)
@@ -490,15 +492,17 @@ public class PSO {
         public void setOpponentWinsBest(Particle you, AIPlayer player, AIPlayer opponent)
     {
         if(player.getRoundCount() >=200 && player.getKillCount() > opponent.getKillCount()){
-            you.bestWins += 1;
+            you.bestWins += 100;
         }else if(player.isGameOver() == opponent.isGameOver()
                 && player.getKillCount() > opponent.getKillCount()){
-            you.bestWins += 1;
+            you.bestWins += 100;
         }else if(!player.isGameOver()){
             you.bestWins += 1;
         }else{
-            you.bestLosses +=1;
+            you.bestLosses +=100;
         }
+        
+        you.bestWins += player.getCurrentPosition().boardFinalRating();
     }
     
     public void localBestCalculate(int size)
