@@ -27,7 +27,7 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 4;
+        int plyDepth = 2;
         int hiddenLayers = 16;
         
         NeuralNetwork nnp1 = new NeuralNetwork(10,1,hiddenLayers,1);
@@ -93,11 +93,6 @@ public class SpaceInvader {
         System.out.println("ties: "+ (ties));
         double end = System.currentTimeMillis();
         System.out.println("Total time: "+ (end-start));
-            
-            
-            
-            
-   
     }
     
     

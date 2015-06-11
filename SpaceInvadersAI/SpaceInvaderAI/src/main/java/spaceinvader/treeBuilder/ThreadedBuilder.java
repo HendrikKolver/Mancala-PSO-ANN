@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class ThreadedBuilder implements Runnable {
     TreeInterface rootNode;
     String initialMove;
-    boolean isCompleted;
+    public boolean isCompleted;
     int plyDepth;
     
     public ThreadedBuilder(TreeInterface node, String move, int plyDepth){

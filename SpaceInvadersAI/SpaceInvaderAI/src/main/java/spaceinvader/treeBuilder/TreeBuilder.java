@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import spaceinvader.neuralNetwork.NeuralNetwork;
+import spaceinvader.utilities.ThreadPool;
 
 /**
  *
@@ -36,18 +37,35 @@ public class TreeBuilder {
         
         TreeInterface tmpNode = null;
         
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+        ExecutorService executor = ThreadPool.executor;
+//        ExecutorService executor = Executors.newFixedThreadPool(2);
+        ArrayList<ThreadedBuilder> builders = new ArrayList();
 
         for(String possibleMove : possibleMoves){
             tmpNode = root.getCopy();
             root.addChild(tmpNode);
-            Runnable builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
+            ThreadedBuilder builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
+            builders.add(builderThread);
             executor.execute(builderThread);
         }
-        executor.shutdown();
+        
 
-        while (!executor.isTerminated()) {
+        while(true){
+            boolean isCompleted = true;
+           for(ThreadedBuilder builder : builders){
+                if(!builder.isCompleted){
+                    isCompleted = false;
+                    break;
+                } 
+            } 
+           if(isCompleted){
+                break;
+            }
         }
+//        executor.shutdown();
+//        
+//        while (!executor.isTerminated()) {
+//        }
        
 //        buildTree(root,null);
        
