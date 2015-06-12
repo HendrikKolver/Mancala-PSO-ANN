@@ -59,13 +59,13 @@ public class Trainer {
         particleCount =30;
         double maxVel =0.3; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
         int maxIter = iterations;//Integer.parseInt(JOptionPane.showInputDialog("Number of Iterations: "));
-        double uB = 1; //upper bound
-        double lB = -1; //lower bound
+        double uB = 2; //upper bound
+        double lB = -2; //lower bound
         int inputs = 10;
         int outputs = 1;
         int hidden = 16;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
         int sigmoid = 1;
-        int neighSize = 3;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
+        int neighSize = 4;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
         int global= 0;//Integer.parseInt(JOptionPane.showInputDialog("Global = 1, Local = 0"));
         
        PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid);
