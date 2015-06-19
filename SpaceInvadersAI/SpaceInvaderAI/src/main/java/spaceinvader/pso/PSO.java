@@ -41,7 +41,7 @@ public class PSO {
     public int tournamentSize ;
     public int plyDepth;
     public double totalProgress;
-    private int gamesPlayed;
+    private final int gamesPlayed;
 
     public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid)
     {
@@ -61,7 +61,7 @@ public class PSO {
        this.sigmoid = sigmoid;
        tournamentSize = 10;
        plyDepth = p;
-       gamesPlayed = 5;
+       gamesPlayed = 1;
        
   
     }
@@ -292,7 +292,7 @@ public class PSO {
                     //updateWins
                     setWinsNormal(particles[x],you);
 
-                    //play 5
+                    
 
                     while(true)
                     { 

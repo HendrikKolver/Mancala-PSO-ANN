@@ -27,15 +27,16 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 2;
-        int hiddenLayers = 16;
+        int plyDepth = 6;
+        int hiddenLayersP1 = 4;
+        int hiddenLayersP2 = 16;
         
-        NeuralNetwork nnp1 = new NeuralNetwork(10,1,hiddenLayers,1);
-        NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayers,1);
+        NeuralNetwork nnp1 = new NeuralNetwork(10,1,hiddenLayersP1,1);
+        NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayersP2,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
-        getWeightsFromFile(nnp2,"tmpFile.txt");
-        getWeightsFromFile(nnp1,"p2.txt");
+        getWeightsFromFile(nnp1,"tmpFile.txt");
+        getWeightsFromFile(nnp2,"p2.txt");
        
         
         int totalRoundCountp1 = 0;
