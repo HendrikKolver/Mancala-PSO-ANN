@@ -26,7 +26,7 @@ public abstract class TreeInterface {
     
     public NeuralNetwork evaluation;
     
-    abstract TreeInterface getCopy();
+    protected abstract TreeInterface clone();
     abstract void nextMove(String move, int roundCounter);
     abstract ArrayList<String> getPossibleMoves();
     abstract TreeInterface getNext();

@@ -16,6 +16,7 @@ import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.pso.AIPlayer;
+import spaceinvader.utilities.InputParser;
 
 /**
  *
@@ -27,7 +28,7 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 6;
+        int plyDepth = 4;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -35,8 +36,8 @@ public class SpaceInvader {
         NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayersP2,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
-        getWeightsFromFile(nnp1,"tmpFile.txt");
-        getWeightsFromFile(nnp2,"4Ply_200it_currentWinner.txt");
+        InputParser.getWeightsFromFile(nnp1,"tmpFile.txt");
+        InputParser.getWeightsFromFile(nnp2,"4Ply_200it_currentWinner.txt");
        
         
         int totalRoundCountp1 = 0;
@@ -200,36 +201,6 @@ public class SpaceInvader {
          Random r = new Random();
 
         return (lower + (upper - lower) * r.nextDouble());
-    }
-    
-    private static void getWeightsFromFile(NeuralNetwork nn, String filename) throws IOException{
-        double weights[] = new double[nn.getConnections()];
-        List<String> lines;
-        
-        //read from file
-        try {
-            String name = filename;//JOptionPane.showInputDialog("Name of file");
-            lines = readSmallTextFile(name);
-            if(lines.size()<1)
-            {
-                throw(new RuntimeException("Error file missing"));
-            }
-            else
-            {
-                String tmp[] =lines.get(0).split(";");
-                System.out.println(tmp.length);
-                System.out.println(weights.length);
-                for(int x=0; x<weights.length;x++)
-                {
-                    weights[x] = Double.parseDouble(tmp[x]);
-                }
-                nn.updateWeights(weights);
-            }
-
-        } catch (IOException ex) {
-            System.out.println("Some file error");
-            throw(ex);
-        }
     }
     
     private static List<String> readSmallTextFile(String aFileName) throws IOException {

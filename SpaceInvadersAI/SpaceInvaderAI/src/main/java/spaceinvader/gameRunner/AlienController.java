@@ -203,6 +203,11 @@ public class AlienController {
                Alien alien = i.next(); 
                    
                 for(GameObject shield : shields){
+                    if(alien.getyPosition() > 5){
+                        //No shields can be build here thus there is no need to check
+                        break;
+                    }
+                    
                     if(shield.getyPosition() == alien.getyPosition() 
                         && (shield.getxPosition() == alien.getxPosition()))
                     {
@@ -291,7 +296,7 @@ public class AlienController {
     }
     
     
-    public AlienController getCopy(){
+    public AlienController clone(){
         AlienController alienControllerCopy = new AlienController();
 //        ArrayList <ArrayList<Alien>> alienRow;
 
@@ -320,11 +325,7 @@ public class AlienController {
     public int getAlienCount(){
         int count = 0;
         for(ArrayList<Alien> aliens : alienRow){
-            Iterator<Alien> i = aliens.iterator();
-            while (i.hasNext()) {
-                Alien alien = i.next(); 
-                count++;
-            }     
+            count+= aliens.size();    
         }
         return count;
     }

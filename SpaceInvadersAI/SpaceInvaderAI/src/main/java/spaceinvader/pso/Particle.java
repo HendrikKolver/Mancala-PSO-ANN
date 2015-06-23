@@ -1,9 +1,11 @@
 package spaceinvader.pso;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import spaceinvader.neuralNetwork.NeuralNetwork;
+import spaceinvader.utilities.InputParser;
 
 
 /**
@@ -87,11 +89,17 @@ public class Particle {
         updateWeights();
        particleBestUpdate();
     }
+    
+    public void initParticle(String fileName) throws IOException
+    {
+        InputParser.getWeightsFromFile(neuralNetwork, fileName);
+        InputParser.getWeightsFromFile(bestNetwork, fileName);
+    }
 
     
     public void updateWeights()
     {
-       neuralNetwork.updateWeights(position);      
+       neuralNetwork.updateWeights(position); 
     }
     
     public void externalWeightUpdate(double[] w)

@@ -23,8 +23,8 @@ public class Trainer {
         double w= 0.72;
         double c1 = 1.4;
         double c2 = 1.4;
-        particleCount =40;
-        double maxVel =0.2; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
+        particleCount =50;
+        double maxVel =0.25; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
         int maxIter = iterations;//Integer.parseInt(JOptionPane.showInputDialog("Number of Iterations: "));
         double uB = 1; //upper bound
         double lB = -1; //lower bound
@@ -32,9 +32,10 @@ public class Trainer {
         int outputs = 1;
         int hidden = 4;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
         int sigmoid = 1;
-        int neighSize = 3;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
+        int neighSize = 4;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
+        int gamesPlayedPerPlayerPerRound = 10;
         
-       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid);
+       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid,gamesPlayedPerPlayerPerRound);
 
        swarmOptimize.trainLocal(neighSize);
 
@@ -67,7 +68,7 @@ public class Trainer {
         int neighSize = 4;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
         int global= 0;//Integer.parseInt(JOptionPane.showInputDialog("Global = 1, Local = 0"));
         
-       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid);
+       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid,10);
 
        swarmOptimize.trainLocal2Player(neighSize);
 

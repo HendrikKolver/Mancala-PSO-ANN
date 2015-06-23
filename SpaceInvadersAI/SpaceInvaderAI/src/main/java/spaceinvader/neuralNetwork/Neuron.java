@@ -75,7 +75,6 @@ public class Neuron {
         return tmp;
     }
     
-    @Override
     public Neuron clone(){
         Neuron neuronCopy = new Neuron();
         neuronCopy.input = this.input;

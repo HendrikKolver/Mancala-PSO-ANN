@@ -270,7 +270,7 @@ public class Player extends GameObject{
     }
     
     @Override
-    public GameObject getCopy(){
+    public GameObject clone(){
         Player player = new Player();
         
         player.shields = ArrayListCopy.copyArray(shields);

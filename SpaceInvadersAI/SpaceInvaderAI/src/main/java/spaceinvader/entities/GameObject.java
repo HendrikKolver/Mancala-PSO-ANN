@@ -79,7 +79,7 @@ public class GameObject {
         return ySize;
     }
     
-    public GameObject getCopy(){
+    public GameObject clone(){
         GameObject gameObject = new GameObject();
         gameObject.xPosition = this.xPosition;
         gameObject.yPosition = this.yPosition;

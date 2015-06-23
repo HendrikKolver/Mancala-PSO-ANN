@@ -44,7 +44,7 @@ public class Alien extends GameObject{
     }
     
     @Override
-    public GameObject getCopy(){
+    public GameObject clone(){
         Alien alien = new Alien(this.xPosition,this.yPosition);
         alien.moveDirection = this.moveDirection;
         return alien;

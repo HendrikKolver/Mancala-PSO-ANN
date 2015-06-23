@@ -23,6 +23,10 @@ public class PlayerController {
         player.setShields(shieldBlock1);
         respawnCounter = 0;
     }
+    
+    public PlayerController(boolean generatePlayer){
+        //This constructor is used to reduce perfomance load by not unnecessarily creating player and shield blocks
+    }
 
     
     public void update(String move){
@@ -58,9 +62,9 @@ public class PlayerController {
         }
     }
     
-    public PlayerController getCopy(){
-        PlayerController playerControllerCopy = new PlayerController();
-        playerControllerCopy.setPlayer((Player) this.player.getCopy());
+    public PlayerController clone(){
+        PlayerController playerControllerCopy = new PlayerController(false);
+        playerControllerCopy.setPlayer((Player) this.player.clone());
         playerControllerCopy.setRespawnCounter(this.respawnCounter);
         return playerControllerCopy;
     }

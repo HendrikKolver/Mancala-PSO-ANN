@@ -137,15 +137,15 @@ public class TreeComposite extends TreeInterface {
     }
 
     @Override
-    TreeInterface getCopy() {
+    protected TreeInterface clone() {
         TreeInterface nodeCopy = new TreeComposite();
-        AlienController tmpAlienController = this.alienController.getCopy();
+        AlienController tmpAlienController = this.alienController.clone();
         nodeCopy.alienController = tmpAlienController;
         
-        PlayerController tmpPlayerController = this.playerController.getCopy();
+        PlayerController tmpPlayerController = this.playerController.clone();
         nodeCopy.playerController = tmpPlayerController;
         
-        BulletController tmpBulletController = this.bulletController.getCopy();
+        BulletController tmpBulletController = this.bulletController.clone();
         nodeCopy.bulletController = tmpBulletController;
         setupControllers(nodeCopy, tmpPlayerController, tmpAlienController, tmpBulletController);
         
@@ -155,7 +155,7 @@ public class TreeComposite extends TreeInterface {
         nodeCopy.nodeDepth = this.nodeDepth;
         nodeCopy.finalState = this.finalState;
         nodeCopy.roundCount = this.roundCount;
-        nodeCopy.evaluation = this.evaluation.getCopy();
+        nodeCopy.evaluation = this.evaluation.clone();
         
         return nodeCopy;
     }

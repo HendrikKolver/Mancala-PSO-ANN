@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import spaceinvader.entities.AlienFactory;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.gameRunner.AlienController;
@@ -45,7 +44,7 @@ public class PSO {
     private double maxIterationTime;
     private int maxIterationRound;
 
-    public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid)
+    public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid, int gamesPlayed)
     {
 
        this.c1 = c1;
@@ -63,7 +62,7 @@ public class PSO {
        this.sigmoid = sigmoid;
        tournamentSize = 10;
        plyDepth = p;
-       gamesPlayed = 1;
+       this.gamesPlayed = gamesPlayed;
        maxIterationTime = 0;
        maxIterationRound = 0;
     }
@@ -232,18 +231,38 @@ public class PSO {
         return tournamentPool;
     }
     
-      public void trainLocal(int size) throws InterruptedException, IOException
+    private void initParticle(int index){
+        particles[index] = new Particle(inputs,outputs,hidden,sigmoid);
+        particles[index].initParticle(lowerBound,upperBound);
+        localBestParticles[index] = new Particle(inputs,outputs,hidden,sigmoid);
+        localBestParticles[index].initParticle(lowerBound,upperBound);
+    }
+    
+    private void initParticle(int index, String fileName) throws IOException{
+        particles[index] = new Particle(inputs,outputs,hidden,sigmoid);
+        particles[index].initParticle(fileName);
+        localBestParticles[index] = new Particle(inputs,outputs,hidden,sigmoid);
+        localBestParticles[index].initParticle(fileName);
+    }
+    
+    public void trainLocal(int size) throws InterruptedException, IOException
     {
        //Particle init
        particles = new Particle[particleCount];
        localBestParticles = new Particle[particleCount];
-         
-       for(int x=0; x<particleCount;x++)
+       
+       //Particle 0 is manually created so the random particle count starts from 1
+        
+        for(int x=0; x<particleCount;x++)
         {
-           particles[x] = new Particle(inputs,outputs,hidden,sigmoid);
-           particles[x].initParticle(lowerBound,upperBound);
-           localBestParticles[x] = new Particle(inputs,outputs,hidden,sigmoid);
-           localBestParticles[x].initParticle(lowerBound,upperBound);
+            if(x == 21){
+                initParticle(x,"4Ply_200it_currentWinner.txt"); 
+            }else if(x == 35){
+                initParticle(x,"goodSolution2.txt"); 
+            }else{
+                initParticle(x);
+            }
+           
         }
         int currentIteration = 0;
         
@@ -589,33 +608,35 @@ public class PSO {
 
         for(int x=0; x<particles.length;x++)
         {
-            //this will be your players
-            AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-            AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+            for (int i = 0; i < this.gamesPlayed; i++) {
+                //this will be your players
+                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
+                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
 
-            while(true)
-            { 
-                if(you.isGameOver())
-                {
-                    break;
+                while(true)
+                { 
+                    if(you.isGameOver())
+                    {
+                        break;
+                    }
+                    you.playRound();
                 }
-                you.playRound();
-            }
-            //updateWins
-            setWinsNormal(particles[x],you);
+                //updateWins
+                setWinsNormal(particles[x],you);
 
-            //play 5
+                //play 5
 
-            while(true)
-            { 
-                if(yourBest.isGameOver())
-                {
-                    break;
+                while(true)
+                { 
+                    if(yourBest.isGameOver())
+                    {
+                        break;
+                    }
+                    yourBest.playRound();
                 }
-                yourBest.playRound();
+                //updateWins
+                setWinsBest(particles[x],yourBest);
             }
-            //updateWins
-            setWinsBest(particles[x],yourBest);
 
             //updating the personal best
             if(particles[x].bestFitness() < particles[x].fitness())

@@ -21,6 +21,7 @@ import spaceinvader.entities.Shield;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.gameRunner.PlayerController;
+import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.pso.AIPlayer;
 
 /**
@@ -192,7 +193,6 @@ public class InputParser {
     }
     
     private static List<String> readSmallTextFile(String aFileName) throws IOException {
-
         List<String> tmp = new ArrayList<String>();
         BufferedReader inFile = new BufferedReader(new FileReader(aFileName));    
         String line;
@@ -203,5 +203,33 @@ public class InputParser {
         inFile.close();
 
         return tmp;
-      }
+    }
+    
+    public static void getWeightsFromFile(NeuralNetwork nn, String filename) throws IOException{
+        double weights[] = new double[nn.getConnections()];
+        List<String> lines;
+        
+        //read from file
+        try {
+            String name = filename;//JOptionPane.showInputDialog("Name of file");
+            lines = readSmallTextFile(name);
+            if(lines.size()<1)
+            {
+                throw(new RuntimeException("Error file missing"));
+            }
+            else
+            {
+                String tmp[] =lines.get(0).split(";");
+                for(int x=0; x<weights.length;x++)
+                {
+                    weights[x] = Double.parseDouble(tmp[x]);
+                }
+                nn.updateWeights(weights);
+            }
+
+        } catch (IOException ex) {
+            System.out.println("Some file error");
+            throw(ex);
+        }
+    }
 }

@@ -42,7 +42,7 @@ public class TreeBuilder {
         ArrayList<ThreadedBuilder> builders = new ArrayList();
 
         for(String possibleMove : possibleMoves){
-            tmpNode = root.getCopy();
+            tmpNode = root.clone();
             root.addChild(tmpNode);
             ThreadedBuilder builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
             builders.add(builderThread);
@@ -62,12 +62,6 @@ public class TreeBuilder {
                 break;
             }
         }
-//        executor.shutdown();
-//        
-//        while (!executor.isTerminated()) {
-//        }
-       
-//        buildTree(root,null);
        
         tmpNode = root.children;
         
@@ -85,8 +79,7 @@ public class TreeBuilder {
             }
             tmpNode = tmpNode.next; 
         }
-//        double end = System.currentTimeMillis();
-//        System.out.println("Total time in method: "+ (end-start));
+
         
         return finalNode;
     }
@@ -127,7 +120,7 @@ public class TreeBuilder {
         
 
         for(String possibleMove : possibleMoves){
-            tmpNode = node.getCopy();
+            tmpNode = node.clone();
 
             tmpNodeScore = buildTree(tmpNode,possibleMove);
             node.addChild(tmpNode);

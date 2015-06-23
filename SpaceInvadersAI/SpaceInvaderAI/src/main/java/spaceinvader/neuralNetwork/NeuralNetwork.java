@@ -17,7 +17,7 @@ public class NeuralNetwork {
     int hiddenCount;
     int outputNumber;
     
-    public NeuralNetwork getCopy(){
+    public NeuralNetwork clone(){
         NeuralNetwork neuralNetworkCopy = new NeuralNetwork(inputCount,outputNumber,hiddenCount,sigmoid);
         
         neuralNetworkCopy.sigmoid = this.sigmoid;

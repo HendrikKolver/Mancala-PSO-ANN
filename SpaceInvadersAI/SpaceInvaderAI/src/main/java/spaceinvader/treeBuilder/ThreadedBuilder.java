@@ -66,7 +66,7 @@ public class ThreadedBuilder implements Runnable {
         double tmpNodeScoreMax = 0;
 
         for(String possibleMove : possibleMoves){
-            tmpNode = node.getCopy();
+            tmpNode = node.clone();
 
             tmpNodeScore = buildTree(tmpNode,possibleMove);
             node.addChild(tmpNode);

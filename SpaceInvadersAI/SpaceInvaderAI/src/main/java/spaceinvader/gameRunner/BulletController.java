@@ -321,7 +321,7 @@ public class BulletController {
         }
     }
     
-    public BulletController getCopy(){
+    public BulletController clone(){
         BulletController bulletControllerCopy = new BulletController();
         bulletControllerCopy.setAlienbullets(ArrayListCopy.copyArray(alienBulletList));
         bulletControllerCopy.setPlayerbullets(ArrayListCopy.copyArray(playerBulletList));
