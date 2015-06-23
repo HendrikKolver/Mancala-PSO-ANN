@@ -89,7 +89,7 @@
               <archive>
                 <manifest>
                   <addClasspath>true</addClasspath>
-                  <mainClass>spaceinvader.Main</mainClass>
+                  <mainClass>spaceinvader.SpaceInvaderTrain</mainClass>
                 </manifest>
               </archive>
             </configuration>

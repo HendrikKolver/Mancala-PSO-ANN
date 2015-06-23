@@ -42,6 +42,8 @@ public class PSO {
     public int plyDepth;
     public double totalProgress;
     private final int gamesPlayed;
+    private double maxIterationTime;
+    private int maxIterationRound;
 
     public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid)
     {
@@ -62,8 +64,8 @@ public class PSO {
        tournamentSize = 10;
        plyDepth = p;
        gamesPlayed = 1;
-       
-  
+       maxIterationTime = 0;
+       maxIterationRound = 0;
     }
     
     public void trainLocal2Player(int size) throws InterruptedException, IOException
@@ -255,7 +257,7 @@ public class PSO {
         //training loop init
         while(currentIteration<numIterations)
         {
-            
+            double startTime = System.currentTimeMillis();
             System.out.println("Iteration---"+currentIteration);
             
             //initial partical value init for each iteration
@@ -272,9 +274,8 @@ public class PSO {
             
             Random r = new Random();
             double randomValue = 0 + (1 - 0) * r.nextDouble();
-            
             for(int x=0; x<particles.length;x++)
-            { 
+            {   
                 for(int i = 0; i<this.gamesPlayed;i++){
                     //this will be your players
                     AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
@@ -367,6 +368,16 @@ public class PSO {
                 }
                 particles[x].updateWeights();
             }
+            
+            double endTime = System.currentTimeMillis();
+            double iterationTime = endTime-startTime;
+            
+            if(iterationTime > this.maxIterationTime){
+                this.maxIterationTime = iterationTime;
+                this.maxIterationRound = currentIteration;
+            }
+            
+            System.out.println("Longest Iteration = " + this.maxIterationRound + " (" + this.maxIterationTime + ")");
             
             currentIteration++;
             printTmpFile();
