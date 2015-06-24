@@ -17,6 +17,7 @@ public class NeuralNetwork {
     int hiddenCount;
     int outputNumber;
     
+    @Override
     public NeuralNetwork clone(){
         NeuralNetwork neuralNetworkCopy = new NeuralNetwork(inputCount,outputNumber,hiddenCount,sigmoid);
         
@@ -57,11 +58,7 @@ public class NeuralNetwork {
     
     public void updateWeights(double pos[])
     {
-        for(int x=0;x<getConnections();x++)
-        {
-            weights[x] = pos[x];
-            
-        } 
+        System.arraycopy(pos, 0, weights, 0, pos.length); 
     }
     
     public Neuron[] calculate(double inputValues[])
