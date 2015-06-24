@@ -28,7 +28,7 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 4;
+        int plyDepth = 6;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -61,13 +61,17 @@ public class SpaceInvader {
                 //System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
-                    if(!player2.isGameOver()){
-                        winsp2++;
-                    }
-                    else if(!player1.isGameOver()){
+                    if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
                         winsp1++;
+                    }else if(player1.isGameOver() == player2.isGameOver()
+                            && player1.getKillCount() > player2.getKillCount()){
+                        winsp1++;
+                    }else if(!player1.isGameOver()){
+                        winsp1++;
+                    }else if(player1.getKillCount() == player2.getKillCount() && player1.getRoundCount() >=200){
+                         ties++;
                     }else{
-                        ties++;
+                        winsp2++;
                     }
                     break;
                 }

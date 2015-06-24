@@ -256,9 +256,11 @@ public class PSO {
         for(int x=0; x<particleCount;x++)
         {
             if(x == 21){
-                initParticle(x,"4Ply_200it_currentWinner.txt"); 
+                initParticle(x,"4Ply_200it_2ndPlace.txt"); 
             }else if(x == 35){
-                initParticle(x,"goodSolution2.txt"); 
+                initParticle(x,"4Ply_50it_3rdPlace.txt"); 
+            }else if(x == 9){
+                initParticle(x,"4Ply_300it_1stPlace.txt"); 
             }else{
                 initParticle(x);
             }
