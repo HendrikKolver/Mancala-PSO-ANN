@@ -11,10 +11,11 @@ import spaceinvader.entities.GameObject;
 public class ArrayListCopy {
 
     public static <T extends GameObject> ArrayList<T> copyArray(ArrayList<T> list){
-        ArrayList<T> newList = new ArrayList();
-        for(T item : list){
-            newList.add((T)item.clone());
+        Object[] array = list.toArray();
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = list.get(i).clone();
         }
+        ArrayList<T> newList = new ArrayList(Arrays.asList(array));
         return newList;
     }
 
