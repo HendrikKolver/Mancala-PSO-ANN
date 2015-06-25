@@ -28,7 +28,7 @@ public class SpaceInvader {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 6;
+        int plyDepth = 4;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -37,7 +37,7 @@ public class SpaceInvader {
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
         InputParser.getWeightsFromFile(nnp1,"tmpFile.txt");
-        InputParser.getWeightsFromFile(nnp2,"4Ply_200it_currentWinner.txt");
+        InputParser.getWeightsFromFile(nnp2,"4Ply_300it_1stPlace.txt");
        
         
         int totalRoundCountp1 = 0;
