@@ -75,10 +75,16 @@ public class PSO {
          
        for(int x=0; x<particleCount;x++)
         {
-           particles[x] = new Particle(inputs,outputs,hidden,sigmoid);
-           particles[x].initParticle(lowerBound,upperBound);
-           localBestParticles[x] = new Particle(inputs,outputs,hidden,sigmoid);
-           localBestParticles[x].initParticle(lowerBound,upperBound);
+            if(x == 21){
+                initParticle(x,"4Ply_200it_2ndPlace.txt"); 
+            }else if(x == 16){
+                initParticle(x,"4Ply_50it_3rdPlace.txt"); 
+            }else if(x == 9){
+                initParticle(x,"4Ply_300it_1stPlace.txt"); 
+            }else{
+                initParticle(x);
+            }
+           
         }
         int currentIteration = 0;
         
@@ -92,7 +98,7 @@ public class PSO {
         //training loop init
         while(currentIteration<numIterations)
         {
-            
+            double startTime = System.currentTimeMillis();
             System.out.println("Iteration---"+currentIteration);
             
             //initial partical value init for each iteration
@@ -214,6 +220,16 @@ public class PSO {
                 particles[x].updateWeights();
             }
             
+            double endTime = System.currentTimeMillis();
+            double iterationTime = endTime-startTime;
+            
+            if(iterationTime > this.maxIterationTime){
+                this.maxIterationTime = iterationTime;
+                this.maxIterationRound = currentIteration;
+            }
+            
+            System.out.println("Longest Iteration = " + this.maxIterationRound + " (" + this.maxIterationTime + ")");
+            
             currentIteration++;
             printTmpFile();
         }
@@ -250,8 +266,6 @@ public class PSO {
        //Particle init
        particles = new Particle[particleCount];
        localBestParticles = new Particle[particleCount];
-       
-       //Particle 0 is manually created so the random particle count starts from 1
         
         for(int x=0; x<particleCount;x++)
         {
