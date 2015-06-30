@@ -27,7 +27,7 @@ public class Main {
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
         int plyDepth = 6;
-        int hiddenLayers = 16;
+        int hiddenLayers = 4;
         
         NeuralNetwork nn = new NeuralNetwork(10,1,hiddenLayers,1);
         getWeightsFromFile(nn);
@@ -36,7 +36,7 @@ public class Main {
         
         player = InputParser.getState(player);
         
-        player.getCurrentPosition().printBoard();
+        //player.getCurrentPosition().printBoard();
         player.playRound();
 //         player.getCurrentPosition().printBoard();
 //        while(true){
@@ -59,7 +59,7 @@ public class Main {
         
         //read from file
         try {
-            String name = "p2.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = "4Ply_200it_2ndPlace.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {

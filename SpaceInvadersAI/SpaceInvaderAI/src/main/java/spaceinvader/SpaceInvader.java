@@ -31,7 +31,7 @@ public class SpaceInvader {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 4;
+        int plyDepth = 7;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -83,7 +83,9 @@ public class SpaceInvader {
 //                player1.getCurrentPosition().printBoard();
 //                System.out.println("P2 board---------------");
 //                player2.getCurrentPosition().printBoard();
+                long moveStart = System.currentTimeMillis();
                 player1.playRound();
+                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
                 player2.playRound();
                 syncBoards(player1, player2);
                 

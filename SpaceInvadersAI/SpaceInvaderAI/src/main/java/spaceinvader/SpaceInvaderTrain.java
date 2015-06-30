@@ -20,7 +20,7 @@ public class SpaceInvaderTrain {
         Trainer trainer = new Trainer();
 //        NeuralNetwork nn = trainer.train(300, 4);
 
-        NeuralNetwork nn = trainer.trainWithOpponent(200, 4);
+        NeuralNetwork nn = trainer.trainWithOpponent(400, 5);
         System.out.println("Done");
 
 //        AIPlayer player = new AIPlayer(6,nn);

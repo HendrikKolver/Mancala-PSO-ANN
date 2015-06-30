@@ -33,7 +33,37 @@ public class TreeBuilder {
         TreeInterface root = node;
         root.nodeDepth = 0;
         
-        ArrayList<String> possibleMoves = node.getPossibleMoves();  
+        
+//        buildTreeMultiThreaded(node, root);  
+        buildTreeSingleThreaded(root);
+       
+        TreeInterface tmpNode = root.children;
+        
+        TreeInterface finalNode = null;
+        double tmpCount = tmpNode.nodeScore;
+        finalNode = tmpNode;
+        tmpNode = tmpNode.next;      
+        
+        while(tmpNode != null)
+        {
+            if(tmpNode.nodeScore > tmpCount)
+            {
+                tmpCount = tmpNode.nodeScore;
+                finalNode = tmpNode;
+            }
+            tmpNode = tmpNode.next; 
+        }
+
+        
+        return finalNode;
+    }
+    
+    private void buildTreeSingleThreaded(TreeInterface root) throws InterruptedException{
+        buildTree(root,null);
+    }
+
+    private void buildTreeMultiThreaded(TreeInterface node, TreeInterface root) {
+        ArrayList<String> possibleMoves = node.getPossibleMoves();
         //System.out.println("Outside loop possibleMoves: "+ possibleMoves);
         
         
@@ -55,36 +85,16 @@ public class TreeBuilder {
 
         while(true){
             boolean isCompleted = true;
-           for(ThreadedBuilder builder : builders){
+            for(ThreadedBuilder builder : builders){
                 if(!builder.isCompleted){
                     isCompleted = false;
                     break;
-                } 
-            } 
-           if(isCompleted){
+                }
+            }
+            if(isCompleted){
                 break;
             }
         }
-       
-        tmpNode = root.children;
-        
-        TreeInterface finalNode = null;
-        double tmpCount = tmpNode.nodeScore;
-        finalNode = tmpNode;
-        tmpNode = tmpNode.next;      
-        
-        while(tmpNode != null)
-        {
-            if(tmpNode.nodeScore > tmpCount)
-            {
-                tmpCount = tmpNode.nodeScore;
-                finalNode = tmpNode;
-            }
-            tmpNode = tmpNode.next; 
-        }
-
-        
-        return finalNode;
     }
     
     private double buildTree(TreeInterface node, String move) throws InterruptedException
@@ -112,9 +122,7 @@ public class TreeBuilder {
             return node.nodeScore;
         }
        
-        ArrayList<String> possibleMoves = node.getPossibleMoves();  
-        //System.out.println("Outside loop possibleMoves: "+ possibleMoves);
-        
+        ArrayList<String> possibleMoves = node.getPossibleMoves();         
         
         TreeInterface tmpNode = null;
        //Increase the node depth
