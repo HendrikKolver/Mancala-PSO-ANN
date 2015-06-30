@@ -75,10 +75,12 @@ public class PSO {
          
        for(int x=0; x<particleCount;x++)
         {
-            if(x == 21){
+            if(x == 27){
+                initParticle(x,"4Ply_100it_3rdPlace.txt"); 
+            }else if(x == 21){
                 initParticle(x,"4Ply_200it_2ndPlace.txt"); 
             }else if(x == 16){
-                initParticle(x,"4Ply_50it_3rdPlace.txt"); 
+                initParticle(x,"4Ply_50it_4thPlace.txt"); 
             }else if(x == 9){
                 initParticle(x,"4Ply_300it_1stPlace.txt"); 
             }else{
@@ -527,6 +529,7 @@ public class PSO {
             you.losses +=100;
         }
         
+        //This means that the player considers how well they won as well rather than just winning and losing
         you.wins += player.getCurrentPosition().boardFinalRating();
     }
     
@@ -548,6 +551,7 @@ public class PSO {
             you.bestLosses +=100;
         }
         
+        //This means that the player considers how well they won as well rather than just winning and losing
         you.bestWins += player.getCurrentPosition().boardFinalRating();
     }
     
