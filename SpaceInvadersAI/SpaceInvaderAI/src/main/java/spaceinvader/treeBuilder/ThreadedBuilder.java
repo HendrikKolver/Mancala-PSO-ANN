@@ -13,12 +13,14 @@ public class ThreadedBuilder implements Runnable {
     String initialMove;
     public boolean isCompleted;
     int plyDepth;
+    public boolean normalEval;
     
     public ThreadedBuilder(TreeInterface node, String move, int plyDepth){
         this.rootNode = node;
         this.initialMove = move;
         this.isCompleted = false;
         this.plyDepth = plyDepth;
+        this.normalEval = false;
     }
 
     @Override
@@ -44,18 +46,31 @@ public class ThreadedBuilder implements Runnable {
         }
 
         if(node.isGameOver()){
-            node.evaluateMyself();
+            if(this.normalEval){
+                node.evaluateMyself(true);
+            }else{
+                node.evaluateMyself();
+            }
+            
             return node.nodeScore;
         }
 
         if(node.roundCount >=200){
-            node.evaluateMyself();
+            if(this.normalEval){
+                node.evaluateMyself(true);
+            }else{
+                node.evaluateMyself();
+            }
             return node.nodeScore;
         }
 
         if(node.nodeDepth >= plyDepth){
             
-            node.evaluateMyself();
+            if(this.normalEval){
+                node.evaluateMyself(true);
+            }else{
+                node.evaluateMyself();
+            }
             return node.nodeScore;
         }
        

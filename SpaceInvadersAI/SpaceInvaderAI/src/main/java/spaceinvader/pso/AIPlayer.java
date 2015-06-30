@@ -14,16 +14,19 @@ public class AIPlayer {
     private NeuralNetwork neuralNetwork;
     private int roundCount;
     private TreeInterface currentPosition;
+    public boolean normalEval;
     
     public AIPlayer(int plyDepth, NeuralNetwork neuralNetwork){
         this.plyDepth = plyDepth;
         this.neuralNetwork = neuralNetwork;
         this.roundCount = 1;
         currentPosition = new TreeComposite(neuralNetwork, roundCount);
+        normalEval = false;
     }
     
     public void playRound() throws InterruptedException{
         TreeBuilder treeBuilder = new TreeBuilder(plyDepth);
+        treeBuilder.normalEval = this.normalEval;
         currentPosition = treeBuilder.build(currentPosition);
         this.roundCount = currentPosition.roundCount;
     }

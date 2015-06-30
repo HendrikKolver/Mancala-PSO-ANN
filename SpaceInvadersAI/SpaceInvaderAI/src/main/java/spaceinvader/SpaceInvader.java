@@ -31,7 +31,7 @@ public class SpaceInvader {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 5;
+        int plyDepth = 4;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -39,7 +39,7 @@ public class SpaceInvader {
         NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayersP2,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
-        InputParser.getWeightsFromFile(nnp1,"tmpFile.txt");
+        InputParser.getWeightsFromFile(nnp1,"4Ply_300it_1stPlace.txt");
         InputParser.getWeightsFromFile(nnp2,"4Ply_300it_1stPlace.txt");
        
         
@@ -51,13 +51,14 @@ public class SpaceInvader {
         int winsp2 = 0;
         int ties = 0;
         
-        double gamesToPlay = 50.0;
+        double gamesToPlay = 100.0;
         
         double start = System.currentTimeMillis();
         
         for (int i = 0; i < gamesToPlay; i++) {
             AIPlayer player1 = new AIPlayer(plyDepth,nnp1);
             AIPlayer player2 = new AIPlayer(plyDepth,nnp2);
+            //player2.normalEval = true;
             while(true)
             { 
                 //sleep(200);

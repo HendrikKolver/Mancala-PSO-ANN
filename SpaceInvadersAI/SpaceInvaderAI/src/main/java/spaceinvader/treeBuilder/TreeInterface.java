@@ -33,6 +33,7 @@ public abstract class TreeInterface {
     abstract void setNext(TreeInterface newNode);
     abstract void addChild(TreeInterface node);
     abstract void evaluateMyself();
+    abstract void evaluateMyself(boolean normal);
     public abstract boolean isGameOver();
     public abstract void printBoard();
     public abstract int boardFinalRating();

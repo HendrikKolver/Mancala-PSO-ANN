@@ -74,8 +74,14 @@ public class TreeComposite extends TreeInterface {
      public void evaluateMyself()
      {
         nnEval();
-//        normalEval();
      }
+     
+     @Override
+     public void evaluateMyself(boolean normal)
+     {
+        normalEval();
+     }
+     
      
      private void nnEval(){
         double input[] = getInputs();
@@ -87,11 +93,14 @@ public class TreeComposite extends TreeInterface {
      
      private void normalEval(){
         double score = this.playerController.getKillCount();
-        score += this.playerController.getLives();
+        score += (this.playerController.getLives()*20);
+        score += this.roundCount;
 
         if(isGameOver()){
             score-=50;
         }
+        
+//        this.nodeScore = this.boardFinalRating();
         this.nodeScore = score;
      }
     
@@ -290,17 +299,6 @@ public class TreeComposite extends TreeInterface {
         }else{
             finalRating+= this.roundCount;
             finalRating+= this.playerController.getKillCount();    
-        }
-        
-        //This is to give the player an incentive to build alien factories. I will see if this actually improves anything
-        for(GameObject building : this.playerController.getBuildings()){
-            if(building.getRepresentation().equals("X")){
-                if((building.getxPosition() == 14 || building.getxPosition() == 1)){
-                    finalRating += 5;
-                }else{
-                    finalRating += 2;
-                }
-            }
         }
 
         return finalRating;

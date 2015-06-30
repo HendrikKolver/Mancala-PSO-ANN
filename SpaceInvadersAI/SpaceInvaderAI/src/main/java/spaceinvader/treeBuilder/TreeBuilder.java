@@ -18,10 +18,12 @@ public class TreeBuilder {
     public double mainA, mainB;
     public int globalPlayer = 2;
     public NeuralNetwork network;
+    public boolean normalEval;
 
     public TreeBuilder(int depth)
     {
-        plyDepth = depth;    
+        plyDepth = depth;  
+        normalEval = false;
     }
     
     public TreeInterface build(TreeInterface node) throws InterruptedException
@@ -45,6 +47,7 @@ public class TreeBuilder {
             tmpNode = root.clone();
             root.addChild(tmpNode);
             ThreadedBuilder builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
+            builderThread.normalEval = this.normalEval;
             builders.add(builderThread);
             executor.execute(builderThread);
         }
