@@ -292,7 +292,7 @@ public class TreeComposite extends TreeInterface {
             finalRating+= this.playerController.getKillCount();    
         }
         
-        //This is to give the player an incentive to build alien controllers. I will see if this actually improves anything
+        //This is to give the player an incentive to build alien factories. I will see if this actually improves anything
         for(GameObject building : this.playerController.getBuildings()){
             if(building.getRepresentation().equals("X")){
                 if((building.getxPosition() == 14 || building.getxPosition() == 1)){
