@@ -17,6 +17,7 @@ import spaceinvader.gameRunner.BulletController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.pso.AIPlayer;
 import spaceinvader.utilities.InputParser;
+import spaceinvader.utilities.ThreadPool;
 
 /**
  *
@@ -31,7 +32,7 @@ public class SpaceInvader {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 7;
+        int plyDepth = 3;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -85,7 +86,7 @@ public class SpaceInvader {
 //                player2.getCurrentPosition().printBoard();
                 long moveStart = System.currentTimeMillis();
                 player1.playRound();
-                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
+//                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
                 player2.playRound();
                 syncBoards(player1, player2);
                 
@@ -105,6 +106,7 @@ public class SpaceInvader {
         System.out.println("ties: "+ (ties));
         double end = System.currentTimeMillis();
         System.out.println("Total time: "+ (end-start));
+        ThreadPool.executor.shutdown();
     }
     
     

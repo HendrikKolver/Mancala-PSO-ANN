@@ -86,7 +86,6 @@ public class PSO {
             }else{
                 initParticle(x);
             }
-           
         }
         int currentIteration = 0;
         
@@ -271,16 +270,17 @@ public class PSO {
         
         for(int x=0; x<particleCount;x++)
         {
-            if(x == 21){
+            if(x == 27){
+                initParticle(x,"4Ply_100it_3rdPlace.txt"); 
+            }else if(x == 21){
                 initParticle(x,"4Ply_200it_2ndPlace.txt"); 
-            }else if(x == 35){
-                initParticle(x,"4Ply_50it_3rdPlace.txt"); 
+            }else if(x == 16){
+                initParticle(x,"4Ply_50it_4thPlace.txt"); 
             }else if(x == 9){
                 initParticle(x,"4Ply_300it_1stPlace.txt"); 
             }else{
                 initParticle(x);
             }
-           
         }
         int currentIteration = 0;
         
