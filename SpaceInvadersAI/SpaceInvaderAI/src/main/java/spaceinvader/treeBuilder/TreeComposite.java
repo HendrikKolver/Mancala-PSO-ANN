@@ -93,11 +93,11 @@ public class TreeComposite extends TreeInterface {
      
      private void normalEval(){
         double score = this.playerController.getKillCount();
-        score += (this.playerController.getLives()*20);
-        score += this.roundCount;
+        score += (this.playerController.getLives()*10);
+        score += (this.roundCount/10.0);
 
-        if(isGameOver()){
-            score-=50;
+        if(isGameOver() && this.roundCount !=200){
+            score-=100;
         }
         
 //        this.nodeScore = this.boardFinalRating();

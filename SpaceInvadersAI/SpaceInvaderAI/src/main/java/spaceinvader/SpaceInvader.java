@@ -40,7 +40,7 @@ public class SpaceInvader {
         NeuralNetwork nnp2 = new NeuralNetwork(10,1,hiddenLayersP2,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
-        InputParser.getWeightsFromFile(nnp1,"tmpFile.txt");
+        InputParser.getWeightsFromFile(nnp1,"6input_beats1stPlaceOn6Ply.txt");
         InputParser.getWeightsFromFile(nnp2,"4Ply_300it_1stPlace.txt");
        
         
@@ -59,7 +59,7 @@ public class SpaceInvader {
         for (int i = 0; i < gamesToPlay; i++) {
             AIPlayer player1 = new AIPlayer(plyDepth,nnp1);
             AIPlayer player2 = new AIPlayer(plyDepth,nnp2);
-            //player2.normalEval = true;
+//            player1.normalEval = true;
             while(true)
             { 
                 //sleep(200);
@@ -87,15 +87,16 @@ public class SpaceInvader {
                 long moveStart = System.currentTimeMillis();
                 player1.playRound();
 //                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
-                player2.playRound();
-                syncBoards(player1, player2);
+//                player2.playRound();
+//                syncBoards(player1, player2);
+                
                 
             }
             totalRoundCountp1 += player1.getRoundCount();
             totalKillCountp1 += player1.getKillCount();
             totalRoundCountp2 += player2.getRoundCount();
             totalKillCountp2 += player2.getKillCount();
-            System.out.println("Game: "+ i + "\r");
+            System.out.println("Game: "+ i + " P1RoundCount: "+ player1.getRoundCount());
         }
         System.out.println("Average round count p1: "+ (totalRoundCountp1/gamesToPlay));
         System.out.println("Average kill count p1: "+ (totalKillCountp1/gamesToPlay));

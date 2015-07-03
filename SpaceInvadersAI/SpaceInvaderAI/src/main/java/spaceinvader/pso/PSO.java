@@ -60,7 +60,7 @@ public class PSO {
        this.hidden = hidden;
        globalBestFitness = 0.0;
        this.sigmoid = sigmoid;
-       tournamentSize = 10;
+       tournamentSize = 5;
        plyDepth = p;
        this.gamesPlayed = gamesPlayed;
        maxIterationTime = 0;
@@ -81,6 +81,8 @@ public class PSO {
                 initParticle(x,"goodSolution2.txt"); 
             }else if(x == 16){
                 initParticle(x,"6inputWinner.txt"); 
+            }else if(x == 35){
+                initParticle(x,"EqualWithCurrentWinner6Inputs.txt"); 
             }else{
                 initParticle(x);
             }
@@ -274,6 +276,8 @@ public class PSO {
                 initParticle(x,"goodSolution2.txt"); 
             }else if(x == 16){
                 initParticle(x,"6inputWinner.txt"); 
+            }else if(x == 35){
+                initParticle(x,"EqualWithCurrentWinner6Inputs.txt"); 
             }else{
                 initParticle(x);
             }
