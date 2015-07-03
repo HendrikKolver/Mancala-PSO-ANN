@@ -26,10 +26,10 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 6;
+        int plyDepth = 5;
         int hiddenLayers = 4;
         
-        NeuralNetwork nn = new NeuralNetwork(10,1,hiddenLayers,1);
+        NeuralNetwork nn = new NeuralNetwork(6,1,hiddenLayers,1);
         getWeightsFromFile(nn);
        
         AIPlayer player = new AIPlayer(plyDepth,nn);
@@ -59,7 +59,7 @@ public class Main {
         
         //read from file
         try {
-            String name = "4Ply_200it_2ndPlace.txt";//JOptionPane.showInputDialog("Name of file");
+            String name = "tmpFile.txt";//JOptionPane.showInputDialog("Name of file");
             lines = readSmallTextFile(name);
             if(lines.size()<1)
             {

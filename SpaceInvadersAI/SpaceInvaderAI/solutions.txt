@@ -1,0 +1,15 @@
+tmpFile:
+Average round count p1: 183.69
+Average kill count p1: 24.36
+
+6inputWinner: 
+Average round count p1: 183.84
+Average kill count p1: 24.31
+
+goodSolution2:
+Average round count p1: 176.02
+Average kill count p1: 23.19
+
+tmpFile - Copy:
+Average round count p1: 174.16
+Average kill count p1: 22.86

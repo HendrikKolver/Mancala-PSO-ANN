@@ -76,13 +76,11 @@ public class PSO {
        for(int x=0; x<particleCount;x++)
         {
             if(x == 27){
-                initParticle(x,"4Ply_100it_3rdPlace.txt"); 
+                initParticle(x,"tmpFile - Copy.txt"); 
             }else if(x == 21){
-                initParticle(x,"4Ply_200it_2ndPlace.txt"); 
+                initParticle(x,"goodSolution2.txt"); 
             }else if(x == 16){
-                initParticle(x,"4Ply_50it_4thPlace.txt"); 
-            }else if(x == 9){
-                initParticle(x,"4Ply_300it_1stPlace.txt"); 
+                initParticle(x,"6inputWinner.txt"); 
             }else{
                 initParticle(x);
             }
@@ -271,13 +269,11 @@ public class PSO {
         for(int x=0; x<particleCount;x++)
         {
             if(x == 27){
-                initParticle(x,"4Ply_100it_3rdPlace.txt"); 
+                initParticle(x,"tmpFile - Copy.txt"); 
             }else if(x == 21){
-                initParticle(x,"4Ply_200it_2ndPlace.txt"); 
+                initParticle(x,"goodSolution2.txt"); 
             }else if(x == 16){
-                initParticle(x,"4Ply_50it_4thPlace.txt"); 
-            }else if(x == 9){
-                initParticle(x,"4Ply_300it_1stPlace.txt"); 
+                initParticle(x,"6inputWinner.txt"); 
             }else{
                 initParticle(x);
             }

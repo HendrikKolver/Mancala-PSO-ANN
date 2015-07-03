@@ -343,4 +343,8 @@ public class Player extends GameObject{
         return shields;
     }
     
+    public int getBulletLimit(){
+        return bulletLimit;
+    }
+    
 }

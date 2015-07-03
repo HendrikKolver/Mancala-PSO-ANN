@@ -227,4 +227,10 @@ public class NeuralNetwork {
        
         return tmpCounter;
     }
+
+    public int getInputCount() {
+        return inputCount;
+    }
+    
+    
 }

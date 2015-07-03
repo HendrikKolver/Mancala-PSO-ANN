@@ -105,35 +105,47 @@ public class TreeComposite extends TreeInterface {
      }
     
     private double[] getInputs(){
-        double[] inputs = new double[10];
-        inputs[0] = this.alienController.getAlienCount();
-        inputs[1] = this.playerController.getAllShields().size();
-        inputs[2] = this.bulletController.getPlayerBulletCount();
-        inputs[3] = this.bulletController.getAlienbullets().size();
-        inputs[4] = this.playerController.getLives();
-        inputs[5] = this.playerController.getKillCount();
-        ArrayList<GameObject> buildings = this.playerController.getBuildings();
-        
-        int bulletFactoryCount = 0;
-        for(GameObject building : buildings){
-            if(building instanceof BulletFactory){
-                bulletFactoryCount++;
+        double[] inputs;
+        if(evaluation.getInputCount() == 6){
+            inputs = new double[6];
+            inputs[0] = this.playerController.getAllShields().size();
+            inputs[1] = this.playerController.getPlayer().getBulletLimit();
+            inputs[2] = this.playerController.getLives();
+            inputs[3] = this.playerController.getKillCount();
+            inputs[4] = this.bulletController.getPlayerBulletCount();
+            inputs[5] = this.roundCount;
+        }else{
+            inputs = new double[10];
+            inputs[0] = this.alienController.getAlienCount();
+            inputs[1] = this.playerController.getAllShields().size();
+            inputs[2] = this.bulletController.getPlayerBulletCount();
+            inputs[3] = this.bulletController.getAlienbullets().size();
+            inputs[4] = this.playerController.getLives();
+            inputs[5] = this.playerController.getKillCount();
+            ArrayList<GameObject> buildings = this.playerController.getBuildings();
+
+            int bulletFactoryCount = 0;
+            for(GameObject building : buildings){
+                if(building instanceof BulletFactory){
+                    bulletFactoryCount++;
+                }
             }
+
+            inputs[6] = bulletFactoryCount;
+
+            int alienFactoryCount = 0;
+            for(GameObject building : buildings){
+                if(building instanceof AlienFactory){
+                    alienFactoryCount++;
+                }
+            }
+
+            inputs[7] = alienFactoryCount;
+
+            inputs[8] = this.alienController.getAlienDistanceFromWall();
+            inputs[9] = this.roundCount;
         }
         
-        inputs[6] = bulletFactoryCount;
-        
-        int alienFactoryCount = 0;
-        for(GameObject building : buildings){
-            if(building instanceof AlienFactory){
-                alienFactoryCount++;
-            }
-        }
-       
-        inputs[7] = alienFactoryCount;
-        
-        inputs[8] = this.alienController.getAlienDistanceFromWall();
-        inputs[9] = this.roundCount;
         
         return inputs;
     }
