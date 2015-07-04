@@ -34,8 +34,8 @@ public class TreeBuilder {
         root.nodeDepth = 0;
         
         
-          buildTreeMultiThreaded(node, root);  
-//        buildTreeSingleThreaded(root);
+//          buildTreeMultiThreaded(node, root);  
+        buildTreeSingleThreaded(root);
        
         TreeInterface tmpNode = root.children;
         
@@ -70,7 +70,6 @@ public class TreeBuilder {
         TreeInterface tmpNode = null;
         
         ExecutorService executor = ThreadPool.executor;
-//        ExecutorService executor = Executors.newFixedThreadPool(2);
         ArrayList<ThreadedBuilder> builders = new ArrayList();
 
         for(String possibleMove : possibleMoves){

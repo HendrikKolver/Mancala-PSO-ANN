@@ -64,6 +64,8 @@ public class AlienController {
                     if(!firstRow.isEmpty()){
                         Alien alienToShoot = getClosestAlienToPlayer(firstRow);
                         alienToShoot.fireBullet();
+                    }else{
+                        System.out.println("whoops");
                     }
                 }else{
                     int rowChoice = 0;

@@ -62,6 +62,7 @@ public class InputParser {
             long waveSize = (long) player2.get("AlienWaveSize");
             JSONArray bullets = (JSONArray) player.get("Missiles");
             JSONArray enemyBullets = (JSONArray) player2.get("Missiles");
+            long realPlayerNumber = (long) player.get("PlayerNumberReal");
             
             
             aiPlayer.getCurrentPosition().roundCount = (int) RoundNumber;
@@ -72,7 +73,7 @@ public class InputParser {
             ArrayList<GameObject> shields = setupPlayer(player, aiPlayer);
             setupPlayerBullets(bullets, bulletFactory);
             setupEnemyBullets(enemyBullets,bulletFactory);
-            setupMapObjects(jsonObject, shields, bulletFactory, alienController);
+            setupMapObjects(jsonObject, shields, bulletFactory, alienController, realPlayerNumber);
             
             
             
@@ -108,7 +109,7 @@ public class InputParser {
         }
     }
 
-    private static void setupMapObjects(JSONObject jsonObject, ArrayList<GameObject> shields, BulletController bulletFactory, AlienController alienController) {
+    private static void setupMapObjects(JSONObject jsonObject, ArrayList<GameObject> shields, BulletController bulletFactory, AlienController alienController, long realPlayerNumber) {
         alienController.getAllAliens().removeAll(alienController.getAllAliens());
         JSONObject map = (JSONObject) jsonObject.get("Map");
         JSONArray rows = (JSONArray) map.get("Rows");
@@ -138,9 +139,16 @@ public class InputParser {
                         }else{
                             latestRow = alienRows.get(alienRows.size()-1);
                         }
-                        if(alien.getyPosition() % 2 == 0){
-                            alien.invertMoveDirection();
+                        if(realPlayerNumber == 1){
+                           if(alien.getyPosition() % 2 == 0){
+                                alien.invertMoveDirection();
+                            } 
+                        }else{
+                          if(alien.getyPosition() % 2 != 0){
+                                alien.invertMoveDirection();
+                            }   
                         }
+                        
                         
                         if(!latestRow.isEmpty() && (alien.getyPosition() == latestRow.get(0).getyPosition())){
                             latestRow.add(alien);
@@ -203,6 +211,18 @@ public class InputParser {
 
         return tmp;
     }
+    
+     public static void getWeightsFromString(NeuralNetwork nn){
+        String weightString = "1.0512049441314197;0.5664481645730253;-0.6886893547457091;0.6519060457448363;-0.6876862913637966;-1.9151817534781377;-1.4686963428553679;-1.9711547031074619;-0.533682209588541;-0.6246842824018869;-0.5068320592982384;-1.1135138192144967;-1.8480627070038853;-1.4031307172700507;-0.6303307566979858;-1.33474113203369;-0.9932558603000936;-1.456051370672671;0.41828735325896654;0.0152195373252979;-0.6632907098822571;-1.8838642539609576;-1.0012679709214027;-0.7430746870327497;-0.9050837159024673;-0.6095380373200011;-0.780769986186697;-0.25075300256258337;-0.38868015222749064;-0.39254203868982424;-0.45380683786074955;-0.4872547749197802;-1.3278193131702845";
+        double weights[] = new double[nn.getConnections()];
+        String tmp[] = weightString.split(";");
+        for(int x=0; x<weights.length;x++)
+        {
+            weights[x] = Double.parseDouble(tmp[x]);
+        }
+        nn.updateWeights(weights);
+    }
+    
     
     public static void getWeightsFromFile(NeuralNetwork nn, String filename) throws IOException{
         double weights[] = new double[nn.getConnections()];
