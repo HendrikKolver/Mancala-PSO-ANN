@@ -32,7 +32,7 @@ public class SpaceInvader {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 6;
+        int plyDepth = 4;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -52,7 +52,7 @@ public class SpaceInvader {
         int winsp2 = 0;
         int ties = 0;
         
-        double gamesToPlay = 10.0;
+        double gamesToPlay = 100.0;
         
         double start = System.currentTimeMillis();
         

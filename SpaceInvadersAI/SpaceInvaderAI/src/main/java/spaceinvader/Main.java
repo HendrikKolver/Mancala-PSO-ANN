@@ -37,9 +37,10 @@ public class Main {
         AIPlayer player = new AIPlayer(plyDepth,nn);
         
         player = InputParser.getState(player);
-        
-//        player.getCurrentPosition().printBoard();
+        System.out.println("before ----");
+        player.getCurrentPosition().printBoard();
         player.playRound();
+        System.out.println("asfter (did I screw up? ----");
         player.getCurrentPosition().printBoard();
 //        while(true){
 //            player.playRound();

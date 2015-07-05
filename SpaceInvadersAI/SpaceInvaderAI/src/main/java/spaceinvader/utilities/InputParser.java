@@ -73,7 +73,7 @@ public class InputParser {
             ArrayList<GameObject> shields = setupPlayer(player, aiPlayer);
             setupPlayerBullets(bullets, bulletFactory);
             setupEnemyBullets(enemyBullets,bulletFactory);
-            setupMapObjects(jsonObject, shields, bulletFactory, alienController, realPlayerNumber);
+            setupMapObjects(jsonObject, shields, bulletFactory, alienController, realPlayerNumber, RoundNumber);
             
             
             
@@ -109,8 +109,11 @@ public class InputParser {
         }
     }
 
-    private static void setupMapObjects(JSONObject jsonObject, ArrayList<GameObject> shields, BulletController bulletFactory, AlienController alienController, long realPlayerNumber) {
-        alienController.getAllAliens().removeAll(alienController.getAllAliens());
+    private static void setupMapObjects(JSONObject jsonObject, ArrayList<GameObject> shields, BulletController bulletFactory, AlienController alienController, long realPlayerNumber, long roundNumber) {
+        alienController.playerNumber = realPlayerNumber;
+        if(roundNumber != 0){
+            alienController.getAllAliens().removeAll(alienController.getAllAliens());
+        }
         JSONObject map = (JSONObject) jsonObject.get("Map");
         JSONArray rows = (JSONArray) map.get("Rows");
         Iterator<JSONArray> rowsIterator = rows.iterator();
@@ -145,6 +148,7 @@ public class InputParser {
                             } 
                         }else{
                           if(alien.getyPosition() % 2 != 0){
+                                System.out.println("Inverted move direction");
                                 alien.invertMoveDirection();
                             }   
                         }
