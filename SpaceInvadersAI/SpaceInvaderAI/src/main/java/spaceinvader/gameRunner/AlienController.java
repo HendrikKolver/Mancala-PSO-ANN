@@ -24,6 +24,7 @@ public class AlienController {
     private BulletController bulletController;
     private AlienController alienController;
     public long playerNumber;
+    public long moveDownRound;
     
     public AlienController(){
         waveSize =3;
@@ -31,7 +32,8 @@ public class AlienController {
         alienRow = new ArrayList();
         latestRowAliens = new ArrayList();
         alienRow.add(latestRowAliens);
-        gameOver = false;      
+        gameOver = false; 
+        moveDownRound = -1;
     }
   
     public void update(int roundNumber){
@@ -40,7 +42,7 @@ public class AlienController {
         }
         
         removeEmptyRows();
-        updateAlienPosition();
+        updateAlienPosition(roundNumber);
         checkForShieldColission();
         checkForPlayerColission();
         checkToFireBullet(roundNumber);
@@ -50,7 +52,7 @@ public class AlienController {
     
     public void checkToFireBullet(int roundNumber){
         removeEmptyRows();
-        if(roundNumber % 6 == 0 && roundNumber != 0){
+        if((roundNumber+1) % 6 == 0 && roundNumber != 0){
             ArrayList<Alien> firstRow = null;
             ArrayList<Alien> secondRow = null;
             if(alienRow.size() >0){
@@ -66,8 +68,6 @@ public class AlienController {
                     if(!firstRow.isEmpty()){
                         Alien alienToShoot = getClosestAlienToPlayer(firstRow);
                         alienToShoot.fireBullet();
-                    }else{
-                        System.out.println("whoops");
                     }
                 }else{
                     int rowChoice = 0;
@@ -122,13 +122,17 @@ public class AlienController {
     
     
     public void checkToAddRow(int roundNumber){
-        if(alienRow.isEmpty() || alienRow.get(alienRow.size()-1).get(0).getyPosition() <10){
-           addNewRow();
-            addAlien(); 
+        
+        if(moveDownRound+1 == roundNumber){
+           if(alienRow.isEmpty() || alienRow.get(alienRow.size()-1).get(0).getyPosition() <10){
+                addNewRow();
+                 addAlien(); 
+             } 
         }
+        
     }
     
-    public void updateAlienPosition(){
+    public void updateAlienPosition(int roundNumber){
         boolean moveDown = false;
          for (ArrayList<Alien> rowAliens : alienRow) { 
             if(rowAliens.get(0).getMoveDirection().equals("LEFT")){
@@ -147,6 +151,7 @@ public class AlienController {
          for (ArrayList<Alien> rowAliens : alienRow) { 
             for (Alien alien : rowAliens) {
                 if(moveDown){
+                    moveDownRound = roundNumber;
                     if(alien.getyPosition()==1){
                         gameOver = true;
                     }
@@ -161,7 +166,7 @@ public class AlienController {
     
     public void addAlien(){
         if(playerNumber == 2){
-            int xStartLocation = 1;
+            int xStartLocation = 2;
             for (int i = 0; i < waveSize; i++) {
                 Alien alien = new Alien(xStartLocation,11);
                 alien.setBulletController(bulletController);
@@ -171,7 +176,7 @@ public class AlienController {
             }
             Collections.reverse(latestRowAliens);
         }else{
-            int xStartLocation = 17;
+            int xStartLocation = 16;
             for (int i = 0; i < waveSize; i++) {
                 Alien alien = new Alien(xStartLocation,11);
                 alien.setBulletController(bulletController);
@@ -320,6 +325,7 @@ public class AlienController {
         alienControllerCopy.setGameOver(gameOver);
         alienControllerCopy.setWaveSize(waveSize);
         alienControllerCopy.playerNumber = this.playerNumber;
+        alienControllerCopy.moveDownRound = this.moveDownRound;
         
         ArrayList <ArrayList<Alien>> tmpAlienRow = new ArrayList();
         for(ArrayList<Alien> tmpAliens : alienRow){

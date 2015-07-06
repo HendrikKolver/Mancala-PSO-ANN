@@ -203,7 +203,6 @@ public class TreeComposite extends TreeInterface {
         node.alienController.setAlienController(alienController);
         node.alienController.setBulletController(bulletController);
         node.alienController.setPlayerController(playerController);
-        node.alienController.addAlien();
         node.playerController.setAlienController(alienController);
         node.playerController.setBulletController(bulletController);
         node.bulletController.setAlienController(alienController);

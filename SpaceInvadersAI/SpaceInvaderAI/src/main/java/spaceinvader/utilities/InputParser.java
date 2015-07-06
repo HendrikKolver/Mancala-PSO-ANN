@@ -111,9 +111,17 @@ public class InputParser {
 
     private static void setupMapObjects(JSONObject jsonObject, ArrayList<GameObject> shields, BulletController bulletFactory, AlienController alienController, long realPlayerNumber, long roundNumber) {
         alienController.playerNumber = realPlayerNumber;
-        if(roundNumber != 0){
-            alienController.getAllAliens().removeAll(alienController.getAllAliens());
+        List<String> moveList;
+       int moveDownRound = -1;
+        try{
+          moveList = readSmallTextFile("moveDownRound.txt");  
+          moveDownRound = Integer.valueOf(moveList.get(0));
+        }catch(Exception e){
+            //file does not exist yet. No worries
         }
+        alienController.moveDownRound = moveDownRound;
+        System.out.println("moveDownRound: "+ moveDownRound);
+
         JSONObject map = (JSONObject) jsonObject.get("Map");
         JSONArray rows = (JSONArray) map.get("Rows");
         Iterator<JSONArray> rowsIterator = rows.iterator();

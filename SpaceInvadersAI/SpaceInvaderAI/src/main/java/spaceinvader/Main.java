@@ -40,7 +40,7 @@ public class Main {
         System.out.println("before ----");
         player.getCurrentPosition().printBoard();
         player.playRound();
-        System.out.println("asfter (did I screw up? ----");
+        System.out.println("after (did I screw up? ----");
         player.getCurrentPosition().printBoard();
 //        while(true){
 //            player.playRound();
@@ -50,7 +50,8 @@ public class Main {
         
         String move = player.getMove();
         writeFile("output","move.txt",move);
-        //System.out.println("Move: "+ move);
+        writeFile("","moveDownRound.txt",String.valueOf(player.getCurrentPosition().getAlienController().moveDownRound));
+        System.out.println("Move: "+ move);
         
         
 
