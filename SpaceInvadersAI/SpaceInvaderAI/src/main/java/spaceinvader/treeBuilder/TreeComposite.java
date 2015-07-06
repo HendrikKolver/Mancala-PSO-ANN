@@ -305,7 +305,7 @@ public class TreeComposite extends TreeInterface {
     public int boardFinalRating() {
         int finalRating = 0;
         if(this.roundCount >= 200){
-            finalRating+= 210;
+            finalRating+= 250;
             finalRating+=this.playerController.getKillCount();
         }else{
             finalRating+= this.roundCount;
