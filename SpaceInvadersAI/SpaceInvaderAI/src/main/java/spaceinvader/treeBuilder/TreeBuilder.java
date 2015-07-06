@@ -2,7 +2,6 @@ package spaceinvader.treeBuilder;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.utilities.ThreadPool;
 
