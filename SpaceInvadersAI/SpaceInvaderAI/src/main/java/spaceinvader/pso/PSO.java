@@ -75,7 +75,7 @@ public class PSO {
          
        for(int x=0; x<particleCount;x++)
         {
-            
+
             if(x == 7){
                 initParticle(x,"6input_beats1stPlaceOn6Ply.txt"); 
             }else if(x == 27){
