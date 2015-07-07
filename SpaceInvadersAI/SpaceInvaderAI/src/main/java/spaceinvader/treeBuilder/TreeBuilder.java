@@ -33,8 +33,8 @@ public class TreeBuilder {
         root.nodeDepth = 0;
         
         
-//          buildTreeMultiThreaded(node, root);  
-        buildTreeSingleThreaded(root);
+          buildTreeMultiThreaded(node, root);  
+//        buildTreeSingleThreaded(root);
        
         TreeInterface tmpNode = root.children;
         
