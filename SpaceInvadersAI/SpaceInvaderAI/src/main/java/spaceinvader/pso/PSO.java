@@ -60,7 +60,7 @@ public class PSO {
        this.hidden = hidden;
        globalBestFitness = 0.0;
        this.sigmoid = sigmoid;
-       tournamentSize = 5;
+       tournamentSize =10;
        plyDepth = p;
        this.gamesPlayed = gamesPlayed;
        maxIterationTime = 0;
@@ -75,7 +75,10 @@ public class PSO {
          
        for(int x=0; x<particleCount;x++)
         {
-            if(x == 27){
+            
+            if(x == 7){
+                initParticle(x,"6input_beats1stPlaceOn6Ply.txt"); 
+            }else if(x == 27){
                 initParticle(x,"tmpFile - Copy.txt"); 
             }else if(x == 21){
                 initParticle(x,"goodSolution2.txt"); 

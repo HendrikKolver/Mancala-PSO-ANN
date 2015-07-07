@@ -32,7 +32,7 @@ public class SpaceInvader {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 4;
+        int plyDepth = 6;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -40,9 +40,10 @@ public class SpaceInvader {
         NeuralNetwork nnp2 = new NeuralNetwork(6,1,hiddenLayersP2,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
-        InputParser.getWeightsFromString(nnp1);
+//        InputParser.getWeightsFromString(nnp1);
+        InputParser.getWeightsFromFile(nnp1,"tmpFile.txt");
         InputParser.getWeightsFromString(nnp2);
-//        InputParser.getWeightsFromFile(nnp2,"4Ply_300it_1stPlace.txt");
+//        InputParser.getWeightsFromFile(nnp2,"tmpFile.txt");
        
         
         int totalRoundCountp1 = 0;
@@ -53,7 +54,7 @@ public class SpaceInvader {
         int winsp2 = 0;
         int ties = 0;
         
-        double gamesToPlay = 10.0;
+        double gamesToPlay = 100.0;
         
         double start = System.currentTimeMillis();
         
@@ -88,8 +89,8 @@ public class SpaceInvader {
                 long moveStart = System.currentTimeMillis();
                 player1.playRound();
 //                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
-                player2.playRound();
-                syncBoards(player1, player2);
+//                player2.playRound();
+//                syncBoards(player1, player2);
                 
                 
             }

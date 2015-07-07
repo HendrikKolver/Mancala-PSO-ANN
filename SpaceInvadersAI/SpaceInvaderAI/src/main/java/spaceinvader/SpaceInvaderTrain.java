@@ -21,7 +21,7 @@ public class SpaceInvaderTrain {
         Trainer trainer = new Trainer();
 //        NeuralNetwork nn = trainer.train(50, 3);
 
-        NeuralNetwork nn = trainer.trainWithOpponent(50, 3);
+        NeuralNetwork nn = trainer.trainWithOpponent(200, 4);
         System.out.println("Done");
         ThreadPool.executor.shutdown();
 
