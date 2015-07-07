@@ -42,10 +42,9 @@ public class SpaceInvader {
 //        setRandomWeights(nnp1);
 //        InputParser.getWeightsFromString(nnp1);
 //        InputParser.getWeightsFromString(nnp2);
-        InputParser.getWeightsFromFile(nnp1,"tmpFile.txt");
-        InputParser.getWeightsFromFile(nnp2,"6Input_4Hidden_1stOn6Ply.txt");
+        InputParser.getWeightsFromFile(nnp1,"2015_07_07_veryVeryGood.txt");
+        InputParser.getWeightsFromFile(nnp2,"2015_07_07_24hTrain.txt");
 
-       
         
         int totalRoundCountp1 = 0;
         int totalKillCountp1 = 0;
@@ -92,8 +91,8 @@ public class SpaceInvader {
                 long moveStart = System.currentTimeMillis();
                 player1.playRound();
 //                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
-//                player2.playRound();
-//                syncBoards(player1, player2);
+                player2.playRound();
+                syncBoards(player1, player2);
                 
                 
             }
