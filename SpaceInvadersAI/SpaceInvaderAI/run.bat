@@ -1,1 +1,1 @@
-java -jar target\SpaceInvaderAI-1.0-SNAPSHOT.jar %1
+java -jar SpaceInvaderAI-1.0-SNAPSHOT.jar %1
