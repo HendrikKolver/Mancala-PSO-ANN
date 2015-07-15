@@ -134,7 +134,7 @@
     <profile>
         <id>mainBuild</id>
         <build>
-            <directory>yourDirectory</directory>
+            <directory>./</directory>
         </build>
     </profile>
 </profiles>

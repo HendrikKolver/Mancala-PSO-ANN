@@ -41,7 +41,7 @@ public class InputParser {
     }
     
     private static String getBoardFromFile(String folder) throws IOException{
-        List<String> jsonList = readSmallTextFile(folder+"/state.json");
+        List<String> jsonList = readSmallTextFile("state.json", folder);
         String jsonString = jsonList.toString();
         return jsonString;
     }
