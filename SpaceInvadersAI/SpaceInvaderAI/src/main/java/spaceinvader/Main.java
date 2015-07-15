@@ -29,6 +29,7 @@ public class Main {
         int plyDepth = 6;
         int hiddenLayers = 4;
         String folder = args[0];
+//        folder = "../"+folder;
         
         NeuralNetwork nn = new NeuralNetwork(6,1,hiddenLayers,1);
 //        getWeightsFromFile(nn);
