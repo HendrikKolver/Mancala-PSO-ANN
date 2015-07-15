@@ -92,8 +92,8 @@ public class Particle {
     
     public void initParticle(String fileName) throws IOException
     {
-        InputParser.getWeightsFromFile(neuralNetwork, fileName);
-        InputParser.getWeightsFromFile(bestNetwork, fileName);
+        InputParser.getWeightsFromFile(neuralNetwork, fileName, ".");
+        InputParser.getWeightsFromFile(bestNetwork, fileName, ".");
     }
 
     

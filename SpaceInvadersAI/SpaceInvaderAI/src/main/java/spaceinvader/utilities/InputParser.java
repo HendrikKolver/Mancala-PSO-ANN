@@ -30,28 +30,28 @@ import spaceinvader.pso.AIPlayer;
  */
 public class InputParser {
     
+    public static AIPlayer getState(AIPlayer aiPlayer, String folder){
     
-    public static AIPlayer getState(AIPlayer aiPlayer){
-        return setGameState(aiPlayer);
+        return setGameState(aiPlayer, folder);
     }
     
-    public static void getBoard() throws IOException{
-        String board = getBoardFromFile();
+    public static void getBoard(String folder) throws IOException{
+        String board = getBoardFromFile(folder);
         System.out.println(board);
     }
     
-    private static String getBoardFromFile() throws IOException{
-        List<String> jsonList = readSmallTextFile("output/state.json");
+    private static String getBoardFromFile(String folder) throws IOException{
+        List<String> jsonList = readSmallTextFile(folder+"/state.json");
         String jsonString = jsonList.toString();
         return jsonString;
     }
     
-    private static AIPlayer setGameState(AIPlayer aiPlayer){
+    private static AIPlayer setGameState(AIPlayer aiPlayer, String folder){
         JSONParser parser = new JSONParser();
  
         try {
  
-            Object obj = parser.parse(new FileReader("output/state.json"));
+            Object obj = parser.parse(new FileReader(folder+"/state.json"));
  
             JSONObject jsonObject = (JSONObject) obj;
             
@@ -73,7 +73,7 @@ public class InputParser {
             ArrayList<GameObject> shields = setupPlayer(player, aiPlayer);
             setupPlayerBullets(bullets, bulletFactory);
             setupEnemyBullets(enemyBullets,bulletFactory);
-            setupMapObjects(jsonObject, shields, bulletFactory, alienController, realPlayerNumber, RoundNumber);
+            setupMapObjects(jsonObject, shields, bulletFactory, alienController, realPlayerNumber, RoundNumber, folder);
             
             
             
@@ -109,12 +109,12 @@ public class InputParser {
         }
     }
 
-    private static void setupMapObjects(JSONObject jsonObject, ArrayList<GameObject> shields, BulletController bulletFactory, AlienController alienController, long realPlayerNumber, long roundNumber) {
+    private static void setupMapObjects(JSONObject jsonObject, ArrayList<GameObject> shields, BulletController bulletFactory, AlienController alienController, long realPlayerNumber, long roundNumber, String folder) {
         alienController.playerNumber = realPlayerNumber;
         List<String> moveList;
        int moveDownRound = -1;
         try{
-          moveList = readSmallTextFile("moveDownRound.txt");  
+          moveList = readSmallTextFile("moveDownRound.txt", folder);  
           moveDownRound = Integer.valueOf(moveList.get(0));
         }catch(Exception e){
             //file does not exist yet. No worries
@@ -211,9 +211,9 @@ public class InputParser {
         return shields;
     }
     
-    private static List<String> readSmallTextFile(String aFileName) throws IOException {
+    private static List<String> readSmallTextFile(String aFileName, String folder) throws IOException {
         List<String> tmp = new ArrayList<String>();
-        BufferedReader inFile = new BufferedReader(new FileReader(aFileName));    
+        BufferedReader inFile = new BufferedReader(new FileReader(folder+"/"+aFileName));    
         String line;
         while((line =inFile.readLine())!= null)
         {
@@ -236,14 +236,14 @@ public class InputParser {
     }
     
     
-    public static void getWeightsFromFile(NeuralNetwork nn, String filename) throws IOException{
+    public static void getWeightsFromFile(NeuralNetwork nn, String filename, String folder) throws IOException{
         double weights[] = new double[nn.getConnections()];
         List<String> lines;
         
         //read from file
         try {
             String name = filename;//JOptionPane.showInputDialog("Name of file");
-            lines = readSmallTextFile(name);
+            lines = readSmallTextFile(name, folder);
             if(lines.size()<1)
             {
                 throw(new RuntimeException("Error file missing"));

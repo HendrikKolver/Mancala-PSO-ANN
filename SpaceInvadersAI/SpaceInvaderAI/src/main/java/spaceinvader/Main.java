@@ -28,6 +28,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
         int plyDepth = 6;
         int hiddenLayers = 4;
+        String folder = args[0];
         
         NeuralNetwork nn = new NeuralNetwork(6,1,hiddenLayers,1);
 //        getWeightsFromFile(nn);
@@ -36,12 +37,12 @@ public class Main {
         
         AIPlayer player = new AIPlayer(plyDepth,nn);
         
-        player = InputParser.getState(player);
-        System.out.println("before ----");
-        player.getCurrentPosition().printBoard();
+        player = InputParser.getState(player, folder);
+//        System.out.println("before ----");
+//        player.getCurrentPosition().printBoard();
         player.playRound();
-        System.out.println("after (did I screw up? ----");
-        player.getCurrentPosition().printBoard();
+//        System.out.println("after (did I screw up? ----");
+//        player.getCurrentPosition().printBoard();
 //        while(true){
 //            player.playRound();
 //            player.getCurrentPosition().printBoard();
@@ -49,8 +50,8 @@ public class Main {
 
         
         String move = player.getMove();
-        writeFile("output","move.txt",move);
-        writeFile("","moveDownRound.txt",String.valueOf(player.getCurrentPosition().getAlienController().moveDownRound));
+        writeFile(folder,"move.txt",move);
+        writeFile(folder,"moveDownRound.txt",String.valueOf(player.getCurrentPosition().getAlienController().moveDownRound));
         System.out.println("Move: "+ move);
         
         
@@ -58,7 +59,7 @@ public class Main {
     }
     
     private static void getWeightsFromString(NeuralNetwork nn){
-        String weightString = "1.0512049441314197;0.5664481645730253;-0.6886893547457091;0.6519060457448363;-0.6876862913637966;-1.9151817534781377;-1.4686963428553679;-1.9711547031074619;-0.533682209588541;-0.6246842824018869;-0.5068320592982384;-1.1135138192144967;-1.8480627070038853;-1.4031307172700507;-0.6303307566979858;-1.33474113203369;-0.9932558603000936;-1.456051370672671;0.41828735325896654;0.0152195373252979;-0.6632907098822571;-1.8838642539609576;-1.0012679709214027;-0.7430746870327497;-0.9050837159024673;-0.6095380373200011;-0.780769986186697;-0.25075300256258337;-0.38868015222749064;-0.39254203868982424;-0.45380683786074955;-0.4872547749197802;-1.3278193131702845";
+        String weightString = "1.0835870090141984;1.100721920417205;-0.34632701332158905;-0.016156456406784432;0.593774398144852;-1.2236624197712027;-1.418340032440387;-0.9927699946840591;-1.6559847229462572;-1.5791007987248817;-0.17355074291970907;-0.4272730761620364;-1.3263478709106693;0.313501047406877;-1.6620981612332362;-1.3461128661890354;1.186129967701129;-0.7640343823848508;-0.9990123784257794;-1.3650557773057683;-1.3129511427604523;-1.3980498971178041;-0.5168648677115766;-1.2464744633773366;-1.5387798942116515;0.11490054753825499;-0.2982963820170826;-0.28862938004795047;-0.7223584250568469;0.34760724102085083;-0.9842956857292396;-0.20896398585222828;-0.9073410516063893";
         double weights[] = new double[nn.getConnections()];
         String tmp[] = weightString.split(";");
         for(int x=0; x<weights.length;x++)
@@ -75,7 +76,7 @@ public class Main {
         //read from file
         try {
             String name = "6input_beats1stPlaceOn6Ply.txt";//JOptionPane.showInputDialog("Name of file");
-            lines = readSmallTextFile(name);
+            lines = readSmallTextFile(name, ".");
             if(lines.size()<1)
             {
                 System.out.println("Cannot, file is empty please train first");
@@ -97,10 +98,10 @@ public class Main {
         }
     }
     
-    private static List<String> readSmallTextFile(String aFileName) throws IOException {
+    private static List<String> readSmallTextFile(String aFileName, String folder) throws IOException {
 
         List<String> tmp = new ArrayList<String>();
-        BufferedReader inFile = new BufferedReader(new FileReader(aFileName));    
+        BufferedReader inFile = new BufferedReader(new FileReader(folder+"/"+aFileName));    
         String line;
         while((line =inFile.readLine())!= null)
         {
