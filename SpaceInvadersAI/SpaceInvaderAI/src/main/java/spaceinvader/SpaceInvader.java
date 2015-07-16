@@ -32,7 +32,7 @@ public class SpaceInvader {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 6;
+        int plyDepth = 4;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         
@@ -55,7 +55,7 @@ public class SpaceInvader {
         int ties = 0;
         
 
-        double gamesToPlay = 100.0;
+        double gamesToPlay = 5.0;
 
         
         double start = System.currentTimeMillis();
@@ -66,8 +66,8 @@ public class SpaceInvader {
 //            player1.normalEval = true;
             while(true)
             { 
-                sleep(200);
-                System.in.read();
+//                sleep(200);
+//                System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
                     if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
