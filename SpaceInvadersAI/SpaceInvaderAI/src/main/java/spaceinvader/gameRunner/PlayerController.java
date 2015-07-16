@@ -139,6 +139,10 @@ public class PlayerController {
     public Player getPlayer() {
         return player;
     }
+    
+    public boolean getDeathOccured(){
+        return player.isDeathOccured();
+    }
      
 }
 

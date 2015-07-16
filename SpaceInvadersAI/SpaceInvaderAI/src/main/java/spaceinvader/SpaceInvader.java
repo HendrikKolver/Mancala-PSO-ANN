@@ -66,8 +66,8 @@ public class SpaceInvader {
 //            player1.normalEval = true;
             while(true)
             { 
-                //sleep(200);
-//                System.in.read();
+                sleep(200);
+                System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
                     if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){

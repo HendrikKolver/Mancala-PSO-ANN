@@ -18,6 +18,7 @@ public class Player extends GameObject{
     private boolean isAlive;
     private BulletController bulletController;
     private AlienController alienController;
+    private boolean deathOccured;
     
     public Player(){
         //start location
@@ -30,6 +31,7 @@ public class Player extends GameObject{
         this.isAlive = true;
         this.kills = 0;
         buildings = new ArrayList();
+        deathOccured = false;
     }
     
     public ArrayList<String> getPossibleMoves(){
@@ -206,6 +208,7 @@ public class Player extends GameObject{
     public void die(){
         this.isAlive = false;
         this.lives--;
+        deathOccured = true;
     }
     
     public void respawn(){
@@ -284,6 +287,7 @@ public class Player extends GameObject{
         player.isAlive = this.isAlive;
         
         player.kills = this.kills;
+        player.setDeathOccured(this.deathOccured);
         return player;
     }
 
@@ -345,6 +349,14 @@ public class Player extends GameObject{
     
     public int getBulletLimit(){
         return bulletLimit;
+    }
+
+    public boolean isDeathOccured() {
+        return deathOccured;
+    }
+
+    public void setDeathOccured(boolean deathOccured) {
+        this.deathOccured = deathOccured;
     }
     
 }

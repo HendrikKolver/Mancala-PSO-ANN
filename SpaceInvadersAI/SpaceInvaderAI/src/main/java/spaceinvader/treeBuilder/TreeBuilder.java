@@ -52,8 +52,6 @@ public class TreeBuilder {
             }
             tmpNode = tmpNode.next; 
         }
-
-        
         return finalNode;
     }
     
@@ -102,6 +100,25 @@ public class TreeBuilder {
             node.nextMove(move, node.roundCount); 
             node.nodeDepth++;
             node.roundCount++;
+        }
+        
+        //negative points for letting aliens come too close   
+        if(node.getAlienController().getAlienDistanceFromWall() <=2){
+            if(node.nodeDepth != 0){
+                node.evaluateMyself();
+                node.nodeScore-= (500/node.getAlienController().getAlienDistanceFromWall());
+                return node.nodeScore;
+            }else{
+                node.evaluateMyself();
+                node.nodeScore-= (500/node.getAlienController().getAlienDistanceFromWall());
+            } 
+        }
+        
+        //Negative points for dying
+        if(node.getPlayerController().getDeathOccured() && node.nodeDepth != 0){
+            node.evaluateMyself();
+            node.nodeScore-= 1000;
+            return node.nodeScore;
         }
 
         if(node.isGameOver()){

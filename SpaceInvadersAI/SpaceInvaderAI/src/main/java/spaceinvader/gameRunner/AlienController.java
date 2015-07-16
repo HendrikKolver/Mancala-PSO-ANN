@@ -63,12 +63,12 @@ public class AlienController {
             }
             
             if(firstRow != null){
-                int probability = RandomGenerator.randInt(1, 1000);
-                if(probability <= 333){
+//                int probability = RandomGenerator.randInt(1, 1000);
+//                if(probability <= 333){
                     if(!firstRow.isEmpty()){
                         Alien alienToShoot = getClosestAlienToPlayer(firstRow);
                         alienToShoot.fireBullet();
-                    }
+//                    }
                 }else{
                     int rowChoice = 0;
                     if(secondRow != null){
@@ -355,9 +355,11 @@ public class AlienController {
     
     public int getAlienDistanceFromWall(){
         int minDistance = 13;
-        for(Alien alien : alienRow.get(0)){
-           minDistance = alien.getyPosition();
-           break;
+        if(!alienRow.isEmpty()){
+            for(Alien alien : alienRow.get(0)){
+               minDistance = alien.getyPosition();
+               break;
+            }
         }
         return minDistance;
     }
@@ -421,8 +423,6 @@ public class AlienController {
 
     public void setWaveSize(int waveSize) {
         this.waveSize = waveSize;
-    }
-    
-    
+    }  
 
 }
