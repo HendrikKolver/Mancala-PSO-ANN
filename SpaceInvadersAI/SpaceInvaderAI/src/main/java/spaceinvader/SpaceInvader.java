@@ -32,7 +32,7 @@ public class SpaceInvader {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 4;
+        int plyDepth = 6;
         int hiddenLayersP1 = 4;
         int hiddenLayersP2 = 4;
         

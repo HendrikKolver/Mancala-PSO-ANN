@@ -77,15 +77,15 @@ public class PSO {
         {
 
             if(x == 7){
-                initParticle(x,"6input_beats1stPlaceOn6Ply.txt"); 
+                initParticle(x,"2015_07_07_24hTrain.txt"); 
             }else if(x == 27){
-                initParticle(x,"tmpFile - Copy.txt"); 
+                initParticle(x,"6Input_4Hidden_1stOn6Ply.txt"); 
             }else if(x == 21){
                 initParticle(x,"goodSolution2.txt"); 
             }else if(x == 16){
                 initParticle(x,"6inputWinner.txt"); 
             }else if(x == 35){
-                initParticle(x,"EqualWithCurrentWinner6Inputs.txt"); 
+                initParticle(x,"2015_07_07_veryVeryGood.txt"); 
             }else{
                 initParticle(x);
             }
