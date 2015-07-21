@@ -102,6 +102,16 @@ public class TreeBuilder {
             node.roundCount++;
         }
         
+        //Although I achieved better results by checking the distance from wall first the death needs to be checked first
+        //Eg all but one position causes aliens to be in the bottom row. The one that doesn't causes the player to die. 
+        //This results in the game choosing death for the player
+        //Negative points for dying
+        if(node.getPlayerController().getDeathOccured() && node.nodeDepth != 0){
+            node.evaluateMyself();
+            node.nodeScore-= 1000;
+            return node.nodeScore;
+        }
+
         //negative points for letting aliens come too close   
         if(node.getAlienController().getAlienDistanceFromWall() <=2){
             if(node.nodeDepth != 0){
@@ -112,13 +122,6 @@ public class TreeBuilder {
                 node.evaluateMyself();
                 node.nodeScore-= (500/node.getAlienController().getAlienDistanceFromWall());
             } 
-        }
-        
-        //Negative points for dying
-        if(node.getPlayerController().getDeathOccured() && node.nodeDepth != 0){
-            node.evaluateMyself();
-            node.nodeScore-= 1000;
-            return node.nodeScore;
         }
 
         if(node.isGameOver()){

@@ -256,7 +256,8 @@ public class AlienController {
                         || player.getxPosition()+2 == alien.getxPosition()))
                 {
                     int xPos = alien.getxPosition();
-                    i.remove();
+//                    Don't remove alien if it comes into contact with player (This is as per the game harness)
+//                    i.remove();
                     playerController.killPlayer();
                     break;
                 }
