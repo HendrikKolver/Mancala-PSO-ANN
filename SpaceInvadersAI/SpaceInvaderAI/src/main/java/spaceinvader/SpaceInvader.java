@@ -42,8 +42,8 @@ public class SpaceInvader {
 //        setRandomWeights(nnp1);
 //        InputParser.getWeightsFromString(nnp1);
 //        InputParser.getWeightsFromString(nnp2);
-        InputParser.getWeightsFromFile(nnp1,"tmpFile.txt", ".");
-        InputParser.getWeightsFromFile(nnp2,"2015_07_07_24hTrain.txt", ".");
+        InputParser.getWeightsFromFile(nnp1,"potential_new_winner.txt", ".");
+        InputParser.getWeightsFromFile(nnp2,"potential_new_winner.txt", ".");
 
         
         int totalRoundCountp1 = 0;
@@ -55,7 +55,7 @@ public class SpaceInvader {
         int ties = 0;
         
 
-        double gamesToPlay = 5.0;
+        double gamesToPlay = 100.0;
 
         
         double start = System.currentTimeMillis();
