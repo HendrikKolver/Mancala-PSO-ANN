@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.pso.AIPlayer;
 import spaceinvader.utilities.InputParser;
@@ -26,7 +25,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 7;
+        int plyDepth = 6;
         int hiddenLayers = 4;
         String folder = args[0];
 //        folder = "../"+folder;

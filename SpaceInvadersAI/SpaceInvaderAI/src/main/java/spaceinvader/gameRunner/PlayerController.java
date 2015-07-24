@@ -1,6 +1,8 @@
 package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
+import spaceinvader.entities.AlienFactory;
+import spaceinvader.entities.BulletFactory;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.Player;
 
@@ -36,7 +38,7 @@ public class PlayerController {
             respawnCounter--;
             return;
         }
-
+        
         player.makeMove(move);
     }
     
@@ -62,6 +64,7 @@ public class PlayerController {
         }
     }
     
+    @Override
     public PlayerController clone(){
         PlayerController playerControllerCopy = new PlayerController(false);
         playerControllerCopy.setPlayer((Player) this.player.clone());
@@ -142,6 +145,14 @@ public class PlayerController {
     
     public boolean getDeathOccured(){
         return player.isDeathOccured();
+    }
+    
+    public boolean hasAlienFactory(){
+        return player.hasAlienFactory();
+    }
+    
+    public boolean hasBulletFactory(){
+         return player.hasBulletFactory();
     }
      
 }

@@ -36,6 +36,7 @@ public class Player extends GameObject{
     
     public ArrayList<String> getPossibleMoves(int roundNumber){
         ArrayList<String> possibleMoves = new ArrayList();
+
           
         if(bulletController.getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
             possibleMoves.add("Shoot");
@@ -44,8 +45,12 @@ public class Player extends GameObject{
         possibleMoves.add("Nothing");
         
         if(canLifeBeUsed() && !isBuildingBehindPlayer() && roundNumber > 4){
-            possibleMoves.add("BuildAlienFactory");
-            possibleMoves.add("BuildMissileController");
+           if(!hasAlienFactory()){
+              possibleMoves.add("BuildAlienFactory"); 
+           }
+           if(!hasBulletFactory()){
+              possibleMoves.add("BuildMissileController");
+           }
         }
         
         if(canLifeBeUsed() && !isShieldInfrontOfPlayer() && roundNumber > 4){
@@ -192,7 +197,7 @@ public class Player extends GameObject{
         this.buildings = buildings;
         int extraBullets = 0;
         for(GameObject building : buildings){
-            if(building instanceof BulletFactory){
+            if(building.getRepresentation().equals("B")){
               extraBullets++; 
             }
         }
@@ -277,7 +282,7 @@ public class Player extends GameObject{
         Player player = new Player();
         
         player.shields = ArrayListCopy.copyArray(shields);
-        player.buildings = ArrayListCopy.copyArray(buildings);
+        player.setBuildings(ArrayListCopy.copyArray(buildings));
         
         //start location
         player.xPosition = this.xPosition;
@@ -357,6 +362,24 @@ public class Player extends GameObject{
 
     public void setDeathOccured(boolean deathOccured) {
         this.deathOccured = deathOccured;
+    }
+    
+    public boolean hasAlienFactory(){
+        for(GameObject building : buildings){
+            if(building.getRepresentation().equals("X")){
+                return true;
+            }     
+        }
+        return false;
+    }
+    
+    public boolean hasBulletFactory(){
+        for(GameObject building : buildings){
+            if(building.getRepresentation().equals("B")){
+                return true;
+            }     
+        }
+        return false;
     }
     
 }

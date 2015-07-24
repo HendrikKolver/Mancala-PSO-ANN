@@ -26,7 +26,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 7;
+        int plyDepth = 6;
         int hiddenLayers = 4;
         String folder = args[0];
 //        folder = "../"+folder;

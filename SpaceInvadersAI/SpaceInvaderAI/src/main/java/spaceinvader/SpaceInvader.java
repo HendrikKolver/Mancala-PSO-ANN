@@ -37,7 +37,7 @@ public class SpaceInvader {
         int hiddenLayersP2 = 4;
         
         NeuralNetwork nnp1 = new NeuralNetwork(6,1,hiddenLayersP1,1);
-        NeuralNetwork nnp2 = new NeuralNetwork(6,1,hiddenLayersP2,1);
+        NeuralNetwork nnp2 = new NeuralNetwork(11,1,hiddenLayersP2,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
 //        InputParser.getWeightsFromString(nnp1);
@@ -55,7 +55,7 @@ public class SpaceInvader {
         int ties = 0;
         
 
-        double gamesToPlay = 50.0;
+        double gamesToPlay = 10.0;
 
         
         double start = System.currentTimeMillis();

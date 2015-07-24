@@ -2,6 +2,7 @@ package spaceinvader.treeBuilder;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
+import spaceinvader.entities.GameObject;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.utilities.ThreadPool;
 
@@ -33,8 +34,8 @@ public class TreeBuilder {
         root.nodeDepth = 0;
         
         
-//          buildTreeMultiThreaded(node, root);  
-        buildTreeSingleThreaded(root);
+        buildTreeMultiThreaded(node, root);  
+//        buildTreeSingleThreaded(root);
        
         TreeInterface tmpNode = root.children;
         
@@ -95,6 +96,9 @@ public class TreeBuilder {
     
     private double buildTree(TreeInterface node, String move) throws InterruptedException
     {
+        boolean hasFactoryBefore = node.playerController.hasAlienFactory();
+        boolean hasBulletFactoryBefore = node.playerController.hasBulletFactory();
+         
         //Run a game update cycle, updating the board to a new state if not root node
         if(move != null){
             node.nextMove(move, node.roundCount); 
@@ -122,7 +126,7 @@ public class TreeBuilder {
                 node.evaluateMyself();
                 node.nodeScore-= (500/node.getAlienController().getAlienDistanceFromWall());
             } 
-        }
+        }      
 
         if(node.isGameOver()){
             node.evaluateMyself();
@@ -138,6 +142,22 @@ public class TreeBuilder {
             
             node.evaluateMyself();
             return node.nodeScore;
+        }
+        
+        if(node.alienController.getWaveSize() >4){
+            if(!hasBulletFactoryBefore && node.playerController.hasBulletFactory()){
+                node.evaluateMyself();
+                node.nodeScore += 100;
+                return node.nodeScore;
+            }
+        }
+        
+        if(node.roundCount >=45 && node.roundCount <80){
+            if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
+                node.evaluateMyself();
+                node.nodeScore += 50;
+                return node.nodeScore;
+            }
         }
        
         ArrayList<String> possibleMoves = node.getPossibleMoves();         
@@ -159,7 +179,7 @@ public class TreeBuilder {
 
         }
         node.nodeScore = tmpNodeScoreMax;
-       
+        
         return node.nodeScore;
     }  
 }

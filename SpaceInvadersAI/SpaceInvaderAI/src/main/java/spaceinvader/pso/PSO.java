@@ -76,19 +76,19 @@ public class PSO {
        for(int x=0; x<particleCount;x++)
         {
 
-            if(x == 7){
-                initParticle(x,"2015_07_07_24hTrain.txt"); 
-            }else if(x == 27){
-                initParticle(x,"6Input_4Hidden_1stOn6Ply.txt"); 
-            }else if(x == 21){
-                initParticle(x,"potential_new_winner.txt"); 
-            }else if(x == 16){
-                initParticle(x,"6inputWinner.txt"); 
-            }else if(x == 35){
-                initParticle(x,"2015_07_07_veryVeryGood.txt"); 
-            }else{
+//            if(x == 7){
+//                initParticle(x,"2015_07_07_24hTrain.txt"); 
+//            }else if(x == 27){
+//                initParticle(x,"6Input_4Hidden_1stOn6Ply.txt"); 
+//            }else if(x == 21){
+//                initParticle(x,"potential_new_winner.txt"); 
+//            }else if(x == 16){
+//                initParticle(x,"6inputWinner.txt"); 
+//            }else if(x == 35){
+//                initParticle(x,"2015_07_07_veryVeryGood.txt"); 
+//            }else{
                 initParticle(x);
-            }
+//            }
         }
         int currentIteration = 0;
         

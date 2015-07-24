@@ -115,7 +115,7 @@ public class TreeComposite extends TreeInterface {
             inputs[4] = this.bulletController.getPlayerBulletCount();
             inputs[5] = this.roundCount;
         }else{
-            inputs = new double[10];
+            inputs = new double[11];
             inputs[0] = this.alienController.getAlienCount();
             inputs[1] = this.playerController.getAllShields().size();
             inputs[2] = this.bulletController.getPlayerBulletCount();
@@ -126,7 +126,7 @@ public class TreeComposite extends TreeInterface {
 
             int bulletFactoryCount = 0;
             for(GameObject building : buildings){
-                if(building instanceof BulletFactory){
+                if(building.getRepresentation().equals("B")){
                     bulletFactoryCount++;
                 }
             }
@@ -135,7 +135,7 @@ public class TreeComposite extends TreeInterface {
 
             int alienFactoryCount = 0;
             for(GameObject building : buildings){
-                if(building instanceof AlienFactory){
+                if(building.getRepresentation().equals("X")){
                     alienFactoryCount++;
                 }
             }
@@ -144,6 +144,7 @@ public class TreeComposite extends TreeInterface {
 
             inputs[8] = this.alienController.getAlienDistanceFromWall();
             inputs[9] = this.roundCount;
+            inputs[10] = this.alienController.getWaveSize();
         }
         
         
