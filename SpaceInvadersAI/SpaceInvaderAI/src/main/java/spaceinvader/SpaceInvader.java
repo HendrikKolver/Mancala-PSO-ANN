@@ -4,12 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import spaceinvader.entities.AlienFactory;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.gameRunner.AlienController;
@@ -55,7 +53,7 @@ public class SpaceInvader {
         int ties = 0;
         
 
-        double gamesToPlay = 10.0;
+        double gamesToPlay = 50.0;
 
         
         double start = System.currentTimeMillis();
@@ -67,7 +65,7 @@ public class SpaceInvader {
             while(true)
             { 
 //                sleep(200);
-//                System.in.read();
+                System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
                     if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
@@ -84,10 +82,10 @@ public class SpaceInvader {
                     }
                     break;
                 }
-//                System.out.println("P1 board---------------");
-//                player1.getCurrentPosition().printBoard();
-//                System.out.println("P2 board---------------");
-//                player2.getCurrentPosition().printBoard();
+                System.out.println("P1 board---------------");
+                player1.getCurrentPosition().printBoard();
+                System.out.println("P2 board---------------");
+                player2.getCurrentPosition().printBoard();
                 long moveStart = System.currentTimeMillis();
                 player1.playRound();
 //                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));

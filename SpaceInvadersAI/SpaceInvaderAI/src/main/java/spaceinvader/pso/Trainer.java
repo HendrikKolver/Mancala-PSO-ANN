@@ -56,8 +56,8 @@ public class Trainer {
         double w= 0.72;
         double c1 = 1.4;
         double c2 = 1.4;
-        particleCount =40;
-        double maxVel =0.3; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
+        particleCount =50;
+        double maxVel =0.2; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
         int maxIter = iterations;//Integer.parseInt(JOptionPane.showInputDialog("Number of Iterations: "));
         double uB = 2; //upper bound
         double lB = -2; //lower bound

@@ -1,8 +1,6 @@
 package spaceinvader.gameRunner;
 
 import java.util.ArrayList;
-import spaceinvader.entities.AlienFactory;
-import spaceinvader.entities.BulletFactory;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.Player;
 

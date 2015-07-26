@@ -27,7 +27,7 @@ public class Player extends GameObject{
         this.xSize =3;
         this.ySize =1;
         bulletLimit = 1;
-        this.lives = 2;
+        this.lives = 3;
         this.isAlive = true;
         this.kills = 0;
         buildings = new ArrayList();
