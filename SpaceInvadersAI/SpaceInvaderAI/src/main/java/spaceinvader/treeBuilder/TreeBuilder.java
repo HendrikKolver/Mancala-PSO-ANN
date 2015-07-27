@@ -19,6 +19,7 @@ public class TreeBuilder {
     public int globalPlayer = 2;
     public NeuralNetwork network;
     public boolean normalEval;
+    public boolean aggresiveTactic;
 
     public TreeBuilder(int depth)
     {
@@ -26,8 +27,9 @@ public class TreeBuilder {
         normalEval = false;
     }
     
-    public TreeInterface build(TreeInterface node) throws InterruptedException
+    public TreeInterface build(TreeInterface node, boolean aggresiveTactic) throws InterruptedException
     {
+        this.aggresiveTactic = aggresiveTactic;
 //        double start = System.currentTimeMillis();
         network = node.evaluation;
         TreeInterface root = node;
@@ -73,7 +75,7 @@ public class TreeBuilder {
         for(String possibleMove : possibleMoves){
             tmpNode = root.clone();
             root.addChild(tmpNode);
-            ThreadedBuilder builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth);
+            ThreadedBuilder builderThread = new ThreadedBuilder(tmpNode,possibleMove,this.plyDepth, this.aggresiveTactic);
             builderThread.normalEval = this.normalEval;
             builders.add(builderThread);
             executor.execute(builderThread);
@@ -144,21 +146,24 @@ public class TreeBuilder {
             return node.nodeScore;
         }
         
-        if(node.alienController.getWaveSize() >4){
-            if(!hasBulletFactoryBefore && node.playerController.hasBulletFactory()){
-                node.evaluateMyself();
-                node.nodeScore += 100;
-                return node.nodeScore;
+        if(this.aggresiveTactic){
+           if(node.alienController.getWaveSize() >4){
+                if(!hasBulletFactoryBefore && node.playerController.hasBulletFactory()){
+                    node.evaluateMyself();
+                    node.nodeScore += 100;
+                    return node.nodeScore;
+                }
             }
+
+            if(node.roundCount >=45 && node.roundCount <=180){
+                if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
+                    node.evaluateMyself();
+                    node.nodeScore += 100;
+                    return node.nodeScore;
+                }
+            } 
         }
         
-        if(node.roundCount >=45 && node.roundCount <=180){
-            if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
-                node.evaluateMyself();
-                node.nodeScore += 100;
-                return node.nodeScore;
-            }
-        }
        
         ArrayList<String> possibleMoves = node.getPossibleMoves();         
         

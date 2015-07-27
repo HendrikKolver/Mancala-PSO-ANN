@@ -35,7 +35,7 @@ public class Trainer {
         int neighSize = 4;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
         int gamesPlayedPerPlayerPerRound = 5;
         
-       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid,gamesPlayedPerPlayerPerRound);
+       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid,gamesPlayedPerPlayerPerRound, true);
 
        swarmOptimize.trainLocal(neighSize);
 
@@ -69,7 +69,7 @@ public class Trainer {
         int global= 0;//Integer.parseInt(JOptionPane.showInputDialog("Global = 1, Local = 0"));
          int gamesPlayedPerPlayerPerRound = 5;
         
-       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid,gamesPlayedPerPlayerPerRound);
+       PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid,gamesPlayedPerPlayerPerRound, true);
 
        swarmOptimize.trainLocal2Player(neighSize);
 

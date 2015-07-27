@@ -15,19 +15,21 @@ public class AIPlayer {
     private int roundCount;
     private TreeInterface currentPosition;
     public boolean normalEval;
+    private boolean aggresiveTactic;
     
-    public AIPlayer(int plyDepth, NeuralNetwork neuralNetwork){
+    public AIPlayer(int plyDepth, NeuralNetwork neuralNetwork, boolean aggresiveTactic){
+        this.aggresiveTactic = aggresiveTactic;
         this.plyDepth = plyDepth;
         this.neuralNetwork = neuralNetwork;
         this.roundCount = 0;
-        currentPosition = new TreeComposite(neuralNetwork, roundCount);
+        currentPosition = new TreeComposite(neuralNetwork, roundCount, aggresiveTactic);
         normalEval = false;
     }
     
     public void playRound() throws InterruptedException{
         TreeBuilder treeBuilder = new TreeBuilder(plyDepth);
         treeBuilder.normalEval = this.normalEval;
-        currentPosition = treeBuilder.build(currentPosition);
+        currentPosition = treeBuilder.build(currentPosition, this.aggresiveTactic);
         this.roundCount = currentPosition.roundCount;
     }
     

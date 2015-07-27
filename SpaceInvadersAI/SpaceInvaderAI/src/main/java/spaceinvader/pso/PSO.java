@@ -43,10 +43,11 @@ public class PSO {
     private final int gamesPlayed;
     private double maxIterationTime;
     private int maxIterationRound;
+    private boolean aggresiveTactic;
 
-    public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid, int gamesPlayed)
+    public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid, int gamesPlayed, boolean aggresiveTactic)
     {
-
+        this.aggresiveTactic = aggresiveTactic;
        this.c1 = c1;
        this.c2 = c2;
        this.w = w;
@@ -126,10 +127,10 @@ public class PSO {
                 
                 for(int i = 0; i<tournamentPool.length;i++){                      
                         //creating new "you" players after every round to reset the board
-                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic);
+                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic);
 
-                    AIPlayer opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork);
+                    AIPlayer opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork, aggresiveTactic);
 
                     while(true)
                     { 
@@ -145,7 +146,7 @@ public class PSO {
                     setOpponentWinsNormal(particles[x],you,opponent);
 
                     //Reset the opponent board for another game
-                    opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork);
+                    opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork, aggresiveTactic);
 
                     while(true)
                     { 
@@ -318,8 +319,8 @@ public class PSO {
             {   
                 for(int i = 0; i<this.gamesPlayed;i++){
                     //this will be your players
-                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic);
+                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic);
 
 
                     while(true)
@@ -633,8 +634,8 @@ public class PSO {
         {
             for (int i = 0; i < this.gamesPlayed; i++) {
                 //this will be your players
-                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic);
+                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic);
 
                 while(true)
                 { 
@@ -722,10 +723,10 @@ public class PSO {
                 }
 
                 //creating new "you" players after every round to reset the board
-                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic);
+                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic);
 
-                AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork, aggresiveTactic);
 
                 while(true)
                 { 
@@ -740,7 +741,7 @@ public class PSO {
                 //updateWins
                 setOpponentWinsNormal(particles[x],you,opponent);
 
-                opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork, aggresiveTactic);
 
                 while(true)
                 { 

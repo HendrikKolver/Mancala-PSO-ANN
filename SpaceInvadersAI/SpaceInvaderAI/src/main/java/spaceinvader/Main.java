@@ -35,7 +35,7 @@ public class Main {
         getWeightsFromString(nn);
        
         
-        AIPlayer player = new AIPlayer(plyDepth,nn);
+        AIPlayer player = new AIPlayer(plyDepth,nn, false);
         
         player = InputParser.getState(player, folder);
 //        System.out.println("before ----");

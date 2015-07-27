@@ -14,8 +14,10 @@ public class ThreadedBuilder implements Runnable {
     public boolean isCompleted;
     int plyDepth;
     public boolean normalEval;
+    private boolean aggresiveTactic;
     
-    public ThreadedBuilder(TreeInterface node, String move, int plyDepth){
+    public ThreadedBuilder(TreeInterface node, String move, int plyDepth, boolean aggresiveTactic){
+        this.aggresiveTactic = aggresiveTactic;
         this.rootNode = node;
         this.initialMove = move;
         this.isCompleted = false;
@@ -98,20 +100,22 @@ public class ThreadedBuilder implements Runnable {
             return node.nodeScore;
         }
         
-        if(node.alienController.getWaveSize() >4){
-            if(!hasBulletFactoryBefore && node.playerController.hasBulletFactory()){
-                node.evaluateMyself();
-                node.nodeScore += 100;
-                return node.nodeScore;
+        if(this.aggresiveTactic){
+           if(node.alienController.getWaveSize() >4){
+                if(!hasBulletFactoryBefore && node.playerController.hasBulletFactory()){
+                    node.evaluateMyself();
+                    node.nodeScore += 100;
+                    return node.nodeScore;
+                }
             }
-        }
-        
-        if(node.roundCount >=45 && node.roundCount <=180){
-            if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
-                node.evaluateMyself();
-                node.nodeScore += 100;
-                return node.nodeScore;
-            }
+
+            if(node.roundCount >=45 && node.roundCount <=180){
+                if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
+                    node.evaluateMyself();
+                    node.nodeScore += 100;
+                    return node.nodeScore;
+                }
+            } 
         }
        
         ArrayList<String> possibleMoves = node.getPossibleMoves();  

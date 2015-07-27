@@ -19,6 +19,7 @@ public abstract class TreeInterface {
     protected boolean finalState;
     public int roundCount;
     protected String move;
+    protected boolean agressiveTactic;
     
     protected AlienController alienController;
     protected PlayerController playerController;

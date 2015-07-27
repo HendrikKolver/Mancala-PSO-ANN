@@ -17,8 +17,9 @@ import spaceinvader.neuralNetwork.Neuron;
  */
 public class TreeComposite extends TreeInterface {       
      
-    public TreeComposite(NeuralNetwork n, int roundCounter)
+    public TreeComposite(NeuralNetwork n, int roundCounter, boolean aggresiveTactic)
     {
+        this.agressiveTactic = aggresiveTactic;
         evaluation = n;
         children = null;
         next = null;
@@ -34,7 +35,7 @@ public class TreeComposite extends TreeInterface {
     
     public TreeComposite()
     {
-        
+        agressiveTactic = false;
     }
  
     @Override
@@ -178,6 +179,7 @@ public class TreeComposite extends TreeInterface {
         nodeCopy.finalState = this.finalState;
         nodeCopy.roundCount = this.roundCount;
         nodeCopy.evaluation = this.evaluation.clone();
+        nodeCopy.agressiveTactic = this.agressiveTactic;
         
         return nodeCopy;
     }
