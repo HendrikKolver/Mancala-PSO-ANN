@@ -122,8 +122,10 @@ public class AlienController {
     
     
     public void checkToAddRow(int roundNumber){
-        
-        if(moveDownRound+1 == roundNumber){
+        if(this.getAlienCount() == 0 && roundNumber >5){
+            addNewRow();
+            addAlien();
+        }else if(moveDownRound+1 == roundNumber){
            if(alienRow.isEmpty() || alienRow.get(alienRow.size()-1).get(0).getyPosition() <10){
                 addNewRow();
                  addAlien(); 

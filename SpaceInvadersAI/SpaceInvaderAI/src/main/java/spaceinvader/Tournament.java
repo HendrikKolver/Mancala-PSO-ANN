@@ -31,24 +31,46 @@ public class Tournament {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException {           
-        int plyDepth = 6;
+        
 
         ArrayList<TournamentPlayer> players = new ArrayList();
        
+        players.add(new TournamentPlayer("Agressive Non-aggresive trained solution",true,6,4,"potential_new_winner.txt"));
         players.add(new TournamentPlayer("Non-aggresive trained solution",false,6,4,"potential_new_winner.txt"));
-        players.add(new TournamentPlayer("Aggresive trained solution",true,11,4,"tmpFile.txt"));
-        players.add(new TournamentPlayer("Non-aggresive random",false,6,4,false));
-        players.add(new TournamentPlayer("Non-aggresive normal eval",false,6,4,true));
+        players.add(new TournamentPlayer("Aggresive trained solution",true,11,4,"11input35roundTrain.txt"));
+        players.add(new TournamentPlayer("Non-aggresive Aggresive trained solution",false,11,4,"11input35roundTrain.txt"));
+//        players.add(new TournamentPlayer("Non-aggresive random",false,6,4,false));
+//        players.add(new TournamentPlayer("Non-aggresive normal eval",false,6,4,true));
         players.add(new TournamentPlayer("Aggresive random",true,6,4,false));
-        players.add(new TournamentPlayer("Aggresive normal eval",true,6,4,true));
-        
-        double totalGames = (players.size() * players.size())*2;
+//        players.add(new TournamentPlayer("Aggresive normal eval",true,6,4,true));
+        int plyDepth = 6;
+        boolean playAgainstSelf = true;
+        int tournamentsToPlay = 5;
         int counter = 0;
+        double totalGames = ((players.size() * players.size())*2)*tournamentsToPlay;
+        
+        for (int i = 0; i < tournamentsToPlay; i++) {
+            counter = runTournament(players, plyDepth, totalGames, counter, playAgainstSelf);
+        }
+        
+        System.out.println("----------Tournament summary----------");
+        System.out.println("Player Name                              \t Wins \t Loss \t Ties \t Score");
+        for(TournamentPlayer tPlayer : players){
+            System.out.println(tPlayer.getPlayerName() + " \t   " + tPlayer.getWins() + " \t " + tPlayer.getLosses() + " \t " + tPlayer.getTies() + " \t " + tPlayer.getScore());
+        }
+        System.out.println("--------------------------------------");
+        ThreadPool.executor.shutdown();
+    }
+
+    private static int runTournament(ArrayList<TournamentPlayer> players, int plyDepth, double totalGames, int counter, boolean playAgainstSelf) throws InterruptedException {
         for(TournamentPlayer tPlayer : players){
             for(TournamentPlayer tOpponent : players){
+                if(!playAgainstSelf && tPlayer == tOpponent){
+                    break;
+                }
                 //Play as player 1
-                AIPlayer player1 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), false);
-                AIPlayer player2 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), true);
+                AIPlayer player1 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy());
+                AIPlayer player2 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy());
                 
                 while(true)
                 { 
@@ -65,7 +87,7 @@ public class Tournament {
                             tPlayer.winGame();
                             tOpponent.loseGame();
                         }else if(player1.getKillCount() == player2.getKillCount() && player1.getRoundCount() >=200){
-                             tPlayer.tieGame();
+                            tPlayer.tieGame();
                             tOpponent.tieGame();
                         }else{
                             tPlayer.loseGame();
@@ -82,8 +104,8 @@ public class Tournament {
                 System.out.println("PercentageComplete: "+ Math.round((counter/totalGames)*100.0) + "%");
                 
                 //Play as player 2
-                player1 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), false);
-                player2 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), true);
+                player1 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy());
+                player2 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy());
                 
                 while(true)
                 { 
@@ -115,15 +137,8 @@ public class Tournament {
                 counter++;
                 System.out.println("PercentageComplete: "+ Math.round((counter/totalGames)*100.0) + "%");
             }
-            
         }
-        System.out.println("----------Tournament summary----------");
-        System.out.println("Player Name                              \t Wins \t Loss \t Ties \t Score");
-        for(TournamentPlayer tPlayer : players){
-            System.out.println(tPlayer.getPlayerName() + " \t   " + tPlayer.getWins() + " \t " + tPlayer.getLosses() + " \t " + tPlayer.getTies() + " \t " + tPlayer.getScore());
-        }
-        System.out.println("--------------------------------------");
-        ThreadPool.executor.shutdown();
+        return counter;
     }
     
     
