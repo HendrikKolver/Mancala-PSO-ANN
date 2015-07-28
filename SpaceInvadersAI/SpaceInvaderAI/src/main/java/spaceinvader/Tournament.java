@@ -40,6 +40,8 @@ public class Tournament {
         players.add(new TournamentPlayer("Non-aggresive trained solution",false,6,4,"potential_new_winner.txt"));
         players.add(new TournamentPlayer("Aggresive trained solution",true,11,4,"11input35roundTrain.txt"));
         players.add(new TournamentPlayer("Non-aggresive Aggresive trained solution",false,11,4,"11input35roundTrain.txt"));
+        players.add(new TournamentPlayer("Non-aggresive WaveSizeBeater",false,11,4,"11input35roundTrain.txt"));
+        players.add(new TournamentPlayer("Aggresive WaveSizeBeater",true,11,4,"waveSizeBeater.txt"));
         players.add(new TournamentPlayer("Non-aggresive random",false,6,4,false));
         players.add(new TournamentPlayer("Non-aggresive normal eval",false,6,4,true));
         players.add(new TournamentPlayer("Aggresive random",true,6,4,false));
@@ -59,7 +61,7 @@ public class Tournament {
         for(TournamentPlayer tPlayer : players){
             System.out.println(tPlayer.getPlayerName() + " \t   " + tPlayer.getWins() + " \t " + tPlayer.getLosses() + " \t " + tPlayer.getTies() + " \t " + tPlayer.getScore());
             if(tPlayer.getPlayerName().equals("Aggresive random") || tPlayer.getPlayerName().equals("Non-aggresive random")){
-                writeTmpFile(tPlayer.getNeuralNetwork(), tPlayer.getPlayerName()+".txt");
+                writeTmpFile(tPlayer.getNeuralNetwork(), (tPlayer.getPlayerName()+".txt"));
             }
         }
         System.out.println("--------------------------------------");
