@@ -17,12 +17,12 @@ public class AIPlayer {
     public boolean normalEval;
     private boolean aggresiveTactic;
     
-    public AIPlayer(int plyDepth, NeuralNetwork neuralNetwork, boolean aggresiveTactic){
+    public AIPlayer(int plyDepth, NeuralNetwork neuralNetwork, boolean aggresiveTactic, NeuralNetwork backup){
         this.aggresiveTactic = aggresiveTactic;
         this.plyDepth = plyDepth;
         this.neuralNetwork = neuralNetwork;
         this.roundCount = 0;
-        currentPosition = new TreeComposite(neuralNetwork, roundCount, aggresiveTactic);
+        currentPosition = new TreeComposite(neuralNetwork, roundCount, aggresiveTactic, backup);
         normalEval = false;
     }
     

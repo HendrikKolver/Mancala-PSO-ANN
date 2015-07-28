@@ -36,19 +36,14 @@ public class Tournament {
 
         ArrayList<TournamentPlayer> players = new ArrayList();
        
-        players.add(new TournamentPlayer("Agressive Non-aggresive trained solution",true,6,4,"potential_new_winner.txt"));
-        players.add(new TournamentPlayer("Non-aggresive trained solution",false,6,4,"potential_new_winner.txt"));
-        players.add(new TournamentPlayer("Aggresive trained solution",true,11,4,"11input35roundTrain.txt"));
-        players.add(new TournamentPlayer("Non-aggresive Aggresive trained solution",false,11,4,"11input35roundTrain.txt"));
-        players.add(new TournamentPlayer("Non-aggresive WaveSizeBeater",false,11,4,"11input35roundTrain.txt"));
-        players.add(new TournamentPlayer("Aggresive WaveSizeBeater",true,11,4,"waveSizeBeater.txt"));
-        players.add(new TournamentPlayer("Non-aggresive random",false,6,4,false));
-        players.add(new TournamentPlayer("Non-aggresive normal eval",false,6,4,true));
-        players.add(new TournamentPlayer("Aggresive random",true,6,4,false));
-        players.add(new TournamentPlayer("Aggresive normal eval",true,6,4,true));
+        players.add(new TournamentPlayer("Non-aggresive trained solution",false,6,4,"handsDownWinner.txt"));
+        players.add(new TournamentPlayer("train1",false,11,6,"train1.txt"));
+        players.add(new TournamentPlayer("train2",false,11,6,"train2.txt"));
+        players.add(new TournamentPlayer("train3",false,11,6,"train3.txt"));
+        players.add(new TournamentPlayer("train4",false,11,6,"train4.txt"));
         int plyDepth = 6;
         boolean playAgainstSelf = true;
-        int tournamentsToPlay = 5;
+        int tournamentsToPlay = 1;
         int counter = 0;
         double totalGames = ((players.size() * players.size())*2)*tournamentsToPlay;
         
@@ -74,12 +69,13 @@ public class Tournament {
                 if(!playAgainstSelf && tPlayer == tOpponent){
                     break;
                 }
+                 NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
                 //Play as player 1
-                AIPlayer player1 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy());
+                AIPlayer player1 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy(), backup);
                 if(tPlayer.isNormalEval()){
                     player1.normalEval = true;
                 }
-                AIPlayer player2 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy());
+                AIPlayer player2 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy(), backup);
                 if(tOpponent.isNormalEval()){
                     player2.normalEval = true;
                 }
@@ -116,11 +112,11 @@ public class Tournament {
                 System.out.println("PercentageComplete: "+ Math.round((counter/totalGames)*100.0) + "%");
                 
                 //Play as player 2
-                player1 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy());
+                player1 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy(), backup);
                 if(tOpponent.isNormalEval()){
                     player1.normalEval = true;
                 }
-                player2 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy());
+                player2 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy(), backup);
                 if(tPlayer.isNormalEval()){
                     player2.normalEval = true;
                 }

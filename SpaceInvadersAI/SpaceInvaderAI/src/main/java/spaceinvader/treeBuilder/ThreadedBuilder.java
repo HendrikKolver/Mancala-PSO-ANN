@@ -35,7 +35,6 @@ public class ThreadedBuilder implements Runnable {
         } catch (InterruptedException ex) {
             Logger.getLogger(ThreadedBuilder.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
     private double buildTree(TreeInterface node, String move) throws InterruptedException
@@ -54,22 +53,34 @@ public class ThreadedBuilder implements Runnable {
         //This results in the game choosing death for the player
         //Negative points for dying
         if(node.getPlayerController().getDeathOccured() && node.nodeDepth != 0){
-            node.evaluateMyself();
+            if(this.normalEval){
+                node.evaluateMyself(true);
+            }else{
+                node.evaluateMyself();
+            }
             node.nodeScore-= 1000;
             return node.nodeScore;
         }
 
         //negative points for letting aliens come too close   
-        if(node.getAlienController().getAlienDistanceFromWall() <=2){
+        if(node.getAlienController().getAlienDistanceFromWall() <=3){
             if(node.nodeDepth != 0){
+                if(this.normalEval){
+                node.evaluateMyself(true);
+            }else{
                 node.evaluateMyself();
+            }
                 node.nodeScore-= (500/node.getAlienController().getAlienDistanceFromWall());
                 return node.nodeScore;
             }else{
+                if(this.normalEval){
+                node.evaluateMyself(true);
+            }else{
                 node.evaluateMyself();
+            }
                 node.nodeScore-= (500/node.getAlienController().getAlienDistanceFromWall());
             } 
-        }
+        }       
 
         if(node.isGameOver()){
             if(this.normalEval){
@@ -98,21 +109,6 @@ public class ThreadedBuilder implements Runnable {
                 node.evaluateMyself();
             }
             return node.nodeScore;
-        }
-        
-        if(this.aggresiveTactic){
-           if(node.alienController.getWaveSize() >4){
-                if(!hasBulletFactoryBefore && node.playerController.hasBulletFactory()){
-                    node.evaluateMyself();
-                    node.nodeScore += 100;
-                    return node.nodeScore;
-                }
-                if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
-                    node.evaluateMyself();
-                    node.nodeScore += 100;
-                    return node.nodeScore;
-                }
-            }
         }
        
         ArrayList<String> possibleMoves = node.getPossibleMoves();  

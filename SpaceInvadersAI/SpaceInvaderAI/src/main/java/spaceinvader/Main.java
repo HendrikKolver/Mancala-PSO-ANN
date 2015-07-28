@@ -33,9 +33,10 @@ public class Main {
         NeuralNetwork nn = new NeuralNetwork(6,1,hiddenLayers,1);
 //        getWeightsFromFile(nn);
         getWeightsFromString(nn);
-       
+       NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
         
-        AIPlayer player = new AIPlayer(plyDepth,nn, false);
+        AIPlayer player = new AIPlayer(plyDepth,nn, false, backup);
+        
         
         player = InputParser.getState(player, folder);
 //        System.out.println("before ----");

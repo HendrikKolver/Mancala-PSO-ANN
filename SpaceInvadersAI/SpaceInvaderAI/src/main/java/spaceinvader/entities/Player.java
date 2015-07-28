@@ -44,7 +44,7 @@ public class Player extends GameObject{
         
         possibleMoves.add("Nothing");
         
-        if(canLifeBeUsed() && !isBuildingBehindPlayer() && roundNumber > 4){
+        if(canLifeBeUsed() && !isBuildingBehindPlayer() && roundNumber >= 4){
            if(!hasAlienFactory()){
               possibleMoves.add("BuildAlienFactory"); 
            }
@@ -53,7 +53,7 @@ public class Player extends GameObject{
            }
         }
         
-        if(canLifeBeUsed() && !isShieldInfrontOfPlayer() && roundNumber > 4){
+        if(canLifeBeUsed() && !isShieldInfrontOfPlayer() && roundNumber >= 4){
             possibleMoves.add("BuildShield");
         }
         

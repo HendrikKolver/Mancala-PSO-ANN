@@ -64,11 +64,11 @@ public class AlienController {
             
             if(firstRow != null){
                 int probability = RandomGenerator.randInt(1, 1000);//Remove to remove randomness
-                if(probability <= 333){//Remove to remove randomness
+//                if(probability <= 333){//Remove to remove randomness
                     if(!firstRow.isEmpty()){
                         Alien alienToShoot = getClosestAlienToPlayer(firstRow);
                         alienToShoot.fireBullet();
-                    } //Remove to remove randomness
+//                    } //Remove to remove randomness
                 }else{
                     int rowChoice = 0;
                     if(secondRow != null){
@@ -365,8 +365,7 @@ public class AlienController {
             }
         }
         return minDistance;
-    }
-    
+    }  
     
     public String dumpGameState(){
         return null;

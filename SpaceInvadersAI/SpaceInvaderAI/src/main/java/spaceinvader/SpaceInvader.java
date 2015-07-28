@@ -35,13 +35,15 @@ public class SpaceInvader {
         int hiddenLayersP2 = 4;
         
         NeuralNetwork nnp1 = new NeuralNetwork(6,1,hiddenLayersP1,1);
-        NeuralNetwork nnp2 = new NeuralNetwork(11,1,hiddenLayersP2,1);
+        NeuralNetwork nnp2 = new NeuralNetwork(6,1,hiddenLayersP2,1);
+        NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
 //        InputParser.getWeightsFromString(nnp1);
 //        InputParser.getWeightsFromString(nnp2);
-        InputParser.getWeightsFromFile(nnp1,"potential_new_winner.txt", ".");
-        InputParser.getWeightsFromFile(nnp2,"tmpFile.txt", ".");
+        InputParser.getWeightsFromFile(nnp1,"handsDownWinner.txt", ".");
+        InputParser.getWeightsFromFile(nnp2,"handsDownWinner.txt", ".");
+        InputParser.getWeightsFromFile(backup,"11input35roundTrain.txt", ".");
 
         
         int totalRoundCountp1 = 0;
@@ -53,19 +55,19 @@ public class SpaceInvader {
         int ties = 0;
         
 
-        double gamesToPlay = 50.0;
+        double gamesToPlay = 20.0;
 
         
         double start = System.currentTimeMillis();
         
         for (int i = 0; i < gamesToPlay; i++) {
-            AIPlayer player1 = new AIPlayer(plyDepth,nnp1, false);
-            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, true);
+            AIPlayer player1 = new AIPlayer(plyDepth,nnp1, true, backup);
+            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, false, backup);
 //            player1.normalEval = true;
             while(true)
             { 
 //                sleep(200);
-//                System.in.read();
+                System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
                     if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
@@ -82,16 +84,16 @@ public class SpaceInvader {
                     }
                     break;
                 }
-//                System.out.println("P1 board---------------");
-//                player1.getCurrentPosition().printBoard();
-//                System.out.println("P2 board---------------");
-//                player2.getCurrentPosition().printBoard();
+                System.out.println("P1 board---------------");
+                player1.getCurrentPosition().printBoard();
+                System.out.println("P2 board---------------");
+                player2.getCurrentPosition().printBoard();
                 long moveStart = System.currentTimeMillis();
                 player1.playRound();
 //                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
                 player2.playRound();
                 syncBoards(player1, player2);
-                
+//                
                 
             }
             totalRoundCountp1 += player1.getRoundCount();

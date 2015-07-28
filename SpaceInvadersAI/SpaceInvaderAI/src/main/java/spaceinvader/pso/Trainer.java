@@ -56,15 +56,15 @@ public class Trainer {
         double w= 0.72;
         double c1 = 1.4;
         double c2 = 1.4;
-        particleCount =50;
+        particleCount =30;
         double maxVel =0.2; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
         int maxIter = iterations;//Integer.parseInt(JOptionPane.showInputDialog("Number of Iterations: "));
-        double uB = 2; //upper bound
-        double lB = -2; //lower bound
+        double uB = 1; //upper bound
+        double lB = -1; //lower bound
         int inputs = 11;
         int outputs = 1;
-        int hidden = 4;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
-        int sigmoid = 1;
+        int hidden = 6;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
+        int sigmoid = 0;
         int neighSize = 4;//Integer.parseInt(JOptionPane.showInputDialog("Neighborhood Size: "));
         int global= 0;//Integer.parseInt(JOptionPane.showInputDialog("Global = 1, Local = 0"));
          int gamesPlayedPerPlayerPerRound = 5;

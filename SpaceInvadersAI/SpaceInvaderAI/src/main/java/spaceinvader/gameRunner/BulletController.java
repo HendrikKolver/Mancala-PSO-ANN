@@ -192,7 +192,6 @@ public class BulletController {
                     if(!increaseCounter){
                         break;
                     }
-
                 }
 
                 //This is incase a player fires a bullet and then builds a shield on top of that bullet.
@@ -273,11 +272,9 @@ public class BulletController {
             }
             
             if(i < enemyBulletList.size()){
-                for(GameObject playerBullet : enemyBulletList){
-                    
+                for(GameObject playerBullet : playerBulletList){
                     if(bulletColissionDetection(enemyBulletList.get(i),playerBullet,1) && 
-                            enemyBulletList.get(i).getObjectID() != playerBullet.getObjectID() && 
-                            playerBullet.getPlayer() == 1)
+                            enemyBulletList.get(i).getObjectID() != playerBullet.getObjectID())
                     {
                         bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
                         enemyBulletList.remove(enemyBulletList.get(i));

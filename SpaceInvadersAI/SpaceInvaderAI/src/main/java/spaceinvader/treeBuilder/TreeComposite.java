@@ -17,10 +17,12 @@ import spaceinvader.neuralNetwork.Neuron;
  */
 public class TreeComposite extends TreeInterface {       
      
-    public TreeComposite(NeuralNetwork n, int roundCounter, boolean aggresiveTactic)
+    public TreeComposite(NeuralNetwork n, int roundCounter, boolean aggresiveTactic, NeuralNetwork backup)
     {
         this.agressiveTactic = aggresiveTactic;
         evaluation = n;
+        this.originalEval = evaluation;
+        this.backup = backup;
         children = null;
         next = null;
         nodeScore = 0;
@@ -93,9 +95,16 @@ public class TreeComposite extends TreeInterface {
      }
      
      private void normalEval(){
-        double score = this.playerController.getKillCount();
-        score += (this.playerController.getLives()*10);
-        score += (this.roundCount/10.0);
+         double score = 0;
+//        double score = this.playerController.getKillCount();
+//        score += (this.playerController.getLives()*10);
+//        score += (this.roundCount);
+        if(this.playerController.hasAlienFactory()){
+            score += 30;
+        }
+        if(this.playerController.hasBulletFactory()){
+            score += 20;
+        }
 
         if(isGameOver() && this.roundCount !=200){
             score-=100;
@@ -179,6 +188,8 @@ public class TreeComposite extends TreeInterface {
         nodeCopy.finalState = this.finalState;
         nodeCopy.roundCount = this.roundCount;
         nodeCopy.evaluation = this.evaluation.clone();
+        nodeCopy.backup = this.backup.clone();
+        nodeCopy.originalEval = this.originalEval.clone();
         nodeCopy.agressiveTactic = this.agressiveTactic;
         
         return nodeCopy;
@@ -356,6 +367,15 @@ public class TreeComposite extends TreeInterface {
     @Override
     public String getMove(){
         return this.move;
+    }
+
+    @Override
+    public void setBackupTo(boolean val) {
+        if(val){
+            this.evaluation = backup;
+        }else{
+            this.evaluation = originalEval;
+        }
     }
          
 }

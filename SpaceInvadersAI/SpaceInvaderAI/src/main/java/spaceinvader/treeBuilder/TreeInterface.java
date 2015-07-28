@@ -26,6 +26,8 @@ public abstract class TreeInterface {
     protected BulletController bulletController;
     
     public NeuralNetwork evaluation;
+    public NeuralNetwork backup;
+    public NeuralNetwork originalEval;
     
     protected abstract TreeInterface clone();
     abstract void nextMove(String move, int roundCounter);
@@ -43,6 +45,7 @@ public abstract class TreeInterface {
     public abstract PlayerController getPlayerController();
     public abstract BulletController getBulletController();
     public abstract AlienController getAlienController();
+    public abstract void setBackupTo(boolean val);
     
     
      

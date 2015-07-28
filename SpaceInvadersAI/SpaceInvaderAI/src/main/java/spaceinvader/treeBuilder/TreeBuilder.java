@@ -35,6 +35,12 @@ public class TreeBuilder {
         TreeInterface root = node;
         root.nodeDepth = 0;
         
+//        node.setBackupTo(false); 
+//        if(aggresiveTactic){
+//            if(node.getAlienController().getWaveSize() > 4 && !node.getPlayerController().hasAlienFactory()){
+//                this.normalEval = true;
+//            }
+//        }
         
         buildTreeMultiThreaded(node, root);  
 //        buildTreeSingleThreaded(root);
@@ -48,6 +54,20 @@ public class TreeBuilder {
         
         while(tmpNode != null)
         {
+            if(aggresiveTactic){
+                if(node.roundCount ==4){
+                    if(tmpNode.move.equals("BuildAlienFactory")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+                if(node.roundCount ==5){
+                    if(tmpNode.move.equals("BuildShield")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+            }
             if(tmpNode.nodeScore > tmpCount)
             {
                 tmpCount = tmpNode.nodeScore;
@@ -55,6 +75,7 @@ public class TreeBuilder {
             }
             tmpNode = tmpNode.next; 
         }
+        
         return finalNode;
     }
     
