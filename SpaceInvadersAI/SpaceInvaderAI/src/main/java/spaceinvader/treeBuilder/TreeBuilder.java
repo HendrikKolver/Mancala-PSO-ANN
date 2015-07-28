@@ -153,9 +153,6 @@ public class TreeBuilder {
                     node.nodeScore += 100;
                     return node.nodeScore;
                 }
-            }
-
-            if(node.roundCount >=45 && node.roundCount <=180){
                 if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
                     node.evaluateMyself();
                     node.nodeScore += 100;

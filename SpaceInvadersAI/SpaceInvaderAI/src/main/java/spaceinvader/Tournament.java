@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,10 +40,10 @@ public class Tournament {
         players.add(new TournamentPlayer("Non-aggresive trained solution",false,6,4,"potential_new_winner.txt"));
         players.add(new TournamentPlayer("Aggresive trained solution",true,11,4,"11input35roundTrain.txt"));
         players.add(new TournamentPlayer("Non-aggresive Aggresive trained solution",false,11,4,"11input35roundTrain.txt"));
-//        players.add(new TournamentPlayer("Non-aggresive random",false,6,4,false));
-//        players.add(new TournamentPlayer("Non-aggresive normal eval",false,6,4,true));
+        players.add(new TournamentPlayer("Non-aggresive random",false,6,4,false));
+        players.add(new TournamentPlayer("Non-aggresive normal eval",false,6,4,true));
         players.add(new TournamentPlayer("Aggresive random",true,6,4,false));
-//        players.add(new TournamentPlayer("Aggresive normal eval",true,6,4,true));
+        players.add(new TournamentPlayer("Aggresive normal eval",true,6,4,true));
         int plyDepth = 6;
         boolean playAgainstSelf = true;
         int tournamentsToPlay = 5;
@@ -57,6 +58,9 @@ public class Tournament {
         System.out.println("Player Name                              \t Wins \t Loss \t Ties \t Score");
         for(TournamentPlayer tPlayer : players){
             System.out.println(tPlayer.getPlayerName() + " \t   " + tPlayer.getWins() + " \t " + tPlayer.getLosses() + " \t " + tPlayer.getTies() + " \t " + tPlayer.getScore());
+            if(tPlayer.getPlayerName().equals("Aggresive random") || tPlayer.getPlayerName().equals("Non-aggresive random")){
+                writeTmpFile(tPlayer.getNeuralNetwork(), tPlayer.getPlayerName()+".txt");
+            }
         }
         System.out.println("--------------------------------------");
         ThreadPool.executor.shutdown();
@@ -70,7 +74,13 @@ public class Tournament {
                 }
                 //Play as player 1
                 AIPlayer player1 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy());
+                if(tPlayer.isNormalEval()){
+                    player1.normalEval = true;
+                }
                 AIPlayer player2 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy());
+                if(tOpponent.isNormalEval()){
+                    player2.normalEval = true;
+                }
                 
                 while(true)
                 { 
@@ -105,7 +115,13 @@ public class Tournament {
                 
                 //Play as player 2
                 player1 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy());
+                if(tOpponent.isNormalEval()){
+                    player1.normalEval = true;
+                }
                 player2 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy());
+                if(tPlayer.isNormalEval()){
+                    player2.normalEval = true;
+                }
                 
                 while(true)
                 { 
@@ -260,4 +276,28 @@ public class Tournament {
 
         return tmp;
       }
+    
+     private static void writeTmpFile(NeuralNetwork n, String filename) throws FileNotFoundException
+    {
+                List<String> lines = new ArrayList<String>();
+                String w ="";
+                double trainedWeights[] = n.weights;
+                for(int x=0; x< trainedWeights.length;x++)
+                {
+                    
+                    if(x != trainedWeights.length-1)
+                        w+= trainedWeights[x]+";";
+                    else
+                        w+= trainedWeights[x];   
+                }
+                lines.add(w);
+        
+        
+        PrintWriter writer = new PrintWriter(filename);
+        writer.print("");
+        for(int x=0; x< lines.size();x++)
+            writer.print(lines.get(x));
+
+        writer.close();
+    }
 }

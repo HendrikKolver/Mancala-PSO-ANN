@@ -107,15 +107,12 @@ public class ThreadedBuilder implements Runnable {
                     node.nodeScore += 100;
                     return node.nodeScore;
                 }
-            }
-
-            if(node.roundCount >=45 && node.roundCount <=180){
                 if(!hasFactoryBefore && node.playerController.hasAlienFactory()){
                     node.evaluateMyself();
                     node.nodeScore += 100;
                     return node.nodeScore;
                 }
-            } 
+            }
         }
        
         ArrayList<String> possibleMoves = node.getPossibleMoves();  
