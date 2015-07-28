@@ -39,6 +39,7 @@ public class AlienController {
     public void update(int roundNumber){
         if(roundNumber == 40){
             this.increaseWaveSize();
+            this.increaseWaveSize();
         }
         
         removeEmptyRows();

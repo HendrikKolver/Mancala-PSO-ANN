@@ -28,7 +28,7 @@ public class Trainer {
         int maxIter = iterations;//Integer.parseInt(JOptionPane.showInputDialog("Number of Iterations: "));
         double uB = 1; //upper bound
         double lB = -1; //lower bound
-        int inputs = 6;
+        int inputs = 11;
         int outputs = 1;
         int hidden = 4;//Integer.parseInt(JOptionPane.showInputDialog("Number of hidden units: "));
         int sigmoid = 1;

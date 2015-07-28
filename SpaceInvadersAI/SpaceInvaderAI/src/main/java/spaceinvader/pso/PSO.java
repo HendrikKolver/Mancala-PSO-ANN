@@ -274,17 +274,17 @@ public class PSO {
         
         for(int x=0; x<particleCount;x++)
         {
-            if(x == 27){
-                initParticle(x,"tmpFile - Copy.txt"); 
-            }else if(x == 21){
-                initParticle(x,"goodSolution2.txt"); 
-            }else if(x == 16){
-                initParticle(x,"6inputWinner.txt"); 
-            }else if(x == 35){
-                initParticle(x,"EqualWithCurrentWinner6Inputs.txt"); 
-            }else{
+//            if(x == 27){
+//                initParticle(x,"tmpFile - Copy.txt"); 
+//            }else if(x == 21){
+//                initParticle(x,"goodSolution2.txt"); 
+//            }else if(x == 16){
+//                initParticle(x,"6inputWinner.txt"); 
+//            }else if(x == 35){
+//                initParticle(x,"EqualWithCurrentWinner6Inputs.txt"); 
+//            }else{
                 initParticle(x);
-            }
+//            }
         }
         int currentIteration = 0;
         

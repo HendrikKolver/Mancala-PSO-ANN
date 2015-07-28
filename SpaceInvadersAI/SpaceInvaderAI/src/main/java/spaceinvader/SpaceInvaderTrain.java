@@ -19,10 +19,10 @@ public class SpaceInvaderTrain {
      */
     public static void main(String[] args) throws InterruptedException, FileNotFoundException, IOException { 
         Trainer trainer = new Trainer();
-//        NeuralNetwork nn = trainer.train(50, 3);
+        NeuralNetwork nn = trainer.train(500, 5);
 
 
-        NeuralNetwork nn = trainer.trainWithOpponent(500, 5);
+//        NeuralNetwork nn = trainer.trainWithOpponent(500, 5);
 
         System.out.println("Done");
         ThreadPool.executor.shutdown();
