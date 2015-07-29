@@ -42,7 +42,7 @@ public class SpaceInvader {
 //        InputParser.getWeightsFromString(nnp1);
 //        InputParser.getWeightsFromString(nnp2);
         InputParser.getWeightsFromFile(nnp1,"handsDownWinner.txt", ".");
-        InputParser.getWeightsFromFile(nnp2,"handsDownWinner.txt", ".");
+        InputParser.getWeightsFromFile(nnp2,"train11.txt", ".");
         InputParser.getWeightsFromFile(backup,"11input35roundTrain.txt", ".");
 
         
@@ -62,7 +62,7 @@ public class SpaceInvader {
         
         for (int i = 0; i < gamesToPlay; i++) {
             AIPlayer player1 = new AIPlayer(plyDepth,nnp1, true, backup);
-            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, false, backup);
+            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, true, backup);
 //            player1.normalEval = true;
             while(true)
             { 

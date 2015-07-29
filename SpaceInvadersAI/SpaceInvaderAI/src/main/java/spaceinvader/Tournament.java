@@ -36,13 +36,23 @@ public class Tournament {
 
         ArrayList<TournamentPlayer> players = new ArrayList();
        
-        players.add(new TournamentPlayer("Non-aggresive trained solution",false,6,4,"handsDownWinner.txt"));
-        players.add(new TournamentPlayer("train1",false,11,6,"train1.txt"));
-        players.add(new TournamentPlayer("train2",false,11,6,"train2.txt"));
-        players.add(new TournamentPlayer("train3",false,11,6,"train3.txt"));
-        players.add(new TournamentPlayer("train4",false,11,6,"train4.txt"));
+        players.add(new TournamentPlayer("Non-aggresive trained solution",true,6,4,"handsDownWinner.txt"));
+        players.add(new TournamentPlayer("train1",true,11,4,"train1.txt"));
+        players.add(new TournamentPlayer("train2",true,11,4,"train2.txt"));
+        players.add(new TournamentPlayer("train3",true,11,4,"train3.txt"));
+        players.add(new TournamentPlayer("train4",true,11,4,"train4.txt"));
+        players.add(new TournamentPlayer("train5",true,11,4,"train5.txt"));
+        players.add(new TournamentPlayer("train6",true,11,4,"train6.txt"));
+        players.add(new TournamentPlayer("train7",true,11,4,"train7.txt"));
+        players.add(new TournamentPlayer("train8",true,11,4,"train8.txt"));
+        players.add(new TournamentPlayer("train9",true,11,4,"train9.txt"));
+        players.add(new TournamentPlayer("train10",true,11,4,"train10.txt"));
+        players.add(new TournamentPlayer("train11",false,11,4,"train11.txt"));
+        players.add(new TournamentPlayer("train12",true,11,4,"train12.txt"));
+        players.add(new TournamentPlayer("train13",true,11,4,"train13.txt"));
+        players.add(new TournamentPlayer("train14",true,11,4,"train14.txt"));
         int plyDepth = 6;
-        boolean playAgainstSelf = true;
+        boolean playAgainstSelf = false;
         int tournamentsToPlay = 1;
         int counter = 0;
         double totalGames = ((players.size() * players.size())*2)*tournamentsToPlay;
@@ -67,89 +77,90 @@ public class Tournament {
         for(TournamentPlayer tPlayer : players){
             for(TournamentPlayer tOpponent : players){
                 if(!playAgainstSelf && tPlayer == tOpponent){
-                    break;
+                   //do nothing
+                }else{
+                    NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
+                   //Play as player 1
+                   AIPlayer player1 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy(), backup);
+                   if(tPlayer.isNormalEval()){
+                       player1.normalEval = true;
+                   }
+                   AIPlayer player2 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy(), backup);
+                   if(tOpponent.isNormalEval()){
+                       player2.normalEval = true;
+                   }
+
+                   while(true)
+                   { 
+                       if(player1.isGameOver() || player2.isGameOver())
+                       {
+                           if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
+                               tPlayer.winGame();
+                               tOpponent.loseGame();
+                           }else if(player1.isGameOver() == player2.isGameOver()
+                                   && player1.getKillCount() > player2.getKillCount()){
+                               tPlayer.winGame();
+                               tOpponent.loseGame();
+                           }else if(!player1.isGameOver()){
+                               tPlayer.winGame();
+                               tOpponent.loseGame();
+                           }else if(player1.getKillCount() == player2.getKillCount() && player1.getRoundCount() >=200){
+                               tPlayer.tieGame();
+                               tOpponent.tieGame();
+                           }else{
+                               tPlayer.loseGame();
+                               tOpponent.winGame();
+                           }
+                           break;
+                       }
+                       player1.playRound();
+                       player2.playRound();
+                       syncBoards(player1, player2);
+                   }
+
+                   counter++;
+                   System.out.println("PercentageComplete: "+ Math.round((counter/totalGames)*100.0) + "%");
+
+                   //Play as player 2
+                   player1 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy(), backup);
+                   if(tOpponent.isNormalEval()){
+                       player1.normalEval = true;
+                   }
+                   player2 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy(), backup);
+                   if(tPlayer.isNormalEval()){
+                       player2.normalEval = true;
+                   }
+
+                   while(true)
+                   { 
+                       if(player1.isGameOver() || player2.isGameOver())
+                       {
+                           if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
+                               tOpponent.winGame();
+                               tPlayer.loseGame();
+                           }else if(player1.isGameOver() == player2.isGameOver()
+                                   && player1.getKillCount() > player2.getKillCount()){
+                               tOpponent.winGame();
+                               tPlayer.loseGame();
+                           }else if(!player1.isGameOver()){
+                               tOpponent.winGame();
+                               tPlayer.loseGame();
+                           }else if(player1.getKillCount() == player2.getKillCount() && player1.getRoundCount() >=200){
+                               tOpponent.tieGame();
+                               tPlayer.tieGame();
+                           }else{
+                               tOpponent.loseGame();
+                               tPlayer.winGame();
+                           }
+                           break;
+                       }
+                       player1.playRound();
+                       player2.playRound();
+                       syncBoards(player1, player2);
+                   }
+                   counter++;
+                   System.out.println("PercentageComplete: "+ Math.round((counter/totalGames)*100.0) + "%");
                 }
-                 NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
-                //Play as player 1
-                AIPlayer player1 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy(), backup);
-                if(tPlayer.isNormalEval()){
-                    player1.normalEval = true;
-                }
-                AIPlayer player2 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy(), backup);
-                if(tOpponent.isNormalEval()){
-                    player2.normalEval = true;
-                }
-                
-                while(true)
-                { 
-                    if(player1.isGameOver() || player2.isGameOver())
-                    {
-                        if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
-                            tPlayer.winGame();
-                            tOpponent.loseGame();
-                        }else if(player1.isGameOver() == player2.isGameOver()
-                                && player1.getKillCount() > player2.getKillCount()){
-                            tPlayer.winGame();
-                            tOpponent.loseGame();
-                        }else if(!player1.isGameOver()){
-                            tPlayer.winGame();
-                            tOpponent.loseGame();
-                        }else if(player1.getKillCount() == player2.getKillCount() && player1.getRoundCount() >=200){
-                            tPlayer.tieGame();
-                            tOpponent.tieGame();
-                        }else{
-                            tPlayer.loseGame();
-                            tOpponent.winGame();
-                        }
-                        break;
-                    }
-                    player1.playRound();
-                    player2.playRound();
-                    syncBoards(player1, player2);
-                }
-                
-                counter++;
-                System.out.println("PercentageComplete: "+ Math.round((counter/totalGames)*100.0) + "%");
-                
-                //Play as player 2
-                player1 = new AIPlayer(plyDepth,tOpponent.getNeuralNetwork(), tOpponent.isAggresiveStrategy(), backup);
-                if(tOpponent.isNormalEval()){
-                    player1.normalEval = true;
-                }
-                player2 = new AIPlayer(plyDepth,tPlayer.getNeuralNetwork(), tPlayer.isAggresiveStrategy(), backup);
-                if(tPlayer.isNormalEval()){
-                    player2.normalEval = true;
-                }
-                
-                while(true)
-                { 
-                    if(player1.isGameOver() || player2.isGameOver())
-                    {
-                        if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
-                            tOpponent.winGame();
-                            tPlayer.loseGame();
-                        }else if(player1.isGameOver() == player2.isGameOver()
-                                && player1.getKillCount() > player2.getKillCount()){
-                            tOpponent.winGame();
-                            tPlayer.loseGame();
-                        }else if(!player1.isGameOver()){
-                            tOpponent.winGame();
-                            tPlayer.loseGame();
-                        }else if(player1.getKillCount() == player2.getKillCount() && player1.getRoundCount() >=200){
-                            tOpponent.tieGame();
-                            tPlayer.tieGame();
-                        }else{
-                            tOpponent.loseGame();
-                            tPlayer.winGame();
-                        }
-                        break;
-                    }
-                    player1.playRound();
-                    player2.playRound();
-                    syncBoards(player1, player2);
-                }
-                counter++;
-                System.out.println("PercentageComplete: "+ Math.round((counter/totalGames)*100.0) + "%");
             }
         }
         return counter;

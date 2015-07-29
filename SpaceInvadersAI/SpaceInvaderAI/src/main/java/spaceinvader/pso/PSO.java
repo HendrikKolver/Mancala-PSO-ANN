@@ -62,7 +62,7 @@ public class PSO {
        globalBestFitness = 0.0;
        this.sigmoid = sigmoid;
 //        tournamentSize = particalCount;
-       tournamentSize = 15;
+       tournamentSize = 10;
        plyDepth = p;
        this.gamesPlayed = gamesPlayed;
        maxIterationTime = 0;
