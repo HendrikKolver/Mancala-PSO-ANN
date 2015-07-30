@@ -16,8 +16,6 @@ import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
 import spaceinvader.neuralNetwork.NeuralNetwork;
 import spaceinvader.pso.AIPlayer;
-import spaceinvader.utilities.InputParser;
-import spaceinvader.utilities.RandomGenerator;
 import spaceinvader.utilities.ThreadPool;
 
 /**
@@ -36,24 +34,24 @@ public class Tournament {
 
         ArrayList<TournamentPlayer> players = new ArrayList();
        
-        players.add(new TournamentPlayer("Non-aggresive trained solution",true,6,4,"handsDownWinner.txt"));
-        players.add(new TournamentPlayer("train1",true,11,4,"train1.txt"));
-        players.add(new TournamentPlayer("train2",true,11,4,"train2.txt"));
-        players.add(new TournamentPlayer("train3",true,11,4,"train3.txt"));
-        players.add(new TournamentPlayer("train4",true,11,4,"train4.txt"));
-        players.add(new TournamentPlayer("train5",true,11,4,"train5.txt"));
-        players.add(new TournamentPlayer("train6",true,11,4,"train6.txt"));
-        players.add(new TournamentPlayer("train7",true,11,4,"train7.txt"));
-        players.add(new TournamentPlayer("train8",true,11,4,"train8.txt"));
-        players.add(new TournamentPlayer("train9",true,11,4,"train9.txt"));
-        players.add(new TournamentPlayer("train10",true,11,4,"train10.txt"));
+        players.add(new TournamentPlayer("Non-aggresive trained solution",false,6,4,"handsDownWinner.txt"));
+        players.add(new TournamentPlayer("Agressive trained solution",true,6,4,"handsDownWinner.txt"));
+        players.add(new TournamentPlayer("train5",false,11,4,"train5.txt"));
+        players.add(new TournamentPlayer("train7",false,11,4,"train7.txt"));
+        players.add(new TournamentPlayer("train8",false,11,4,"train8.txt"));
+        players.add(new TournamentPlayer("train10",false,11,4,"train10.txt"));
         players.add(new TournamentPlayer("train11",false,11,4,"train11.txt"));
-        players.add(new TournamentPlayer("train12",true,11,4,"train12.txt"));
-        players.add(new TournamentPlayer("train13",true,11,4,"train13.txt"));
-        players.add(new TournamentPlayer("train14",true,11,4,"train14.txt"));
+        players.add(new TournamentPlayer("train12",false,11,4,"train12.txt"));
+        players.add(new TournamentPlayer("train13",false,11,4,"train13.txt"));
+        players.add(new TournamentPlayer("2015_07_07_24hTrain",false,6,4,"2015_07_07_24hTrain.txt"));
+        players.add(new TournamentPlayer("2015_07_07_veryVeryGood",false,6,4,"2015_07_07_veryVeryGood.txt"));
+        players.add(new TournamentPlayer("2015_07_07_solution4_very_good",false,6,4,"2015_07_07_solution4_very_good.txt"));
+        players.add(new TournamentPlayer("2015_07_07_24hTrain Agressive",true,6,4,"2015_07_07_24hTrain.txt"));
+        players.add(new TournamentPlayer("2015_07_07_veryVeryGood Agressive",true,6,4,"2015_07_07_veryVeryGood.txt"));
+        players.add(new TournamentPlayer("2015_07_07_solution4_very_good Agressive",true,6,4,"2015_07_07_solution4_very_good.txt"));
         int plyDepth = 6;
-        boolean playAgainstSelf = false;
-        int tournamentsToPlay = 1;
+        boolean playAgainstSelf = true;
+        int tournamentsToPlay = 2;
         int counter = 0;
         double totalGames = ((players.size() * players.size())*2)*tournamentsToPlay;
         

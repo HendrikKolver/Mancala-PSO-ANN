@@ -42,8 +42,8 @@ public class SpaceInvader {
 //        InputParser.getWeightsFromString(nnp1);
 //        InputParser.getWeightsFromString(nnp2);
         InputParser.getWeightsFromFile(nnp1,"handsDownWinner.txt", ".");
-        InputParser.getWeightsFromFile(nnp2,"train11.txt", ".");
-        InputParser.getWeightsFromFile(backup,"11input35roundTrain.txt", ".");
+        InputParser.getWeightsFromFile(nnp2,"2015_07_07_veryVeryGood.txt", ".");
+        InputParser.getWeightsFromFile(backup,"train11.txt", ".");
 
         
         int totalRoundCountp1 = 0;
@@ -62,12 +62,12 @@ public class SpaceInvader {
         
         for (int i = 0; i < gamesToPlay; i++) {
             AIPlayer player1 = new AIPlayer(plyDepth,nnp1, true, backup);
-            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, true, backup);
+            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, false, backup);
 //            player1.normalEval = true;
             while(true)
             { 
 //                sleep(200);
-                System.in.read();
+//                System.in.read();
                 if(player1.isGameOver() || player2.isGameOver())
                 {
                     if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
@@ -84,10 +84,10 @@ public class SpaceInvader {
                     }
                     break;
                 }
-                System.out.println("P1 board---------------");
-                player1.getCurrentPosition().printBoard();
-                System.out.println("P2 board---------------");
-                player2.getCurrentPosition().printBoard();
+//                System.out.println("P1 board---------------");
+//                player1.getCurrentPosition().printBoard();
+//                System.out.println("P2 board---------------");
+//                player2.getCurrentPosition().printBoard();
                 long moveStart = System.currentTimeMillis();
                 player1.playRound();
 //                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
