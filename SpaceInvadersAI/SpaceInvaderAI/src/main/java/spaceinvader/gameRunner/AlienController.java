@@ -50,6 +50,20 @@ public class AlienController {
         checkToAddRow(roundNumber);
     }
     
+    public void updateForBulletCheck(int roundNumber){
+        if(roundNumber == 40){
+            this.increaseWaveSize();
+        }
+        
+        removeEmptyRows();
+        updateAlienPosition(roundNumber);
+        checkForShieldColission();
+//        checkForPlayerColission();
+        checkToFireBullet(roundNumber);
+        removeEmptyRows();
+        checkToAddRow(roundNumber);
+    }
+    
     public void checkToFireBullet(int roundNumber){
         removeEmptyRows();
         if((roundNumber+1) % 6 == 0 && roundNumber != 0){

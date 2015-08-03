@@ -62,7 +62,7 @@ public class SpaceInvader {
         
         for (int i = 0; i < gamesToPlay; i++) {
             AIPlayer player1 = new AIPlayer(plyDepth,nnp1, true, backup);
-            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, false, backup);
+            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, true, backup);
 //            player1.normalEval = true;
             while(true)
             { 

@@ -37,6 +37,23 @@ public class BulletController {
         enemyBulletColissionDetection();
     }
     
+    public boolean updateForBulletCheck(int bulletId){
+        removeOutOfBoundsBullets();
+        updateAlienBulletPosition();
+        if(alienBulletColissionDetectionForPlayerBullet(bulletId)){
+            return true;
+        }
+        updatePlayerBulletPosition();
+        if(playerBulletColissionDetectionForPlayerBullet(bulletId)){
+             return true;
+        };
+        updateEnemyBulletPosition();
+        if(enemyBulletColissionDetectionForPlayerBullet(bulletId)){
+            return true;
+        }
+        return false;
+    }
+    
     public void updateAlienBulletPosition(){
         for(GameObject alienBullet : alienBulletList){
             alienBullet.updatePosition("DOWN");
@@ -108,6 +125,54 @@ public class BulletController {
         }
     }
     
+    public boolean alienBulletColissionDetectionForPlayerBullet(int bulletId){
+        
+        ArrayList<GameObject> shields = playerController.getAllShields();
+        Player player = playerController.getPlayer();
+        boolean boolValue = false;
+        
+        for (int i = 0; i < alienBulletList.size();) {
+            boolean increaseCounter = true;
+            
+            if(i < alienBulletList.size()){
+                for(GameObject shield : shields){
+                    if(bulletColissionDetection(alienBulletList.get(i),shield,1))
+                    {
+                      shields.remove(shield);
+                      alienBulletList.remove(alienBulletList.get(i));
+                      increaseCounter = false;
+                      break;
+                    }
+                } 
+            }
+            
+            if(i < alienBulletList.size()){
+                for(GameObject playerBullet : playerBulletList){
+                    if(bulletColissionDetection(alienBulletList.get(i),playerBullet,1)
+                            && playerBullet.getPlayer() == 1)
+                    {
+                        alienBulletList.remove(alienBulletList.get(i));
+                        
+                        playerBulletList.remove(playerBullet);
+                        
+                        increaseCounter = false;
+                        if(playerBullet.getObjectID() == bulletId){
+                            boolValue = true;
+                            return boolValue;
+                        }
+                        break;
+                    }
+                } 
+            }
+            
+            if(increaseCounter){
+                i++;
+            }
+        }
+        playerController.setShields(shields);
+        return boolValue;
+    }
+    
     public void alienBulletColissionDetection(){
         
         ArrayList<GameObject> buildings = playerController.getBuildings();
@@ -169,6 +234,46 @@ public class BulletController {
         playerController.setShields(shields);
     }
     
+    public boolean playerBulletColissionDetectionForPlayerBullet(int bulletId){
+        
+        ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
+        boolean boolValue = false;
+        
+        for (int i = 0; i < playerBulletList.size();) {
+            boolean increaseCounter = true;
+            GameObject playerBullet = playerBulletList.get(i);
+            if(playerBullet.getPlayer() == 1){
+                for(ArrayList<Alien> aliens : allAliens){
+                    for(Alien alien : aliens){
+                        if(bulletColissionDetection(playerBullet,alien,1))
+                        {
+                          aliens.remove(alien);
+                          playerBulletList.remove(playerBullet);
+                          playerController.increaseKillCount();
+                          increaseCounter = false;
+                          if(playerBullet.getObjectID() == bulletId){
+                              boolValue = true;
+                              return boolValue;
+                          }
+                          break;
+                        }
+                    } 
+                    if(!increaseCounter){
+                        break;
+                    }
+                }
+
+                if(increaseCounter){
+                    i++;
+                }
+            }else{
+                i++;
+            }
+        }
+        alienController.setAliens(allAliens);
+        return boolValue;
+    }
+    
     public void playerBulletColissionDetection(){
         
         ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
@@ -215,6 +320,73 @@ public class BulletController {
             }
         }
         alienController.setAliens(allAliens);
+    }
+    
+    public boolean enemyBulletColissionDetectionForPlayerBullet(int bulletId){
+        
+        ArrayList<ArrayList<Alien>> allAliens = alienController.getAllAliens();
+        ArrayList<GameObject> shields = playerController.getAllShields();
+        boolean boolValue = false;
+
+        
+        for (int i = 0; i < enemyBulletList.size();) {
+            boolean increaseCounter = true;
+            
+            for(ArrayList<Alien> aliens : allAliens){
+                for(Alien alien : aliens){
+                    if(bulletColissionDetection(enemyBulletList.get(i),alien,1))
+                    {
+                      aliens.remove(alien);
+                      bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
+                      enemyBulletList.remove(enemyBulletList.get(i));
+                      increaseCounter = false;
+                      break;
+                    }
+                } 
+                if(!increaseCounter){
+                    break;
+                }   
+            }
+
+            if(i < enemyBulletList.size()){
+                for(GameObject shield : shields){
+                    
+                    if(bulletColissionDetection(enemyBulletList.get(i),shield,1))
+                    {
+                      shields.remove(shield);
+                      bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
+                      enemyBulletList.remove(enemyBulletList.get(i));
+                      increaseCounter = false;
+                      break;
+                    }
+                } 
+            }
+            
+            if(i < enemyBulletList.size()){
+                for(GameObject playerBullet : playerBulletList){
+                    if(bulletColissionDetection(enemyBulletList.get(i),playerBullet,1) && 
+                            enemyBulletList.get(i).getObjectID() != playerBullet.getObjectID())
+                    {
+                        bulletIdsToRemove.add(enemyBulletList.get(i).getObjectID());
+                        enemyBulletList.remove(enemyBulletList.get(i));
+                        playerBulletList.remove(playerBullet);
+                        increaseCounter = false;
+                        if(playerBullet.getObjectID() == bulletId){
+                            boolValue = true;
+                            return boolValue;
+                        }
+                        break;
+                    }
+                } 
+            }
+
+            if(increaseCounter){
+                i++;
+            }
+        }
+        alienController.setAliens(allAliens);
+        playerController.setShields(shields);
+        return boolValue;
     }
     
     public void enemyBulletColissionDetection(){

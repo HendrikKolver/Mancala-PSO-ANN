@@ -55,66 +55,66 @@ public class TreeBuilder {
         while(tmpNode != null)
         {
             if(aggresiveTactic){
-//                if(node.roundCount == 1){
-//                    if(tmpNode.move.equals("MoveLeft")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
-//                if(node.roundCount == 2){
-//                    if(tmpNode.move.equals("MoveLeft")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
-//                if(node.roundCount == 3){
-//                    if(tmpNode.move.equals("MoveLeft")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
+                if(node.roundCount == 1){
+                    if(tmpNode.move.equals("MoveLeft")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+                if(node.roundCount == 2){
+                    if(tmpNode.move.equals("MoveLeft")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+                if(node.roundCount == 3){
+                    if(tmpNode.move.equals("MoveLeft")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
                 if(node.roundCount == 4){
-                    if(tmpNode.move.equals("BuildAlienFactory")){
+                    if(tmpNode.move.equals("MoveLeft")){
                         finalNode = tmpNode;
                         break;
                     }
                 }
                 if(node.roundCount == 5){
-                    if(tmpNode.move.equals("BuildShield")){
+                    if(tmpNode.move.equals("MoveLeft")){
                         finalNode = tmpNode;
                         break;
                     }
                 }
-//                if(node.roundCount == 6){
-//                    if(tmpNode.move.equals("MoveLeft")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
-//                if(node.roundCount ==7){
-//                    if(tmpNode.move.equals("BuildAlienFactory")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
-//                if(node.roundCount ==9){
-//                    if(tmpNode.move.equals("MoveRight")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
-//                if(node.roundCount ==10){
-//                    if(tmpNode.move.equals("MoveRight")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
-//                if(node.roundCount ==11){
-//                    if(tmpNode.move.equals("MoveRight")){
-//                        finalNode = tmpNode;
-//                        break;
-//                    }
-//                }
+                if(node.roundCount == 6){
+                    if(tmpNode.move.equals("MoveLeft")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+                if(node.roundCount ==7){
+                    if(tmpNode.move.equals("BuildAlienFactory")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+                if(node.roundCount ==9){
+                    if(tmpNode.move.equals("MoveRight")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+                if(node.roundCount ==10){
+                    if(tmpNode.move.equals("MoveRight")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
+                if(node.roundCount ==11){
+                    if(tmpNode.move.equals("MoveRight")){
+                        finalNode = tmpNode;
+                        break;
+                    }
+                }
             }else{
                 if(node.roundCount == 1){
                     if(tmpNode.move.equals("MoveLeft")){

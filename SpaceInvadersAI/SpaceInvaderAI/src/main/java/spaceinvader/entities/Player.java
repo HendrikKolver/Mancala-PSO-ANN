@@ -3,6 +3,7 @@ package spaceinvader.entities;
 import java.util.ArrayList;
 import spaceinvader.gameRunner.AlienController;
 import spaceinvader.gameRunner.BulletController;
+import spaceinvader.gameRunner.PlayerController;
 import spaceinvader.utilities.ArrayListCopy;
 
 /**
@@ -18,6 +19,7 @@ public class Player extends GameObject{
     private boolean isAlive;
     private BulletController bulletController;
     private AlienController alienController;
+    private PlayerController playerController;
     private boolean deathOccured;
     
     public Player(){
@@ -39,7 +41,9 @@ public class Player extends GameObject{
 
           
         if(bulletController.getPlayerBulletCount()<bulletLimit && !isShieldBlockingPlayerBullet()){
-            possibleMoves.add("Shoot");
+            if(willShotHit(roundNumber)){
+                possibleMoves.add("Shoot");
+            }
         }
         
         possibleMoves.add("Nothing");
@@ -65,6 +69,45 @@ public class Player extends GameObject{
         }
 
         return possibleMoves;
+    }
+    
+    public boolean willShotHit(int roundNumber){
+       PlayerController pCtrlCopy = playerController.clone();
+       AlienController aCtrlCopy = alienController.clone();
+       BulletController bCtrlCopy = bulletController.clone();
+       pCtrlCopy.setBulletController(bCtrlCopy);
+       pCtrlCopy.setAlienController(aCtrlCopy);
+       aCtrlCopy.setPlayerController(pCtrlCopy);
+       aCtrlCopy.setBulletController(bCtrlCopy);
+       bCtrlCopy.setAlienController(aCtrlCopy);
+       bCtrlCopy.setPlayerController(pCtrlCopy);
+
+       int counter = 0;
+       int bulletId = 0;
+       boolean gameOver = false;
+       while(counter <12 && !gameOver){
+           
+           if(bCtrlCopy.updateForBulletCheck(bulletId))
+               return true;
+              
+           aCtrlCopy.updateForBulletCheck(roundNumber);
+           
+           if(counter == 0){
+                //FireInitialShot that will be checked if it hits anything
+                bulletId = pCtrlCopy.getPlayer().fireBulletWithId();
+           }
+           if(bCtrlCopy.alienBulletColissionDetectionForPlayerBullet(bulletId))
+               return true;
+           if(bCtrlCopy.playerBulletColissionDetectionForPlayerBullet(bulletId))
+               return true;
+           if(bCtrlCopy.enemyBulletColissionDetectionForPlayerBullet(bulletId))
+               return true;
+            
+           gameOver = aCtrlCopy.isGameOver();
+           counter++;
+           
+       }
+       return false;  
     }
     
     private boolean canLifeBeUsed(){
@@ -141,6 +184,12 @@ public class Player extends GameObject{
     private void fireBullet(){
         PlayerBullet playerBullet = new PlayerBullet(this.getxPosition()+1,this.getyPosition()+1);
         bulletController.addPlayerBullet(playerBullet);
+    }
+    
+    private int fireBulletWithId(){
+        PlayerBullet playerBullet = new PlayerBullet(this.getxPosition()+1,this.getyPosition()+1);
+        bulletController.addPlayerBullet(playerBullet);
+        return playerBullet.getObjectID();
     }
     
     private void buildBulletFactory(){
@@ -381,5 +430,12 @@ public class Player extends GameObject{
         }
         return false;
     }
-    
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
+    }
 }

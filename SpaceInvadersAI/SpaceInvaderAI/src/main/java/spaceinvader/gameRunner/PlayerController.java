@@ -21,6 +21,7 @@ public class PlayerController {
         ArrayList<GameObject> shieldBlock2 = player.createShieldBlock(14);
         shieldBlock1.addAll(shieldBlock2);
         player.setShields(shieldBlock1);
+        player.setPlayerController(this);
         respawnCounter = 0;
     }
     
@@ -66,6 +67,7 @@ public class PlayerController {
     public PlayerController clone(){
         PlayerController playerControllerCopy = new PlayerController(false);
         playerControllerCopy.setPlayer((Player) this.player.clone());
+        playerControllerCopy.getPlayer().setPlayerController(playerControllerCopy);
         playerControllerCopy.setRespawnCounter(this.respawnCounter);
         return playerControllerCopy;
     }
