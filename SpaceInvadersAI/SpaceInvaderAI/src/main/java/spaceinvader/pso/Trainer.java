@@ -57,7 +57,7 @@ public class Trainer {
         double c1 = 1.4;
         double c2 = 1.4;
         particleCount =30;
-        double maxVel =0.3; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
+        double maxVel =0.2; //Double.parseDouble(JOptionPane.showInputDialog("Max Velocity: "));
         int maxIter = iterations;//Integer.parseInt(JOptionPane.showInputDialog("Number of Iterations: "));
         double uB = 1; //upper bound
         double lB = -1; //lower bound
@@ -71,12 +71,7 @@ public class Trainer {
         
        PSO swarmOptimize = new PSO(plyDepth, w, c1,  c2,  particleCount,  maxVel,  maxIter,  uB,  lB,  inputs,  outputs,  hidden,  sigmoid,gamesPlayedPerPlayerPerRound, true);
 
-       swarmOptimize.trainLocal2Player(neighSize);
-
-       
-//       Particle p =swarmOptimize.winningOpponentParticle();
-//       NeuralNetwork best = p.bestNetwork;
-       
+       swarmOptimize.trainLocal2Player(neighSize); 
        //PrintFinalNN
        swarmOptimize.printTmpFile();
        
