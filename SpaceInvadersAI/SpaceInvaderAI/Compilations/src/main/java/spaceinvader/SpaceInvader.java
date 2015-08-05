@@ -4,12 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import spaceinvader.entities.AlienFactory;
 import spaceinvader.entities.GameObject;
 import spaceinvader.entities.PlayerBullet;
 import spaceinvader.gameRunner.AlienController;
@@ -38,12 +36,14 @@ public class SpaceInvader {
         
         NeuralNetwork nnp1 = new NeuralNetwork(6,1,hiddenLayersP1,1);
         NeuralNetwork nnp2 = new NeuralNetwork(6,1,hiddenLayersP2,1);
+        NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
 //        setRandomWeights(nnp2);
 //        setRandomWeights(nnp1);
 //        InputParser.getWeightsFromString(nnp1);
 //        InputParser.getWeightsFromString(nnp2);
-        InputParser.getWeightsFromFile(nnp1,"potential_new_winner.txt", ".");
-        InputParser.getWeightsFromFile(nnp2,"tmpFile.txt", ".");
+        InputParser.getWeightsFromFile(nnp1,"2015_07_07_veryVeryGood.txt", ".");
+        InputParser.getWeightsFromFile(nnp2,"2015_07_07_veryVeryGood.txt", ".");
+        InputParser.getWeightsFromFile(backup,"train11.txt", ".");
 
         
         int totalRoundCountp1 = 0;
@@ -55,20 +55,20 @@ public class SpaceInvader {
         int ties = 0;
         
 
-        double gamesToPlay = 50.0;
+        double gamesToPlay = 20.0;
 
         
         double start = System.currentTimeMillis();
         
         for (int i = 0; i < gamesToPlay; i++) {
-            AIPlayer player1 = new AIPlayer(plyDepth,nnp1);
-            AIPlayer player2 = new AIPlayer(plyDepth,nnp2);
+            AIPlayer player1 = new AIPlayer(plyDepth,nnp1, true, backup);
+            AIPlayer player2 = new AIPlayer(plyDepth,nnp2, true, backup);
 //            player1.normalEval = true;
             while(true)
             { 
 //                sleep(200);
-//                System.in.read();
-                if(player1.isGameOver() || player2.isGameOver())
+                System.in.read();
+                if(player1.isGameOver() )
                 {
                     if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
                         winsp1++;
@@ -84,8 +84,8 @@ public class SpaceInvader {
                     }
                     break;
                 }
-//                System.out.println("P1 board---------------");
-//                player1.getCurrentPosition().printBoard();
+                System.out.println("P1 board---------------");
+                player1.getCurrentPosition().printBoard();
 //                System.out.println("P2 board---------------");
 //                player2.getCurrentPosition().printBoard();
                 long moveStart = System.currentTimeMillis();
@@ -93,7 +93,7 @@ public class SpaceInvader {
 //                System.out.println("moveDuration: "+ (System.currentTimeMillis()-moveStart));
                 player2.playRound();
                 syncBoards(player1, player2);
-                
+//                
                 
             }
             totalRoundCountp1 += player1.getRoundCount();

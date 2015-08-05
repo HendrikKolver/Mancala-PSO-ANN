@@ -50,6 +50,20 @@ public class AlienController {
         checkToAddRow(roundNumber);
     }
     
+    public void updateForBulletCheck(int roundNumber){
+        if(roundNumber == 40){
+            this.increaseWaveSize();
+        }
+        
+        removeEmptyRows();
+        updateAlienPosition(roundNumber);
+        checkForShieldColission();
+//        checkForPlayerColission();
+        checkToFireBullet(roundNumber);
+        removeEmptyRows();
+        checkToAddRow(roundNumber);
+    }
+    
     public void checkToFireBullet(int roundNumber){
         removeEmptyRows();
         if((roundNumber+1) % 6 == 0 && roundNumber != 0){
@@ -63,12 +77,12 @@ public class AlienController {
             }
             
             if(firstRow != null){
-//                int probability = RandomGenerator.randInt(1, 1000);//Remove to remove randomness
-//                if(probability <= 333){//Remove to remove randomness
+                int probability = RandomGenerator.randInt(1, 1000);//Remove to remove randomness
+                if(probability <= 333){//Remove to remove randomness
                     if(!firstRow.isEmpty()){
                         Alien alienToShoot = getClosestAlienToPlayer(firstRow);
                         alienToShoot.fireBullet();
-//                    } //Remove to remove randomness
+                    } //Remove to remove randomness
                 }else{
                     int rowChoice = 0;
                     if(secondRow != null){
@@ -122,8 +136,10 @@ public class AlienController {
     
     
     public void checkToAddRow(int roundNumber){
-        
-        if(moveDownRound+1 == roundNumber){
+        if(this.getAlienCount() == 0 && roundNumber >5){
+            addNewRow();
+            addAlien();
+        }else if(moveDownRound+1 == roundNumber){
            if(alienRow.isEmpty() || alienRow.get(alienRow.size()-1).get(0).getyPosition() <10){
                 addNewRow();
                  addAlien(); 
@@ -363,8 +379,7 @@ public class AlienController {
             }
         }
         return minDistance;
-    }
-    
+    }  
     
     public String dumpGameState(){
         return null;
@@ -424,6 +439,10 @@ public class AlienController {
 
     public void setWaveSize(int waveSize) {
         this.waveSize = waveSize;
-    }  
+    } 
+    
+    public int getWaveSize(){
+        return waveSize;
+    }
 
 }

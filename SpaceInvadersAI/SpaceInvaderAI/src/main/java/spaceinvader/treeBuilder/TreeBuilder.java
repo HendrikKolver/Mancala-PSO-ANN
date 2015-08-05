@@ -42,8 +42,8 @@ public class TreeBuilder {
 //            }
 //        }
         
-        buildTreeMultiThreaded(node, root);  
-//        buildTreeSingleThreaded(root);
+//        buildTreeMultiThreaded(node, root);  
+        buildTreeSingleThreaded(root);
        
         TreeInterface tmpNode = root.children;
         
@@ -115,67 +115,73 @@ public class TreeBuilder {
                         break;
                     }
                 }
-            }else{
-                if(node.roundCount == 1){
-                    if(tmpNode.move.equals("MoveLeft")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount == 2){
-                    if(tmpNode.move.equals("MoveLeft")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount == 3){
-                    if(tmpNode.move.equals("MoveLeft")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount == 4){
-                    if(tmpNode.move.equals("MoveLeft")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount == 5){
-                    if(tmpNode.move.equals("MoveLeft")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount == 6){
-                    if(tmpNode.move.equals("MoveLeft")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount ==7){
-                    if(tmpNode.move.equals("BuildAlienFactory")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount ==9){
-                    if(tmpNode.move.equals("MoveRight")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
-                if(node.roundCount ==10){
-                    if(tmpNode.move.equals("MoveRight")){
-                        finalNode = tmpNode;
-                        break;
-                    }
-                }
                 if(node.roundCount ==11){
                     if(tmpNode.move.equals("MoveRight")){
                         finalNode = tmpNode;
                         break;
                     }
                 }
+            }else{
+//                if(node.roundCount == 1){
+//                    if(tmpNode.move.equals("MoveLeft")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount == 2){
+//                    if(tmpNode.move.equals("MoveLeft")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount == 3){
+//                    if(tmpNode.move.equals("MoveLeft")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount == 4){
+//                    if(tmpNode.move.equals("MoveLeft")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount == 5){
+//                    if(tmpNode.move.equals("MoveLeft")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount == 6){
+//                    if(tmpNode.move.equals("MoveLeft")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount ==7){
+//                    if(tmpNode.move.equals("BuildAlienFactory")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount ==9){
+//                    if(tmpNode.move.equals("MoveRight")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount ==10){
+//                    if(tmpNode.move.equals("MoveRight")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
+//                if(node.roundCount ==11){
+//                    if(tmpNode.move.equals("MoveRight")){
+//                        finalNode = tmpNode;
+//                        break;
+//                    }
+//                }
             }
             if(tmpNode.nodeScore > tmpCount)
             {

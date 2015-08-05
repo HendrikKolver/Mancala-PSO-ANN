@@ -43,10 +43,11 @@ public class PSO {
     private final int gamesPlayed;
     private double maxIterationTime;
     private int maxIterationRound;
+    private boolean aggresiveTactic;
 
-    public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid, int gamesPlayed)
+    public PSO(int p, double w, double c1, double c2, int particalCount, double maxVel, int nIter, double uB, double lB, int inputs, int outputs, int hidden, int sigmoid, int gamesPlayed, boolean aggresiveTactic)
     {
-
+        this.aggresiveTactic = aggresiveTactic;
        this.c1 = c1;
        this.c2 = c2;
        this.w = w;
@@ -60,7 +61,8 @@ public class PSO {
        this.hidden = hidden;
        globalBestFitness = 0.0;
        this.sigmoid = sigmoid;
-       tournamentSize =10;
+//        tournamentSize = particalCount;
+       tournamentSize = 10;
        plyDepth = p;
        this.gamesPlayed = gamesPlayed;
        maxIterationTime = 0;
@@ -76,16 +78,16 @@ public class PSO {
        for(int x=0; x<particleCount;x++)
         {
 
-            if(x == 7){
-                initParticle(x,"2015_07_07_24hTrain.txt"); 
-            }else if(x == 27){
-                initParticle(x,"6Input_4Hidden_1stOn6Ply.txt"); 
-            }else if(x == 21){
-                initParticle(x,"potential_new_winner.txt"); 
-            }else if(x == 16){
-                initParticle(x,"6inputWinner.txt"); 
-            }else if(x == 35){
-                initParticle(x,"2015_07_07_veryVeryGood.txt"); 
+           if(x == 7){
+                initParticle(x,"train11.txt"); 
+//            }else if(x == 27){
+//                initParticle(x,"6Input_4Hidden_1stOn6Ply.txt"); 
+//            }else if(x == 21){
+//                initParticle(x,"potential_new_winner.txt"); 
+//            }else if(x == 16){
+//                initParticle(x,"6inputWinner.txt"); 
+//            }else if(x == 35){
+//                initParticle(x,"2015_07_07_veryVeryGood.txt"); 
             }else{
                 initParticle(x);
             }
@@ -126,10 +128,11 @@ public class PSO {
                 
                 for(int i = 0; i<tournamentPool.length;i++){                      
                         //creating new "you" players after every round to reset the board
-                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                    NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
+                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic, backup);
+                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic, backup);
 
-                    AIPlayer opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork);
+                    AIPlayer opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork, aggresiveTactic, backup);
 
                     while(true)
                     { 
@@ -145,7 +148,7 @@ public class PSO {
                     setOpponentWinsNormal(particles[x],you,opponent);
 
                     //Reset the opponent board for another game
-                    opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork);
+                    opponent = new AIPlayer(plyDepth,tournamentPool[i].neuralNetwork, aggresiveTactic, backup);
 
                     while(true)
                     { 
@@ -318,8 +321,9 @@ public class PSO {
             {   
                 for(int i = 0; i<this.gamesPlayed;i++){
                     //this will be your players
-                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                    NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
+                    AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic, backup);
+                    AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic, backup);
 
 
                     while(true)
@@ -633,8 +637,9 @@ public class PSO {
         {
             for (int i = 0; i < this.gamesPlayed; i++) {
                 //this will be your players
-                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
+                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic, backup);
+                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic, backup);
 
                 while(true)
                 { 
@@ -720,12 +725,12 @@ public class PSO {
                 if(x == i){
                     break;
                 }
-
+                NeuralNetwork backup = new NeuralNetwork(11,1,4,1);
                 //creating new "you" players after every round to reset the board
-                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork);
-                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork);
+                AIPlayer you = new AIPlayer(plyDepth,particles[x].neuralNetwork, aggresiveTactic, backup);
+                AIPlayer yourBest = new AIPlayer(plyDepth,particles[x].bestNetwork, aggresiveTactic, backup);
 
-                AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                AIPlayer opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork, aggresiveTactic, backup);
 
                 while(true)
                 { 
@@ -740,7 +745,7 @@ public class PSO {
                 //updateWins
                 setOpponentWinsNormal(particles[x],you,opponent);
 
-                opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork);
+                opponent = new AIPlayer(plyDepth,particles[i].neuralNetwork, aggresiveTactic, backup);
 
                 while(true)
                 { 

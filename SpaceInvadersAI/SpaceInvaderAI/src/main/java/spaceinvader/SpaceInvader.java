@@ -41,7 +41,7 @@ public class SpaceInvader {
 //        setRandomWeights(nnp1);
 //        InputParser.getWeightsFromString(nnp1);
 //        InputParser.getWeightsFromString(nnp2);
-        InputParser.getWeightsFromFile(nnp1,"handsDownWinner.txt", ".");
+        InputParser.getWeightsFromFile(nnp1,"2015_07_07_veryVeryGood.txt", ".");
         InputParser.getWeightsFromFile(nnp2,"2015_07_07_veryVeryGood.txt", ".");
         InputParser.getWeightsFromFile(backup,"train11.txt", ".");
 
@@ -67,8 +67,8 @@ public class SpaceInvader {
             while(true)
             { 
 //                sleep(200);
-//                System.in.read();
-                if(player1.isGameOver() || player2.isGameOver())
+                System.in.read();
+                if(player1.isGameOver() )
                 {
                     if(player1.getRoundCount() >=200 && player1.getKillCount() > player2.getKillCount()){
                         winsp1++;
@@ -84,8 +84,8 @@ public class SpaceInvader {
                     }
                     break;
                 }
-//                System.out.println("P1 board---------------");
-//                player1.getCurrentPosition().printBoard();
+                System.out.println("P1 board---------------");
+                player1.getCurrentPosition().printBoard();
 //                System.out.println("P2 board---------------");
 //                player2.getCurrentPosition().printBoard();
                 long moveStart = System.currentTimeMillis();

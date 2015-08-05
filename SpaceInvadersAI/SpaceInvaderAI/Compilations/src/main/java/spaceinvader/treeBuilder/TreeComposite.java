@@ -17,9 +17,12 @@ import spaceinvader.neuralNetwork.Neuron;
  */
 public class TreeComposite extends TreeInterface {       
      
-    public TreeComposite(NeuralNetwork n, int roundCounter)
+    public TreeComposite(NeuralNetwork n, int roundCounter, boolean aggresiveTactic, NeuralNetwork backup)
     {
+        this.agressiveTactic = aggresiveTactic;
         evaluation = n;
+        this.originalEval = evaluation;
+        this.backup = backup;
         children = null;
         next = null;
         nodeScore = 0;
@@ -34,7 +37,7 @@ public class TreeComposite extends TreeInterface {
     
     public TreeComposite()
     {
-        
+        agressiveTactic = false;
     }
  
     @Override
@@ -92,9 +95,16 @@ public class TreeComposite extends TreeInterface {
      }
      
      private void normalEval(){
-        double score = this.playerController.getKillCount();
-        score += (this.playerController.getLives()*10);
-        score += (this.roundCount/10.0);
+         double score = 0;
+//        double score = this.playerController.getKillCount();
+//        score += (this.playerController.getLives()*10);
+//        score += (this.roundCount);
+        if(this.playerController.hasAlienFactory()){
+            score += 30;
+        }
+        if(this.playerController.hasBulletFactory()){
+            score += 20;
+        }
 
         if(isGameOver() && this.roundCount !=200){
             score-=100;
@@ -115,7 +125,7 @@ public class TreeComposite extends TreeInterface {
             inputs[4] = this.bulletController.getPlayerBulletCount();
             inputs[5] = this.roundCount;
         }else{
-            inputs = new double[10];
+            inputs = new double[11];
             inputs[0] = this.alienController.getAlienCount();
             inputs[1] = this.playerController.getAllShields().size();
             inputs[2] = this.bulletController.getPlayerBulletCount();
@@ -126,7 +136,7 @@ public class TreeComposite extends TreeInterface {
 
             int bulletFactoryCount = 0;
             for(GameObject building : buildings){
-                if(building instanceof BulletFactory){
+                if(building.getRepresentation().equals("B")){
                     bulletFactoryCount++;
                 }
             }
@@ -135,7 +145,7 @@ public class TreeComposite extends TreeInterface {
 
             int alienFactoryCount = 0;
             for(GameObject building : buildings){
-                if(building instanceof AlienFactory){
+                if(building.getRepresentation().equals("X")){
                     alienFactoryCount++;
                 }
             }
@@ -144,6 +154,7 @@ public class TreeComposite extends TreeInterface {
 
             inputs[8] = this.alienController.getAlienDistanceFromWall();
             inputs[9] = this.roundCount;
+            inputs[10] = this.alienController.getWaveSize();
         }
         
         
@@ -177,6 +188,9 @@ public class TreeComposite extends TreeInterface {
         nodeCopy.finalState = this.finalState;
         nodeCopy.roundCount = this.roundCount;
         nodeCopy.evaluation = this.evaluation.clone();
+        nodeCopy.backup = this.backup.clone();
+        nodeCopy.originalEval = this.originalEval.clone();
+        nodeCopy.agressiveTactic = this.agressiveTactic;
         
         return nodeCopy;
     }
@@ -353,6 +367,15 @@ public class TreeComposite extends TreeInterface {
     @Override
     public String getMove(){
         return this.move;
+    }
+
+    @Override
+    public void setBackupTo(boolean val) {
+        if(val){
+            this.evaluation = backup;
+        }else{
+            this.evaluation = originalEval;
+        }
     }
          
 }

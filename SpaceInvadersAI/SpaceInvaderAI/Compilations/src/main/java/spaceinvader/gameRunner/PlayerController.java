@@ -21,6 +21,7 @@ public class PlayerController {
         ArrayList<GameObject> shieldBlock2 = player.createShieldBlock(14);
         shieldBlock1.addAll(shieldBlock2);
         player.setShields(shieldBlock1);
+        player.setPlayerController(this);
         respawnCounter = 0;
     }
     
@@ -36,7 +37,7 @@ public class PlayerController {
             respawnCounter--;
             return;
         }
-
+        
         player.makeMove(move);
     }
     
@@ -62,9 +63,11 @@ public class PlayerController {
         }
     }
     
+    @Override
     public PlayerController clone(){
         PlayerController playerControllerCopy = new PlayerController(false);
         playerControllerCopy.setPlayer((Player) this.player.clone());
+        playerControllerCopy.getPlayer().setPlayerController(playerControllerCopy);
         playerControllerCopy.setRespawnCounter(this.respawnCounter);
         return playerControllerCopy;
     }
@@ -142,6 +145,14 @@ public class PlayerController {
     
     public boolean getDeathOccured(){
         return player.isDeathOccured();
+    }
+    
+    public boolean hasAlienFactory(){
+        return player.hasAlienFactory();
+    }
+    
+    public boolean hasBulletFactory(){
+         return player.hasBulletFactory();
     }
      
 }
