@@ -1,4 +1,6 @@
 Hendrik J Kolver
+hendrik.kolver@gmail.com
+082 433 3603
 
 -------------------------------
 Compile:
